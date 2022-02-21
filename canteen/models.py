@@ -5,17 +5,37 @@
 from typing import List, Union
 from bson import ObjectId
 import datetime
+from canteen import mongo, login_manager
+from flask_login import UserMixin
 
 
 class bcrypt_password(str):
     pass
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    return LoginUser(user_json)
+
+
+class LoginUser(UserMixin):
+    def __init__(self, user_json):
+        self.user_json = user_json
+
+    # Overriding get_id is required if you don't have the id property
+    # Check the source code for UserMixin for details
+    def get_id(self):
+        object_id = self.user_json.get('_id')
+        return str(object_id)
+
+
 class User:
-    def __init__(self, email, password, auth_type):
+    def __init__(self, email, password, username):
         self.email: str = email
         self.password: bcrypt_password = password  # This should be a bcrypt-encrypted password
-        self.auth_type: int = auth_type  # 0: administrator, 1: canteen owner, 2: student
+        self.auth_type: int = 2  # 0: administrator, 1: canteen owner, 2: student
+        self.username: str = username
         self.balance: float = 0
 
     def to_json(self):
