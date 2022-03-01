@@ -35,6 +35,7 @@ class User:
         self.email: str = email
         self.password: bcrypt_password = password  # This should be a bcrypt-encrypted password
         self.auth_type: int = 2  # 0: administrator, 1: canteen owner, 2: student
+        self.confirmed: int = 0
         self.username: str = username
         self.balance: float = 0 #amount of money
 
