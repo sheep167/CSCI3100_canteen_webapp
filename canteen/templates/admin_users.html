@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Admin Page - Users Overview
+{% endblock %}
+
+{% block content %}
+  <h1>Overview</h1>
+  <a class="btn btn-success" href="/add/users">Add user</a>
+  <hr>
+  <table class="table table-striped table-dark">
+    <tr>
+      <th>Email</th>
+      <th>Username</th>
+      <th>Auth Type</th>
+    </tr>
+    {% for user in users %}
+      <tr>
+        <td>{{user.email}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.auth_type}}</td>
+        <td><a href="/edit/users/{{user._id}}" class="btn btn-primary">Edit</a></td>
+        <td><a href="/delete/users/{{user._id}}" class="btn btn-danger">Delete</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

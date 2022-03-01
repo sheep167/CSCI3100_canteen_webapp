@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
 from canteen import mongo
 
@@ -26,3 +26,8 @@ class UserLoginForm(FlaskForm):
     email = StringField(label='Enter Email:', validators=[Email(), DataRequired()])
     password = PasswordField(label='Enter Password:', validators=[Length(min=6), DataRequired()])
     submit = SubmitField(label='Sign in')
+
+
+class DataEditForm(FlaskForm):
+    text = TextAreaField()
+    submit = SubmitField()
