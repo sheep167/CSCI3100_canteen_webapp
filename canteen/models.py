@@ -36,7 +36,7 @@ class User:
         self.password: bcrypt_password = password  # This should be a bcrypt-encrypted password
         self.auth_type: int = 2  # 0: administrator, 1: canteen owner, 2: student
         self.username: str = username
-        self.balance: float = 0
+        self.balance: float = 0 #amount of money
 
     def to_json(self):
         # This function turns all attributes value to dict (json) for MongoDB
