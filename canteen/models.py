@@ -13,23 +13,6 @@ class bcrypt_password(str):
     pass
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
-    return LoginUser(user_json)
-
-
-class LoginUser(UserMixin):
-    def __init__(self, user_json):
-        self.user_json = user_json
-
-    # Overriding get_id is required if you don't have the id property
-    # Check the source code for UserMixin for details
-    def get_id(self):
-        object_id = self.user_json.get('_id')
-        return str(object_id)
-
-
 class User:
     def __init__(self, email, password, username):
         self.email: str = email
@@ -42,6 +25,25 @@ class User:
     def to_json(self):
         # This function turns all attributes value to dict (json) for MongoDB
         return self.__dict__
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    return LoginUser(user_json)
+
+
+class LoginUser(UserMixin, User):
+    def __init__(self, user_json):
+        super(LoginUser, self).__init__(email=user_json.get('email'), username=user_json.get('username'), password=user_json.get('password'))
+        for key, value in user_json.items():
+            setattr(self, key, value)
+
+    # Overriding get_id is required if you don't have the id property
+    # Check the source code for UserMixin for details
+    def get_id(self):
+        object_id = self._id
+        return str(object_id)
 
 
 class Canteen:

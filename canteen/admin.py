@@ -11,45 +11,50 @@ import bcrypt
 class ValidationError(Exception):
     pass
 
+
 @app.route('/overview/')
 def over_view_page():
     return redirect(url_for('home_page'))
 
+
 @app.route('/overview/users')
 def admin_user_page():
-    if current_user.is_authenticated == True:
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
         users = list(mongo.db.users.find())
     else:
         return 'Not Authorized', 403
     return render_template('admin_users.html', users=users)
 
+
 @app.route('/overview/canteens')
 def admin_canteen_page():
-    if current_user.is_authenticated == True:
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
         canteens = list(mongo.db.canteens.find())
     else:
         return 'Not Authorized', 403
     return render_template('admin_canteens.html', canteens=canteens)
 
+
 @app.route('/overview/comments')
 def admin_comment_page():
-    if current_user.is_authenticated == True:
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
         comments = list(mongo.db.comments.find())
     else:
         return 'Not Authorized', 403
     return render_template('admin_comments.html', comments=comments)
 
+
 @app.route('/add/<category>', methods=['GET', 'POST'])
 def add_data_page(category):
-    if current_user.is_authenticated == True:
-        print(current_user.user_json)
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        # print(current_user.user_json)
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
     else:
         return redirect('/login')
@@ -95,9 +100,9 @@ def add_data_page(category):
 
 @app.route('/edit/<category>/<_id>', methods=['GET', 'POST'])
 def edit_data_page(category, _id):
-    if current_user.is_authenticated == True:
-        print(current_user.user_json)
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        # print(current_user.user_json)
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
     else:
         return redirect(url_for('login'))
@@ -106,10 +111,10 @@ def edit_data_page(category, _id):
     mongo_col = mongo.db[category]
 
     if request.method == 'GET':
-        print(_id)
-        print(category)
+        # print(_id)
+        # print(category)
         form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0}), indent=4, default=str)
-        print(form.text)
+        # print(form.text)
         
     if request.method == 'POST':
         try:
@@ -126,9 +131,9 @@ def edit_data_page(category, _id):
 
 @app.route('/delete/<category>/<_id>', methods=['GET', 'POST'])
 def delete_data_page(category, _id):
-    if current_user.is_authenticated == True:
-        print(current_user.user_json)
-        if int(current_user.user_json.get('auth_type')) != 0:
+    if current_user.is_authenticated:
+        # print(current_user.user_json)
+        if current_user.auth_type != 0:
             return 'Not Authorized', 403
     else:
         return redirect('/login')

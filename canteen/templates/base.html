@@ -24,7 +24,7 @@
                       <a class="nav-link" href="{{url_for('home_page')}}">Home <span class="sr-only">(current)</span></a>
                   </li>
                   {% if current_user.is_authenticated %}
-                    {% if current_user.user_json.auth_type == 0 %}
+                    {% if current_user.auth_type == 0 %}
                   <li class="nav-item">
                       <a class="nav-link" href="{{url_for('admin_user_page')}}">User</a>
                   </li>
@@ -44,7 +44,7 @@
               {% if current_user.is_authenticated %}
               <ul class="navbar-nav">
                   <li class="nav-item">
-                      <a class="nav-link">Welcome, {{ current_user.user_json.username }}</a>
+                      <a class="nav-link">Welcome, {{ current_user.username }}</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="{{url_for('logout_page')}}">Logout</a>
