@@ -1,6 +1,7 @@
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
+
 from .form import UserRegistrationForm, UserLoginForm
 from .models import User, LoginUser
 import bcrypt
@@ -48,11 +49,17 @@ def register_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if current_user.is_authenticated == True:
+        return redirect(url_for('home_page'))
+
     form = UserLoginForm()
     if form.validate_on_submit():
         attempted_user = mongo.db.users.find_one({'email': form.email.data})
+        # print(form.password.data.encode('utf-8'))
+        # print(attempted_user.get('password'))
+        # print(bcrypt.checkpw(form.password.data.encode('utf-8'), attempted_user.get('password')))
         if attempted_user and bcrypt.checkpw(form.password.data.encode('utf-8'), attempted_user.get('password')):
-            if attempted_user.get('confirmed') == 1:
+            if int(attempted_user.get('confirmed')) == 1:
                 login_user(LoginUser(attempted_user))
                 flash('Successfully Logged In as: %s' % attempted_user.get('username'), category='success')
                 return redirect(url_for('home_page'))
