@@ -1,0 +1,7 @@
+node_modules
+_modules.txt
+_doc.txt
+Pipfile
+Pipfile.lock
+package.json
+package-lock.json
