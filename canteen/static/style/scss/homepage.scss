@@ -27,8 +27,8 @@
 
 // 6. Add additional custom code here
 
-.title {
-    color: $yellow-500
+h3.title {
+    color: $yellow-500;
 }
 
 .card-text{
@@ -38,8 +38,12 @@
 header.homepic{
     position: relative;
     background-color: #343a40;
-    background: url("../../image/bg-masthead.jpeg") no-repeat center center;
+    background: url("../../image/home-bg.jpeg") no-repeat center center;
     background-size: cover;
     padding-top: 8rem;
     padding-bottom: 8rem;
+}
+
+header.jumbotron{
+    margin-bottom: 0;
 }
