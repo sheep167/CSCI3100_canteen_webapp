@@ -13,50 +13,57 @@
 - https://getbootstrap.com/docs/5.1/components/carousel/
 - https://getbootstrap.com/docs/5.1/examples/album/# -->
 
-<section class="py-5 text-center container">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100" src="../static/image/food1.png" alt="First slide">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>My Caption Title (1st Image)</h5>
-                    <p>The whole caption will only show up if the screen is at least medium size.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="../static/image/food2.jpeg" alt="Second slide">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>My Caption Title (2nd Image)</h5>
-                    <p>The whole caption will only show up if the screen is at least medium size.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="../static/image/food3.jpeg" alt="Third slide">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>My Caption Title (3rd Image)</h5>
-                    <p>The whole caption will only show up if the screen is at least medium size.</p>
+<header class="jumbotron homepic">
+    <div class="container position-relative">
+        <div class="row justify-content-center">
+            <div class="col-xl-6">
+                <div class="text-center text-white">
+                    <!-- Page heading-->
+                    <h1 class="mb-5">Search Canteen here!</h1>
+                    <!-- Signup form-->
+                    <!-- * * * * * * * * * * * * * * *-->
+                    <!-- * * SB Forms Contact Form * *-->
+                    <!-- * * * * * * * * * * * * * * *-->
+                    <!-- This form is pre-integrated with SB Forms.-->
+                    <!-- To make this form functional, sign up at-->
+                    <!-- https://startbootstrap.com/solution/contact-forms-->
+                    <!-- to get an API token!-->
+                    <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                        <!-- Email address input-->
+                        <div class="row">
+                            <div class="col">
+                                <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address" data-sb-validations="required,email" />
+                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
+                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
+                            </div>
+                            <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
+                        </div>
+                        <!-- Submit success message-->
+                        <!---->
+                        <!-- This is what your users will see when the form-->
+                        <!-- has successfully submitted-->
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">
+                                <div class="fw-bolder">Form submission successful!</div>
+                                <p>To activate this form, sign up at</p>
+                                <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                            </div>
+                        </div>
+                        <!-- Submit error message-->
+                        <!---->
+                        <!-- This is what your users will see when there is-->
+                        <!-- an error submitting the form-->
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                    </form>
                 </div>
             </div>
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
     </div>
-  </section>
+</header>
 
-  <div class="album py-5 bg-light">
+<div class="album py-5 bg-light row">
     <div class="container">
-        <p class="title">Currently Open Restaurant</p>
+    <p class="title">Currently Open Restaurant</p>
         
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
@@ -207,7 +214,7 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
 <footer class="text-muted py-5">
   <div class="container">
