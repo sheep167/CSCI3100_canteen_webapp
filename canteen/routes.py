@@ -88,6 +88,14 @@ def confirm_email(token):
         return '<h1> Token Expired </h1> '
     return redirect(url_for('home_page'))
 
+@app.route('/canteen/<canteen_name>')
+def canteen_page(canteen_name):
+    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke"] #not complete
+    if( canteen_name in canteen_name_list ):
+        return render_template('canteen_page.html', canteen_name=canteen_name)
+    else:
+        return 'Page Not Found', 404
+
 
 # @app.route('/test')
 # def test():

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{canteen_name}} Canteen Page
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../static/style/css/canteenpage.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    
+    <script >
+        function toggleCart(){
+            document.querySelector('.sidecart').classList.toggle('open-cart');
+        }
+        console.log("Hello");
+        toggleCart();
+    </script>
+
+    <button class="btn btn-primary" onclick="toggleCart()" >Toggle Cart</button>
+  
+<div class="sidecart bg-light text-center">
+  
+  <ul class="nav flex-column">
+    <div class="text-secondary font-weight-light h4 m-0 px-4 text-center container">
+      Your Cart 
+      <div class="d-inline" onclick="toggleCart()" ><i class="far text-success float-right fa-arrow-alt-circle-right mt-1"></i></div>
+    </div>
+    <li class="nav-link d-flex flex-wrap flex-row">
+      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
+      <div class="col-4 p-0">
+        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+      </div>
+      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
+        <i class="fas fa-plus"></i>
+        <div class="product-quantity m-0 p-0 h5">2</div>
+        <i class="fas fa-minus"></i>
+      </div>
+      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
+        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
+        <div class="product-price">R$ 1200,00</div>
+        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
+      </div>
+    </li>
+    <li class="nav-link d-flex flex-wrap flex-row">
+      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
+      <div class="col-4 p-0">
+        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+      </div>
+      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
+        <i class="fas fa-plus"></i>
+        <div class="product-quantity m-0 p-0 h5">2</div>
+        <i class="fas fa-minus"></i>
+      </div>
+      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
+        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
+        <div class="product-price">R$ 1200,00</div>
+        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
+      </div>
+    </li>
+    <li class="nav-link d-flex flex-wrap flex-row">
+      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
+      <div class="col-4 p-0">
+        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+      </div>
+      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
+        <i class="fas fa-plus"></i>
+        <div class="product-quantity m-0 p-0 h5">2</div>
+        <i class="fas fa-minus"></i>
+      </div>
+      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
+        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
+        <div class="product-price">R$ 1200,00</div>
+        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
+      </div>
+    </li>
+  </ul>
+  <div class="text-light h6 text-left mx-3">Total Produtos: <span class="text-success" id="sidecart-total-products">R$ 7.200,00</span></div>
+  <div class="text-light h6 text-left mx-3">Frete: <span class="text-success" id="sidecart-frete">R$ 20,00</span> (taxa fixa)</div>
+  <div class="text-light h5 text-left mx-3">Valor Final: <span class="text-success" id="sidecart-total">R$ 7.220,00</span></div>
+  <div class="p-2">
+    <button type="button" class="btn btn-success w-100">Finalizar Compra</button>
+  </div>
+</div>
+</main>
+{% endblock %}
+
+
+
