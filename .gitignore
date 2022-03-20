@@ -1,6 +1,7 @@
 node_modules
 _modules.txt
 _doc.txt
+_flask_run.sh
 Pipfile
 Pipfile.lock
 package.json

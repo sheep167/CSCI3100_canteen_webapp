@@ -21,60 +21,40 @@
 
     <button class="btn btn-primary" onclick="toggleCart()" >Toggle Cart</button>
   
-<div class="sidecart bg-light text-center">
+<div class="sidecart bg-light text-center open-cart">
   
   <ul class="nav flex-column">
-    <div class="text-secondary font-weight-light h4 m-0 px-4 text-center container">
-      Your Cart 
-      <div class="d-inline" onclick="toggleCart()" ><i class="far text-success float-right fa-arrow-alt-circle-right mt-1"></i></div>
+    <div class="text-secondary m-0 px-4 text-center container pt-4">
+      <div class="h4 font-weight-light text-center">
+        Your Cart 
+        <div class="d-inline float-right" style="margin-right: 0 auto;" onclick="toggleCart()">x</div>  <!-- THIS BLOCK EFFECTS THE CENTRE, IF LOOK CAREFULLY "YOUR CART" IS NOT CENTERED -->
+      </div>
+      <div class="h6 font-weight-light">No items in your cart</div>
     </div>
-    <li class="nav-link d-flex flex-wrap flex-row">
-      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
-      <div class="col-4 p-0">
-        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+
+    <div>Your order from #CANTEEN NAME</div>
+    
+    <li class="nav-link d-flex flex-wrap flex-column">
+      <div class="flex-row flex-wrap d-flex">
+        <div class="mr-auto text-danger">noodles</div>
+        <div class="ml-auto">$32</div>
       </div>
-      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
-        <i class="fas fa-plus"></i>
-        <div class="product-quantity m-0 p-0 h5">2</div>
-        <i class="fas fa-minus"></i>
-      </div>
-      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
-        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
-        <div class="product-price">R$ 1200,00</div>
-        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
-      </div>
+      <div class="ml-auto">- 1 +</div>
     </li>
-    <li class="nav-link d-flex flex-wrap flex-row">
-      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
-      <div class="col-4 p-0">
-        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+
+    <li class="nav-link d-flex flex-wrap flex-column">
+      <div class="flex-row flex-wrap d-flex">
+        <div class="mr-auto text-danger">noodles</div>
+        <div class="ml-auto">$32</div>
       </div>
-      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
-        <i class="fas fa-plus"></i>
-        <div class="product-quantity m-0 p-0 h5">2</div>
-        <i class="fas fa-minus"></i>
-      </div>
-      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
-        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
-        <div class="product-price">R$ 1200,00</div>
-        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
-      </div>
+      <div class="ml-auto">- 1 +</div>
     </li>
-    <li class="nav-link d-flex flex-wrap flex-row">
-      <div class="col-12 text-light h5 text-center p-0">Lorem Productos</div>
-      <div class="col-4 p-0">
-        <img class="img-fluid" src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?v=1530129292" alt="">
+    <li class="nav-link d-flex flex-wrap flex-column">
+      <div class="flex-row flex-wrap d-flex">
+        <div class="mr-auto text-danger">noodles</div>
+        <div class="ml-auto">$32</div>
       </div>
-      <div class="col-2 bg-primary text-light justify-content-around d-flex flex-column">
-        <i class="fas fa-plus"></i>
-        <div class="product-quantity m-0 p-0 h5">2</div>
-        <i class="fas fa-minus"></i>
-      </div>
-      <div class="sidecart-price pl-0 col-6 bg-primary text-right d-flex flex-wrap text-light">
-        <div class="text-right text-dark d-flex flex-row justify-content-end align-items-center h6 m-0 p-0">Remover <span class="h5 ml-2 m-0 p-0 "><b>X</b></span></div>
-        <div class="product-price">R$ 1200,00</div>
-        <div class=""><span class="text-dark"><b>Total</b></span> <span class="product-price-total">R$ 2400,00</span></div>
-      </div>
+      <div class="ml-auto">- 1 +</div>
     </li>
   </ul>
   <div class="text-light h6 text-left mx-3">Total Produtos: <span class="text-success" id="sidecart-total-products">R$ 7.200,00</span></div>
@@ -87,5 +67,13 @@
 </main>
 {% endblock %}
 
+{% block style %}
+<style>
+      /* body {
+      background-color: #212121;
+      color: white
+      } */
+   </style>
+{% endblock %}
 
 
