@@ -27,19 +27,20 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
           <div class="collapse navbar-collapse" id="navbarNav">
+              {% set active_page = active_page|default('home') -%}
               <ul class="navbar-nav mr-auto">
-                  <li class="nav-item active">
+                  <li class="{{'nav-item active' if active_page == 'home' else 'nav-item'}}">
                       <a class="nav-link" href="{{url_for('home')}}">Home <span class="sr-only">(current)</span></a>
                   </li>
                   {% if current_user.is_authenticated %}
                     {% if current_user.auth_type == 0 %}
-                  <li class="nav-item">
+                  <li class="{{'nav-item active' if active_page == 'user' else 'nav-item'}}">
                       <a class="nav-link" href="{{url_for('admin_user_page')}}">User</a>
                   </li>
-                  <li class="nav-item">
+                  <li class="{{'nav-item active' if active_page == 'canteen' else 'nav-item'}}">
                     <a class="nav-link" href="{{url_for('admin_canteen_page')}}">Canteen</a>
                   </li>
-                  <li class="nav-item">
+                  <li class="{{'nav-item active' if active_page == 'comment' else 'nav-item'}}">
                     <a class="nav-link" href="{{url_for('admin_comment_page')}}">Comment</a>
                   </li>
                   {% else %}
