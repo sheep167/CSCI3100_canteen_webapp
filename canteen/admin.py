@@ -1,7 +1,10 @@
+import os
+
 from canteen import app, mongo
 from flask import render_template, request, redirect, flash
 from flask_login import current_user, login_required
-from .form import DataEditForm
+from .form import DataEditForm, DataEditFormWithImage
+from werkzeug.utils import secure_filename
 import json
 from json import JSONDecodeError
 from bson import ObjectId
@@ -34,8 +37,10 @@ def overview_page(category):
 def overview_canteens_dishes(canteen_id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
-    mongo_col = mongo.db['dishes']
-    results = mongo_col.aggregate([
+
+    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+
+    results = mongo.db.dishes.aggregate([
         {'$match': {'at_canteen': ObjectId(canteen_id)}},
         {'$lookup':
             {'from': 'canteens',
@@ -47,7 +52,55 @@ def overview_canteens_dishes(canteen_id):
     ])
 
     dishes = list(results)
-    return render_template('admin_dishes.html', canteen_id=canteen_id, dishes=dishes)
+    for dish in dishes:
+        if dish.get('image_path'):
+            dish['image_path'] = '/static/image/%s/%s' % (canteen.get('name'), dish.get('image_path'))
+            dish['image_path'] = dish.get('image_path').replace(' ', '%20')
+        else:
+            dish['image_path'] = None
+
+    return render_template('admin_dishes.html', canteen=canteen, dishes=dishes)
+
+
+@app.route('/add/canteens/<canteen_id>/dishes', methods=['GET', 'POST'])
+@login_required
+def add_canteens_dishes(canteen_id):
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
+
+    form = DataEditFormWithImage()
+
+    if request.method == 'GET':
+        form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
+
+    if request.method == 'POST':
+        try:
+            data = json.loads(form.text.data)
+            data['at_canteen'] = ObjectId(canteen_id)
+
+            if form.image.data.filename != '':
+                filename = secure_filename(form.image.data.filename)
+                if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+                    folder_path = './canteen/static/image/%s' % canteen.get('name')
+                    os.makedirs(folder_path, exist_ok=True)
+                    save_path = os.path.join(folder_path, filename).replace('\\', '/')
+                    form.image.data.save(save_path)
+                    data['image_path'] = filename
+                else:
+                    raise ValidationError()
+            else:
+                data['image_path'] = None
+
+            mongo.db.dishes.insert_one(data)
+            return redirect('/overview/canteens')
+
+        except JSONDecodeError:
+            flash('Cannot decode JSON. Please check and try again.', category='error')
+        except ValidationError:
+            flash('Not supported file type. Only .jpg and .png are allowed', category='error')
+
+    return render_template('data_with_image.html', form=form, method='Add')
 
 
 @app.route('/add/<category>', methods=['GET', 'POST'])
@@ -108,10 +161,9 @@ def edit_data_page(category, _id):
     mongo_col = mongo.db[category]
 
     if request.method == 'GET':
-        # print(_id)
-        # print(category)
         form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0}), indent=4, default=str)
-        # print(form.text)
+        if category == 'canteens':
+            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0}), indent=4, default=str)
         
     if request.method == 'POST':
         try:
