@@ -77,7 +77,7 @@ def add_data_page(category):
         except ValidationError:
             flash('Duplicate keys with the database', category='error')
 
-    return render_template('data.html', form=form)
+    return render_template('data.html', form=form, method='Add', category=category)
 
 
 @app.route('/edit/<category>/<_id>', methods=['GET', 'POST'])
@@ -108,7 +108,7 @@ def edit_data_page(category, _id):
             flash('Cannot decode JSON. Please check and try again.', category='error')
         except ValidationError:
             flash('Duplicate keys with the database', category='error')
-    return render_template('data.html', form=form, category=category)
+    return render_template('data.html', form=form, method='Edit', category=category)
 
 
 @app.route('/delete/<category>/<_id>', methods=['GET', 'POST'])
