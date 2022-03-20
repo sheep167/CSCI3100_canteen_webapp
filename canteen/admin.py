@@ -1,6 +1,6 @@
 from canteen import app, mongo
-from flask import render_template, request, redirect, flash, url_for
-from flask_login import current_user
+from flask import render_template, request, redirect, flash
+from flask_login import current_user, login_required
 from .form import DataEditForm
 import json
 from json import JSONDecodeError
@@ -13,13 +13,10 @@ class ValidationError(Exception):
 
 
 @app.route('/overview/<category>')
-def admin_user_page(category):
-    if current_user.is_authenticated:
-        # print(current_user.user_json)
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
-    else:
-        return redirect('/login')
+@login_required
+def overview_page(category):
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
 
     if category == 'users':
         users = list(mongo.db.users.find())
@@ -32,14 +29,32 @@ def admin_user_page(category):
         return render_template('admin_comments.html', comments=comments)
 
 
+@app.route('/overview/canteens/<canteen_id>/dishes')
+@login_required
+def overview_canteens_dishes(canteen_id):
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
+    mongo_col = mongo.db['dishes']
+    results = mongo_col.aggregate([
+        {'$match': {'at_canteen': ObjectId(canteen_id)}},
+        {'$lookup':
+            {'from': 'canteens',
+             'localField': 'at_canteen',
+             'foreignField': '_id',
+             'as': 'at_canteen'}},
+        {'$set': {'at_canteen': {'$arrayElemAt': ['$at_canteen', 0]}}},
+        {'$set': {'at_canteen': '$at_canteen.name'}}
+    ])
+
+    dishes = list(results)
+    return render_template('admin_dishes.html', canteen_id=canteen_id, dishes=dishes)
+
+
 @app.route('/add/<category>', methods=['GET', 'POST'])
+@login_required
 def add_data_page(category):
-    if current_user.is_authenticated:
-        # print(current_user.user_json)
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
-    else:
-        return redirect('/login')
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
 
     form = DataEditForm()
     mongo_col = mongo.db[category]
@@ -48,13 +63,13 @@ def add_data_page(category):
         if category == 'users':
             form.text.data = json.dumps({'email': 'str', 'password': 'str', 'username': 'str', 'auth_type': 'int', 'confirmed': 'int', 'balance': 'float'}, indent=4)
         elif category == 'canteens':
-            form.text.data = json.dumps({'name': 'str', 'longitude': 'float', 'latitude': 'float', 'open_at': 'str', 'close_at': 'str', 'capacity': 'int', 'menu':'list'}, indent=4)
+            form.text.data = json.dumps({'name': 'str', 'longitude': 'float', 'latitude': 'float', 'open_at': 'str', 'close_at': 'str', 'capacity': 'int'}, indent=4)
         elif category == 'dishes':
-            form.text.data = json.dumps({'name': 'str', 'in_canteen': 'object_id', 'price': 'float', 'ingredients': 'List[str]','rating': 'int','image_file_name': 'str'}, indent=4)
+            form.text.data = json.dumps({'name': 'str', 'in_canteen': 'object_id', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int', 'image_file_name': 'str'}, indent=4)
         elif category == 'comments':
             form.text.data = json.dumps({'posted_time': 'str', 'posted_by_user': 'object_id', 'posted_on_canteen': 'object_id', 'rating': 'int', 'paragraph': 'str'}, indent=4)
         elif category == 'orders':
-            form.text.data = json.dumps({'created_time': 'str', 'created_by_user': 'object_id','created_at_canteen': 'object_id','food': 'List[object_id]', 'total_price': 'float', 'order_status': 'str'}, indent=4)
+            form.text.data = json.dumps({'created_time': 'str', 'created_by_user': 'object_id', 'created_at_canteen': 'object_id', 'food': 'List[object_id]', 'total_price': 'float', 'order_status': 'str'}, indent=4)
         else:
             return 'Not Found', 404
 
@@ -69,6 +84,9 @@ def add_data_page(category):
                 hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
                 data['password'] = hashed_password
 
+            elif category == 'canteens':
+                data['menu'] = []
+
             mongo_col.insert_one(data)
             return redirect('/overview/%s' % category)
 
@@ -81,13 +99,10 @@ def add_data_page(category):
 
 
 @app.route('/edit/<category>/<_id>', methods=['GET', 'POST'])
+@login_required
 def edit_data_page(category, _id):
-    if current_user.is_authenticated:
-        # print(current_user.user_json)
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
-    else:
-        return redirect(url_for('login'))
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
 
     form = DataEditForm()
     mongo_col = mongo.db[category]
@@ -112,13 +127,10 @@ def edit_data_page(category, _id):
 
 
 @app.route('/delete/<category>/<_id>', methods=['GET', 'POST'])
+@login_required
 def delete_data_page(category, _id):
-    if current_user.is_authenticated:
-        # print(current_user.user_json)
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
-    else:
-        return redirect('/login')
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
 
     mongo_col = mongo.db[category]
     mongo_col.delete_one({'_id': ObjectId(_id)})

@@ -61,9 +61,9 @@ class Canteen:
 
 
 class Dishes:
-    def __init__(self, name, in_canteen, price, ingredients, image_file_name):
+    def __init__(self, name, at_canteen, price, ingredients, image_file_name):
         self.name: str = name
-        self.in_canteen: ObjectId = in_canteen
+        self.at_canteen: ObjectId = at_canteen
         self.price: float = price
         self.ingredients: List[str] = ingredients
         self.rating: Union[int, None] = None  # Average rating is updated on every comment
@@ -75,7 +75,7 @@ class Dishes:
 
 class Order:
     def __init__(self, created_time, created_by_user, created_at_canteen, food, total_price):
-        self.created_time: datetime.datetime = created_time
+        self.created_at_time: datetime.datetime = created_time
         self.created_by_user: ObjectId = created_by_user
         self.created_at_canteen: ObjectId = created_at_canteen
         self.food: List[ObjectId] = food
