@@ -18,6 +18,9 @@ def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
 
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -50,7 +53,7 @@ def register_page():
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if current_user.is_authenticated == True:
-        return redirect(url_for('home_page'))
+        return redirect(url_for('home'))
 
     form = UserLoginForm()
     if form.validate_on_submit():
@@ -62,7 +65,7 @@ def login_page():
             if int(attempted_user.get('confirmed')) == 1:
                 login_user(LoginUser(attempted_user))
                 flash('Successfully Logged In as: %s' % attempted_user.get('username'), category='success')
-                return redirect(url_for('home_page'))
+                return redirect(url_for('home'))
             else:
                 flash('Not authenticated', category='danger')
         else:
@@ -75,7 +78,7 @@ def login_page():
 def logout_page():
     logout_user()
     flash('You have been logged out!', category='info')
-    return redirect(url_for('home_page'))
+    return redirect(url_for('home'))
 
 
 @app.route('/confirm_email/<token>')
@@ -86,7 +89,15 @@ def confirm_email(token):
         mongo.db.users.update_one({'email': email}, {'$set': {'confirmed': 1}})
     except SignatureExpired:
         return '<h1> Token Expired </h1> '
-    return redirect(url_for('home_page'))
+    return redirect(url_for('home'))
+
+@app.route('/canteen/<canteen_name>')
+def canteen_page(canteen_name):
+    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke"] #not complete
+    if( canteen_name in canteen_name_list ):
+        return render_template('canteen_page.html', canteen_name=canteen_name)
+    else:
+        return 'Page Not Found', 404
 
 
 # @app.route('/test')

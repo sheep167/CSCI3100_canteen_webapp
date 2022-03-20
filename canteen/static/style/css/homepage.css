@@ -1,0 +1,22 @@
+h3.title {
+  color: #ffc107;
+}
+
+.card-text {
+  color: #ffc107;
+}
+
+header.homepic {
+  position: relative;
+  background-color: #343a40;
+  background: url("../../image/home-bg.jpeg") no-repeat center center;
+  background-size: cover;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+header.jumbotron {
+  margin-bottom: 0;
+}
+
+/*# sourceMappingURL=homepage.css.map */
