@@ -12,42 +12,24 @@ class ValidationError(Exception):
     pass
 
 
-@app.route('/overview/')
-def over_view_page():
-    return redirect(url_for('home_page'))
-
-
-@app.route('/overview/users')
-def admin_user_page():
+@app.route('/overview/<category>')
+def admin_user_page(category):
     if current_user.is_authenticated:
+        # print(current_user.user_json)
         if current_user.auth_type != 0:
             return 'Not Authorized', 403
+    else:
+        return redirect('/login')
+
+    if category == 'users':
         users = list(mongo.db.users.find())
-    else:
-        return 'Not Authorized', 403
-    return render_template('admin_users.html', users=users)
-
-
-@app.route('/overview/canteens')
-def admin_canteen_page():
-    if current_user.is_authenticated:
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
+        return render_template('admin_users.html', users=users)
+    elif category == 'canteens':
         canteens = list(mongo.db.canteens.find())
-    else:
-        return 'Not Authorized', 403
-    return render_template('admin_canteens.html', canteens=canteens)
-
-
-@app.route('/overview/comments')
-def admin_comment_page():
-    if current_user.is_authenticated:
-        if current_user.auth_type != 0:
-            return 'Not Authorized', 403
+        return render_template('admin_canteens.html', canteens=canteens)
+    elif category == 'comments':
         comments = list(mongo.db.comments.find())
-    else:
-        return 'Not Authorized', 403
-    return render_template('admin_comments.html', comments=comments)
+        return render_template('admin_comments.html', comments=comments)
 
 
 @app.route('/add/<category>', methods=['GET', 'POST'])
