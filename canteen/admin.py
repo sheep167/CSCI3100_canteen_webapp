@@ -119,38 +119,39 @@ def delete_data_page(category, _id):
     return redirect('/overview/%s' % category)
 
 
-@app.route('/overview/canteens/<canteen_id>/dishes')
+@app.route('/overview/canteens/<canteen_id>/<category>')
 @login_required
-def overview_canteens_dishes(canteen_id):
+def overview_canteens_dishes(canteen_id, category):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    if category == 'dishes':
+        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
 
-    results = mongo.db.dishes.aggregate([
-        {'$match': {'at_canteen': ObjectId(canteen_id)}},
-        {'$lookup':
-            {'from': 'canteens',
-             'localField': 'at_canteen',
-             'foreignField': '_id',
-             'as': 'at_canteen'}},
-        {'$set': {'at_canteen': {'$arrayElemAt': ['$at_canteen', 0]}}},
-        {'$set': {'at_canteen': '$at_canteen.name'}}
-    ])
+        results = mongo.db.dishes.aggregate([
+            {'$match': {'at_canteen': ObjectId(canteen_id)}},
+            {'$lookup':
+                {'from': 'canteens',
+                 'localField': 'at_canteen',
+                 'foreignField': '_id',
+                 'as': 'at_canteen'}},
+            {'$set': {'at_canteen': {'$arrayElemAt': ['$at_canteen', 0]}}},
+            {'$set': {'at_canteen': '$at_canteen.name'}}
+        ])
 
-    dishes = list(results)
-    for dish in dishes:
-        if dish.get('image_path'):
-            dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
-        else:
-            dish['image_path'] = None
+        dishes = list(results)
+        for dish in dishes:
+            if dish.get('image_path'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            else:
+                dish['image_path'] = None
 
-    return render_template('admin_dishes.html', canteen=canteen, dishes=dishes)
+        return render_template('admin_dishes.html', canteen=canteen, dishes=dishes)
 
 
-@app.route('/add/canteens/<canteen_id>/dishes', methods=['GET', 'POST'])
+@app.route('/add/canteens/<canteen_id>/<category>', methods=['GET', 'POST'])
 @login_required
-def add_canteens_data(canteen_id):
+def add_canteens_data(canteen_id, category):
     def save_image():
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
         folder_path = './canteen/static/image/%s' % canteen.get('name')
@@ -165,24 +166,26 @@ def add_canteens_data(canteen_id):
     form = DataEditFormWithImage()
 
     if request.method == 'GET':
-        form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
+        if category == 'dishes':
+            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
 
     if request.method == 'POST':
         try:
-            data = json.loads(form.text.data)
-            data['at_canteen'] = ObjectId(canteen_id)
+            if category == 'dishes':
+                data = json.loads(form.text.data)
+                data['at_canteen'] = ObjectId(canteen_id)
 
-            if form.image.data.filename != '':
-                filename = secure_filename(form.image.data.filename)
-                if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
-                    save_image()
+                if form.image.data.filename != '':
+                    filename = secure_filename(form.image.data.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        save_image()
+                    else:
+                        raise ValidationError()
                 else:
-                    raise ValidationError()
-            else:
-                data['image_path'] = None
+                    data['image_path'] = None
 
-            mongo.db.dishes.insert_one(data)
-            return redirect('/overview/canteens/%s/dishes' % canteen_id)
+                mongo.db.dishes.insert_one(data)
+                return redirect('/overview/canteens/%s/dishes' % canteen_id)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
@@ -192,9 +195,9 @@ def add_canteens_data(canteen_id):
     return render_template('data_with_image.html', form=form, method='Add')
 
 
-@app.route('/edit/canteens/<canteen_id>/dishes/<_id>', methods=['GET', 'POST'])
+@app.route('/edit/canteens/<canteen_id>/<category>/<_id>', methods=['GET', 'POST'])
 @login_required
-def edit_canteens_data(canteen_id, _id):
+def edit_canteens_data(canteen_id, category, _id):
 
     def save_and_delete_image():
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
@@ -214,21 +217,22 @@ def edit_canteens_data(canteen_id, _id):
     form = DataEditFormWithImage()
 
     if request.method == 'GET':
-        form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
+        if category == 'dishes':
+            form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
 
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
 
-            # Validate the file
-            if form.image.data.filename != '':
-                filename = secure_filename(form.image.data.filename)
-                if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
-                    save_and_delete_image()
-                else:
-                    raise ValidationError()
-            mongo.db.dishes.update_one({'_id': ObjectId(_id)}, {'$set': data})
-            return redirect('/overview/canteens/%s/dishes' % canteen_id)
+            if category == 'dishes':
+                if form.image.data.filename != '':
+                    filename = secure_filename(form.image.data.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        save_and_delete_image()
+                    else:
+                        raise ValidationError()
+                mongo.db.dishes.update_one({'_id': ObjectId(_id)}, {'$set': data})
+                return redirect('/overview/canteens/%s/dishes' % canteen_id)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
@@ -237,9 +241,9 @@ def edit_canteens_data(canteen_id, _id):
     return render_template('data_with_image.html', form=form, method='Edit')
 
 
-@app.route('/delete/canteens/<canteen_id>/dishes/<_id>', methods=['GET', 'POST'])
+@app.route('/delete/canteens/<canteen_id>/<category>/<_id>', methods=['GET', 'POST'])
 @login_required
-def delete_canteens_data(canteen_id, _id):
+def delete_canteens_data(canteen_id, category, _id):
 
     def delete_image():
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
@@ -252,7 +256,13 @@ def delete_canteens_data(canteen_id, _id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    delete_image()
-    mongo.db.dishes.delete_one({'_id': ObjectId(_id)})
+    if category == 'dishes':
+        # Delete image only if there is no entry sharing the same image
+        image_path = mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'image_path': 1}).get('image_path')
+        if mongo.db.dishes.count_documents({'image_path': image_path}) == 1:
+            delete_image()
+
+    mongo_col = mongo.db[category]
+    mongo_col.delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')
     return redirect('/overview/canteens/%s/dishes' % canteen_id)
