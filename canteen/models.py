@@ -75,9 +75,9 @@ class Dishes:
 
 class Order:
     def __init__(self, created_time, created_by_user, created_at_canteen, food, total_price):
-        self.created_at_time: datetime.datetime = created_time
-        self.created_by_user: ObjectId = created_by_user
-        self.created_at_canteen: ObjectId = created_at_canteen
+        self.at_time: datetime.datetime = created_time
+        self.by_user: ObjectId = created_by_user
+        self.at_canteen: ObjectId = created_at_canteen
         self.food: List[ObjectId] = food
         self.total_price: float = total_price
         self.order_status: str = 'waiting'  # waiting, fulfilled, unfulfilled
@@ -87,10 +87,10 @@ class Order:
 
 
 class Comment:
-    def __init__(self, posted_time, posted_by_user, posted_on_canteen, rating, paragraph):
-        self.posted_time: datetime.datetime = posted_time
-        self.posted_by_user: ObjectId = posted_by_user
-        self.posted_on_canteen: ObjectId = posted_on_canteen
+    def __init__(self, posted_time, posted_by_user, posted_at_canteen, rating, paragraph):
+        self.at_time: datetime.datetime = posted_time
+        self.by_user: ObjectId = posted_by_user
+        self.at_canteen: ObjectId = posted_at_canteen
         self.rating: int = rating
         self.paragraph: str = paragraph
 
