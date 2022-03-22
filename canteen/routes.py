@@ -93,7 +93,7 @@ def confirm_email(token):
 
 @app.route('/canteen/<canteen_name>')
 def canteen_page(canteen_name):
-    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke"] #not complete
+    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"] #not complete
     if( canteen_name in canteen_name_list ):
         return render_template('canteen_page.html', canteen_name=canteen_name)
     else:

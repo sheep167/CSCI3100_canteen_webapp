@@ -53,4 +53,33 @@
   white-space: nowrap;
 }
 
+#bg-img {
+  position: relative;
+  padding-bottom: 20%;
+  background-size: cover;
+  background-position: center center;
+}
+
+div.canteen-pic {
+  position: relative;
+  background-color: #343a40;
+  background-size: cover;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+div.canteen-info {
+  display: inline-block;
+}
+
+#canteen-info {
+  display: inline-block;
+  max-width: 100%;
+}
+
+#menu-nav-tab button {
+  border-radius: 0;
+  font-weight: 200;
+}
+
 /*# sourceMappingURL=canteenpage.css.map */

@@ -132,12 +132,27 @@
     </div>
     
   </div>
-
-  <div class="flex-column">
-    <div style="max-height: 300px;">
-      Hello
+  <div class="m-0 p-0" style="overflow: hidden; width: 100%;">
+    <div id="bg-img" style="background-image: url(../static/image/UC/UC1.jpeg) ;">  
+    <!-- <img src="../static/image/UC/UC1.jpeg" style="width: 100vw; position: relative; top: -300px">   -->
     </div>
 
+    <div id="canteen-info" class="container m-0 pt-5 pl-5 pb-4">
+        <div class="font-weight-bold text-secondary h3"> {{canteen_name}} </div>
+        <div class="font-weight-light"> Open from 9am to 8.30pm </div>
+        <div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>
+    </div>
+
+    <div id="menu-nav-tab" class="d-flex border m-0" style="height: 6vh;">
+      <button type="button" class="col-1 btn btn-outline-secondary border-0"> &lt; </button>
+      <div class="d-flex flex-fill m-0">
+        <button type="button" class="flex-fill btn btn-outline-secondary border-0"> Food </button>
+        <button type="button" class="flex-fill btn btn-outline-secondary border-0"> Drink </button>
+        <button type="button" class="flex-fill btn btn-outline-secondary border-0"> Dessert </button>
+      </div>
+      <button type="button" class="col-1 btn btn-outline-secondary border-0"> &gt; </button>
+    </div>
+    
   </div>
 </main>
 {% endblock %}
