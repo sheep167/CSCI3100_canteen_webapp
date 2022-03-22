@@ -22,10 +22,6 @@ def generate_confirmation_token(email):
 def home():
     return render_template('home.html')
 
-@app.route('/user_account', methods=['GET', 'POST'])
-def user_account():
-    return render_template('user_account.html')
-
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
     form = UserRegistrationForm()

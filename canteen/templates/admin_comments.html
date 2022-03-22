@@ -1,29 +1,29 @@
 {% extends 'base.html' %}
-{% set active_page = "canteens" %}
+{% set active_page = "comments" %}
 
 {% block title %}
     Admin Page - Comments Overview
 {% endblock %}
 
 {% block content %}
-  <h1>{{canteen.name}} Comments</h1>
-  <a class="btn btn-success" href="/add/canteens/{{canteen._id}}/comments">Add Comment</a>
+  <h1>Overview</h1>
+  <a class="btn btn-success" href="/add/comments">Add comment</a>
   <hr>
   <table class="table table-striped table-dark">
     <tr>
-      <th>Posted At Time</th>
-      <th>Posted By User</th>
+      <th>Posted User</th>
+      <th>Posted Time</th>
+      <th>Canteen</th>
       <th>Rating</th>
-      <th>Paragraph</th>
     </tr>
     {% for comment in comments %}
       <tr>
-        <td>{{comment.at_time}}</td>
-        <td>{{comment.by_user}}</td>
+        <td>{{comment.posted_by_user}}</td>
+        <td>{{comment.posted_time}}</td>
+        <td>{{comment.posted_on_canteen}}</td>
         <td>{{comment.rating}}</td>
-        <td>{{comment.paragraph}}</td>
-        <td><a href="/edit/canteens/{{canteen._id}}/comments/{{comment._id}}" class="btn btn-primary">Edit</a></td>
-        <td><a href="/delete/canteens/{{canteen._id}}/comments/{{comment._id}}" class="btn btn-danger">Delete</a></td>
+        <td><a href="/edit/comments/{{comment._id}}" class="btn btn-primary">Edit</a></td>
+        <td><a href="/delete/comments/{{comment._id}}" class="btn btn-danger">Delete</a></td>
       </tr>
     {% endfor %}
   </table>

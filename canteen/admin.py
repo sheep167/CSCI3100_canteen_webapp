@@ -1,5 +1,5 @@
-import datetime
 import os
+
 from canteen import app, mongo
 from flask import render_template, request, redirect, flash
 from flask_login import current_user, login_required
@@ -12,10 +12,6 @@ import bcrypt
 
 
 class ValidationError(Exception):
-    pass
-
-
-class NoSuchUserError(Exception):
     pass
 
 
@@ -152,23 +148,6 @@ def overview_canteens_dishes(canteen_id, category):
 
         return render_template('admin_dishes.html', canteen=canteen, dishes=dishes)
 
-    elif category == 'comments':
-
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
-        results = mongo.db.comments.aggregate([
-            {'$match': {'at_canteen': ObjectId(canteen_id)}},
-            {'$lookup':
-                {'from': 'users',
-                 'localField': 'by_user',
-                 'foreignField': '_id',
-                 'as': 'by_user'}},
-            {'$set': {'by_user': {'$arrayElemAt': ['$by_user', 0]}}},
-            {'$set': {'by_user': '$by_user.username'}}
-        ])
-
-        comments = list(results)
-        return render_template('admin_comments.html', canteen=canteen, comments=comments)
-
 
 @app.route('/add/canteens/<canteen_id>/<category>', methods=['GET', 'POST'])
 @login_required
@@ -184,23 +163,16 @@ def add_canteens_data(canteen_id, category):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    if category == 'dishes':
-        form = DataEditFormWithImage()
-    else:
-        form = DataEditForm()
+    form = DataEditFormWithImage()
 
     if request.method == 'GET':
         if category == 'dishes':
             form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
-        elif category == 'comments':
-            form.text.data = json.dumps({'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'username': 'str', 'rating': 'int', 'paragraph': 'str'}, indent=4)
 
     if request.method == 'POST':
         try:
-            data = json.loads(form.text.data)
-
             if category == 'dishes':
-
+                data = json.loads(form.text.data)
                 data['at_canteen'] = ObjectId(canteen_id)
 
                 if form.image.data.filename != '':
@@ -212,30 +184,13 @@ def add_canteens_data(canteen_id, category):
                 else:
                     data['image_path'] = None
 
-            elif category == 'comments':
-
-                data['at_canteen'] = ObjectId(canteen_id)
-
-                user = mongo.db.users.find_one({'username': data.get('username')})
-                if not user:
-                    raise NoSuchUserError
-                user_id = user.get('_id')
-                del data['username']
-                data['by_user'] = ObjectId(user_id)
-
-                data['at_time'] = datetime.datetime.strptime(data.get('at_time'), '%Y-%m-%d %H:%M:%S')
-
-            mongo.db[category].insert_one(data)
-            return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
+                mongo.db.dishes.insert_one(data)
+                return redirect('/overview/canteens/%s/dishes' % canteen_id)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
         except ValidationError:
             flash('Not supported file type. Only .jpg and .png are allowed', category='error')
-        except NoSuchUserError:
-            flash('No such user with this username', category='error')
-        except ValueError:
-            flash('Wrong time format', category='error')
 
     return render_template('data_with_image.html', form=form, method='Add')
 
@@ -259,15 +214,11 @@ def edit_canteens_data(canteen_id, category, _id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    form = DataEditForm()
-    if category == 'dishes':
-        form = DataEditFormWithImage()
+    form = DataEditFormWithImage()
 
     if request.method == 'GET':
         if category == 'dishes':
             form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
-        elif category == 'comments':
-            form.text.data = json.dumps(mongo.db.comments.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'at_canteen': 0, 'by_user': 0, 'at_time': 0}), indent=4, default=str)
 
     if request.method == 'POST':
         try:
@@ -280,18 +231,14 @@ def edit_canteens_data(canteen_id, category, _id):
                         save_and_delete_image()
                     else:
                         raise ValidationError()
-
-            mongo.db[category].update_one({'_id': ObjectId(_id)}, {'$set': data})
-            return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
+                mongo.db.dishes.update_one({'_id': ObjectId(_id)}, {'$set': data})
+                return redirect('/overview/canteens/%s/dishes' % canteen_id)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
         except ValidationError:
             flash('Not supported file type. Only .jpg and .png are allowed', category='error')
-
-    if category == 'dishes':
-        return render_template('data_with_image.html', form=form, method='Edit')
-    return render_template('data.html', form=form, method='Edit')
+    return render_template('data_with_image.html', form=form, method='Edit')
 
 
 @app.route('/delete/canteens/<canteen_id>/<category>/<_id>', methods=['GET', 'POST'])
@@ -315,6 +262,7 @@ def delete_canteens_data(canteen_id, category, _id):
         if mongo.db.dishes.count_documents({'image_path': image_path}) == 1:
             delete_image()
 
-    mongo.db[category].delete_one({'_id': ObjectId(_id)})
+    mongo_col = mongo.db[category]
+    mongo_col.delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')
-    return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
+    return redirect('/overview/canteens/%s/dishes' % canteen_id)

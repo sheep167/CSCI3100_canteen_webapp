@@ -1,3 +1,4 @@
+$main-color: #ff7500;
 
 .sidecart{
   width: 320px;
@@ -59,7 +60,6 @@
 // main page css
 
 #bg-img{
-  position: relative;
   padding-bottom: 20%;
   background-size: cover;
   background-position: center center;
@@ -73,18 +73,39 @@ div.canteen-pic{
   padding-bottom: 8rem;
 }
 
-div.canteen-info{
-  display: inline-block;
-}
-
 #canteen-info{
-  display:inline-block;
-  max-width: 100%;
+
 }
 
 #menu-nav-tab button{
   border-radius: 0;
   font-weight: 200;
 }
+
+#menu-nav-tab button:hover{
+  border-radius: 0;
+  background-color: transparent;
+  border: 0;
+  color: $main-color;
+  font-weight: 600;
+}
+
+#menu-nav-tab button:focus{
+  border-radius: 0;
+  background-color: transparent;
+  border: 0;
+  color: $main-color;
+  font-weight: 400;
+  box-sizing: none;
+  box-shadow: none;
+}
+
+
+
+
+// COULDN'T GET THIS TO WORK, DON"T KNOW WhY
+// button #food:hover{
+//   cursor: url('../../image/cutlery-icon.png') !important;
+// }
   
   
