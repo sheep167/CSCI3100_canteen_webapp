@@ -8,19 +8,19 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
 
-
 @app.route('/', methods=['GET'])
-def home_page():
-    return render_template('home_page.html')
+def home():
+    # two templates are available: home.html and home2.html
+    # use home.html
+    return render_template('home.html')
 
+@app.route('/user_account', methods=['GET', 'POST'])
+def user_account():
+    return render_template('user_account.html')
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
-
-@app.route('/home')
-def home():
-    return render_template('home.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -88,14 +88,16 @@ def confirm_email(token):
         email = serializer.loads(token, salt=app.config['SECRET_KEY'], max_age=300)
         mongo.db.users.update_one({'email': email}, {'$set': {'confirmed': 1}})
     except SignatureExpired:
-        return '<h1> Token Expired </h1> '
+        return '<h1> Token Expired </h1> '    
     return redirect(url_for('home'))
+
 
 @app.route('/canteen/<canteen_name>')
 def canteen_page(canteen_name):
     # this must be changed to get canteen name list from mongodb
     attempted_canteen =  mongo.db.canteens.find_one({'name':canteen_name})
     
+
     # canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
     if attempted_canteen :
         return render_template('canteen_page.html', canteen_name=canteen_name)
