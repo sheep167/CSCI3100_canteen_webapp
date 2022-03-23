@@ -50,14 +50,6 @@ def add_data_page(category):
             form.text.data = json.dumps({'email': 'str', 'password': 'str', 'username': 'str', 'auth_type': 'int', 'confirmed': 'int', 'balance': 'float'}, indent=4)
         elif category == 'canteens':
             form.text.data = json.dumps({'name': 'str', 'longitude': 'float', 'latitude': 'float', 'open_at': 'str', 'close_at': 'str', 'capacity': 'int'}, indent=4)
-        elif category == 'dishes':
-            form.text.data = json.dumps({'name': 'str', 'in_canteen': 'object_id', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int', 'image_file_name': 'str'}, indent=4)
-        elif category == 'comments':
-            form.text.data = json.dumps({'posted_time': 'str', 'posted_by_user': 'object_id', 'posted_on_canteen': 'object_id', 'rating': 'int', 'paragraph': 'str'}, indent=4)
-        elif category == 'orders':
-            form.text.data = json.dumps({'created_time': 'str', 'created_by_user': 'object_id', 'created_at_canteen': 'object_id', 'food': 'List[object_id]', 'total_price': 'float', 'order_status': 'str'}, indent=4)
-        else:
-            return 'Not Found', 404
 
     if request.method == 'POST':
         try:
@@ -94,8 +86,9 @@ def edit_data_page(category, _id):
     mongo_col = mongo.db[category]
 
     if request.method == 'GET':
-        form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0}), indent=4, default=str)
-        if category == 'canteens':
+        if category == 'users':
+            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'email': 0, 'username': 0, 'password': 0}), indent=4, default=str)
+        elif category == 'canteens':
             form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0}), indent=4, default=str)
         
     if request.method == 'POST':
