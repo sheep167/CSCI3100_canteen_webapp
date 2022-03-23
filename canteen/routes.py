@@ -14,6 +14,10 @@ def home():
     # use home.html
     return render_template('home.html')
 
+@app.route('/user_account', methods=['GET', 'POST'])
+def user_account():
+    return render_template('user_account.html')
+
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
