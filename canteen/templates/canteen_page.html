@@ -20,13 +20,18 @@
 
   <script >
       function toggleCart(){
-          document.querySelector('.sidecart').classList.toggle('open-cart');
+        document.querySelector('.sidecart').classList.toggle('open-cart');
+        document.querySelector('#sidecart').classList.toggle('bg-over-lay');
+
       }
-      console.log("Hello");
-      toggleCart();
+      function addToCart(){
+        document.querySelector('.food-info').classList.toggle('bg-over-lay');
+      }
   </script>
     
-  <div class="sidecart bg-light text-center">
+  <!-- Side Cart -->
+  <div id="sidecart" class="">
+    <div class="sidecart bg-light text-center">
     
     <div class="nav flex-column container">
       <div class="text-secondary m-0 px-4 text-center container pt-4">
@@ -134,12 +139,15 @@
           
 
         <div class="pt-2">
-          <button type="button" class="pt-2 btn btn-danger w-100">Go to checkout</button>
+          <button type="button" class="pt-2 btn btn-main-color w-100">Go to checkout</button>
         </div>
       </div>
     </div>
     
+    </div>
   </div>
+
+  <!-- Canteen Thumbnail and Info -->
   <div class="m-0 p-0" style="overflow: hidden; background-color: #ffffff;">
     <div id="bg-img" style="background-image: url(../static/image/UC/UC1.jpeg) ;">  
     </div>
@@ -164,53 +172,126 @@
 
   </div>
 
-  <div id="cat-1" class="mt-4 mb-4 p-0 container-fluid" style="background-color:rgb(255, 255, 255); ">
+  <!-- Enter Food Info -->
+  <div id="enter-food-info" class="">
+    <div class="">
+      
+    </div>
+  </div>
+
+  <!-- Category 1 -->
+  <div id="cat-1" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h4">Popular</div>
     </div>
 
     <div class="container-fluid pl-5 pr-5">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
+
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" onclick="addToCart()">
+            <div class="container">
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food1</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
           <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
               <div class="flex-row d-flex flex-wrap">
-                <div class="d-flex flex-column">
-                  <div class="mr-auto">Food1</div>
-                  <div class="mr-auto font-weight-light" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food2</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
                 </div>
+                <!-- Right Side of Button -->
                 <div class="ml-auto">
-                  img
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
                 </div>
-
               </div>
-
             </div>
           </button>
         </div>
 
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
-              <div class="float-left">Food2</div>
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food3</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
+                </div>
+              </div>
             </div>
           </button>
         </div>
-        
 
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
-              <div class="float-left">Food3</div>
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food4</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
+                </div>
+              </div>
             </div>
           </button>
         </div>
-        
 
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
-              <div class="float-left">Food4</div>
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food5</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-4" style="height: 20vh; min-width: 300px;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
+            <div class="container">
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <div class="mr-auto pt-2 h5">Food6</div>
+                  <div class="mr-auto font-weight-light h6 text-left" style="font-size: small;">Lorem ipsum dolor sit amet</div>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="../static/image/UC/Food1.jpeg" style="object-fit: cover; width: 100px; height: 100px;">
+                </div>
+              </div>
             </div>
           </button>
         </div>
@@ -220,7 +301,8 @@
 
   </div>
 
-  <div id="cat-2" class="mt-4 mb-4 p-0 container-fluid" style="background-color:rgb(255, 255, 255); ">
+  <!-- Category 2 -->
+  <div id="cat-2" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h4">Food</div>
     </div>
@@ -228,7 +310,7 @@
     <div class="container-fluid pl-5 pr-5">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100" >
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
               <div class="float-left">Food1</div>
             </div>
@@ -236,7 +318,7 @@
         </div>
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food2</div>
             </div>
@@ -245,7 +327,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food3</div>
             </div>
@@ -254,7 +336,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food4</div>
             </div>
@@ -266,7 +348,8 @@
 
   </div>
 
-  <div id="cat-3" class="mt-4 mb-4 p-0 container-fluid" style="background-color:rgb(255, 255, 255); ">
+  <!-- Category 3 -->
+  <div id="cat-3" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h4">Drink</div>
     </div>
@@ -274,7 +357,7 @@
     <div class="container-fluid pl-5 pr-5">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100" >
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
               <div class="float-left">Food1</div>
             </div>
@@ -282,7 +365,7 @@
         </div>
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food2</div>
             </div>
@@ -291,7 +374,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food3</div>
             </div>
@@ -300,7 +383,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food4</div>
             </div>
@@ -312,8 +395,8 @@
 
   </div>
   
-
-  <div id="cat-4" class="mt-4 mb-4 p-0 container-fluid" style="background-color:rgb(255, 255, 255); ">
+<!-- Category 4 -->
+  <div id="cat-4" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h4">Dessert</div>
     </div>
@@ -321,7 +404,7 @@
     <div class="container-fluid pl-5 pr-5">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100" >
+          <button class="food-menu btn btn-outline-secondary h-100 w-100" >
             <div class="container">
               <div class="float-left">Food1</div>
             </div>
@@ -329,7 +412,7 @@
         </div>
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food2</div>
             </div>
@@ -338,7 +421,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food3</div>
             </div>
@@ -347,7 +430,7 @@
         
 
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0" style="width: 45vw; height: 20vh;">
-          <button class="btn btn-outline-secondary h-100 w-100">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
             <div class="container">
               <div class="float-left">Food4</div>
             </div>

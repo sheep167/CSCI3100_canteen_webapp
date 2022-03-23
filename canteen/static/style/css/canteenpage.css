@@ -1,13 +1,25 @@
-.sidecart {
-  width: 320px;
-  min-width: 320px;
-  height: 100vh;
+.bg-over-lay {
   position: fixed;
-  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.48);
+  z-index: 2000;
+}
+
+.sidecart {
+  height: 100vh;
+  width: 400px;
+  min-width: 400px;
+  position: fixed;
   overflow: auto !important;
-  right: -320px;
+  right: -400px;
   z-index: 9000;
   transition: 0.5s ease;
+  background-color: #ffffff !important;
 }
 
 @media (max-width: 400px) {
@@ -18,21 +30,6 @@
 }
 .open-cart {
   right: 0px !important;
-}
-
-.open-cart:before {
-  content: "";
-  position: fixed;
-  top: 0px;
-  width: 100vw;
-  height: 100vh;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  pointer-events: none;
-  background-color: #ffffff;
-  opacity: 0.5;
-  z-index: -1;
 }
 
 .product-quantity {
@@ -51,6 +48,11 @@
   margin: auto;
   width: 100%;
   white-space: nowrap;
+}
+
+button.btn-main-color {
+  background-color: #ff7500;
+  color: #ffffff;
 }
 
 #bg-img {
@@ -91,36 +93,28 @@ div.canteen-pic {
 }
 
 button.food-menu {
-  border-radius: 0;
   background-color: transparent;
-  border: 1px;
-  border-color: #ff7500;
   color: #ff7500;
   font-weight: 400;
-  box-sizing: none;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 0;
 }
 
 button.food-menu:hover {
-  border-radius: 0;
   background-color: transparent;
-  border: 1px;
-  border-color: #ff7500;
   color: #ff7500;
   font-weight: 400;
-  box-sizing: none;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 1px solid !important;
+  border-color: #ff7500;
 }
 
 button.food-menu:focus {
-  border-radius: 0;
   background-color: transparent;
-  border: 1px;
-  border-color: #ff7500;
   color: #ff7500;
   font-weight: 400;
-  box-sizing: none;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-color: #ff7500;
 }
 
 /*# sourceMappingURL=canteenpage.css.map */
