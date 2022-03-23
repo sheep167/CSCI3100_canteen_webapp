@@ -8,15 +8,19 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
 
+
 @app.route('/', methods=['GET'])
-def home():
-    # two templates are available: home.html and home2.html
-    # use home.html
-    return render_template('home.html')
+def home_page():
+    return render_template('home_page.html')
+
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():

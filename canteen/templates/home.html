@@ -21,61 +21,141 @@ Canteen List
 <!--Welcome Message-->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 text-center text-light bg-dark" id="Charmonman">
+        <div class="col-md-12 text-center text-light bg-dark">
             <h2 class="display-3 font-weight-normal mt-4">CU Food Order</h2>
             <p class="lead font-weight-normal">Start to Enjoy Your Favorite Dish</p>
             <img src="../static/image/home/dish.png" width="80px" height="80px">
         </div>
     </div>
-</div>
 
-<!--Canteen List-->
-<div class="card mx-5 my-5" style="max-height: 250px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h4 class="foodlist card-title">UC Canteen</h4><br>
-                <p class="foodlist card-text">Star: 3.5/5</p>
-                <p class="foodlist card-text">Crowdedness:</p>
-                <a class="btn btn-outline-warning mb-3" href="{{url_for('canteen_page', canteen_name='UC Canteen')}}">View</a>
+    <!--Keyword Search-->
+    <div class="row justify-content-center text-center text-light bg-dark">
+        <div class="col-md-6 mt-3 mb-3">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Choose your preferred type of food"
+                    aria-label="Type of food" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="card mx-5 my-5" style="max-height: 250px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+</div>
+
+<!--Displaying Content List-->
+<div class="container mt-4" id="tabs">
+    <div class="row mt-5 justify-content-center">
+        <!--Tab to choose filter (Near me / Favorites)-->
+        <div class="col-md-6">
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-near-tab" data-toggle="tab" href="#nav-near" role="tab"
+                        aria-controls="nav-near" aria-selected="true">Near Me</a>
+                    <a class="nav-item nav-link" id="nav-fav-tab" data-toggle="tab" href="#nav-fav" role="tab"
+                        aria-controls="nav-fav" aria-selected="false">Favorites</a>
+                </div>
+            </nav>
         </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h4 class="foodlist card-title">Canteen Name</h4><br>
-                <p class="foodlist card-text">Star: 3.5/5</p>
-                <p class="foodlist card-text">Crowdedness:</p>
-                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+
+        <!--Canteen List: separate opened and closed canteens-->
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+            <!--Near Me Canteen List-->
+            <div class="tab-pane fade show active" id="nav-near" role="tabpanel" aria-labelledby="nav-near">
+                <!--Canteen List (Currently Open)-->
+                <h4 class="ml-5 font-weight-normal mt-4">Currently Opened</h4>
+                <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="foodlist card-title mb-2">Canteen Name</h4><br>
+                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
+                                    8.45pm)
+                                </p>
+                                <p class="foodlist card-text mb-2"></p>
+                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
+                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
+                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Canteen List (Currently Closed)-->
+                <h4 class="ml-5 font-weight-normal mt-4">Currently Closed</h4>
+                <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="foodlist card-title mb-2">Canteen Name</h4><br>
+                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
+                                    8.45pm)
+                                </p>
+                                <p class="foodlist card-text mb-2"></p>
+                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
+                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
+                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Favorite Canteen List-->
+            <div class="tab-pane fade" id="nav-fav" role="tabpanel" aria-labelledby="nav-fav">
+
+                <!--Canteen List (Currently Opened)-->
+                <h4 class="ml-5 font-weight-normal mt-4">Currently Opened</h4>
+
+                <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="foodlist card-title mb-2">Favorite1</h4><br>
+                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
+                                    8.45pm)
+                                </p>
+                                <p class="foodlist card-text mb-2"></p>
+                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
+                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
+                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Canteen List (Currently Closed)-->
+                <h4 class="ml-5 font-weight-normal mt-4">Currently Closed</h4>
+
+                <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="foodlist card-title mb-2">Favorite2</h4><br>
+                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
+                                    8.45pm)
+                                </p>
+                                <p class="foodlist card-text mb-2"></p>
+                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
+                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
+                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="card mx-5 my-5" style="max-height: 250px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <h4 class="foodlist card-title">Canteen Name</h4><br>
-                <p class="foodlist card-text">Star: 3.5/5</p>
-                <p class="foodlist card-text">Crowdedness:</p>
-                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
-            </div>
-        </div>
-    </div>
 </div>
-
-
-
 {% endblock %}
