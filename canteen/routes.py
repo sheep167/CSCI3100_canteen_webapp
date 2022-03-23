@@ -90,11 +90,13 @@ def confirm_email(token):
 @app.route('/canteen/<canteen_name>')
 def canteen_page(canteen_name):
     # this must be changed to get canteen name list from mongodb
-    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
-    if( canteen_name in canteen_name_list ):
+    attempted_canteen =  mongo.db.canteens.find_one({'name':canteen_name})
+    
+    # canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
+    if attempted_canteen :
         return render_template('canteen_page.html', canteen_name=canteen_name)
     else:
-        return 'Page Not Found', 404
+        return 'Page Not Found' + canteen_name, 404
 
 
 # @app.route('/test')

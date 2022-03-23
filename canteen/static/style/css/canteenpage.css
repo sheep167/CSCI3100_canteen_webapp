@@ -69,25 +69,58 @@ div.canteen-pic {
 
 #menu-nav-tab button {
   border-radius: 0;
+  border: 0;
+  background-color: transparent;
   font-weight: 200;
 }
 
 #menu-nav-tab button:hover {
   border-radius: 0;
-  background-color: transparent;
   border: 0;
+  background-color: transparent;
   color: #ff7500;
   font-weight: 600;
 }
 
 #menu-nav-tab button:focus {
   border-radius: 0;
-  background-color: transparent;
   border: 0;
+  background-color: transparent;
+  font-weight: 400;
+  box-shadow: none;
+}
+
+button.food-menu {
+  border-radius: 0;
+  background-color: transparent;
+  border: 1px;
+  border-color: #ff7500;
   color: #ff7500;
   font-weight: 400;
   box-sizing: none;
-  box-shadow: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+button.food-menu:hover {
+  border-radius: 0;
+  background-color: transparent;
+  border: 1px;
+  border-color: #ff7500;
+  color: #ff7500;
+  font-weight: 400;
+  box-sizing: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+button.food-menu:focus {
+  border-radius: 0;
+  background-color: transparent;
+  border: 1px;
+  border-color: #ff7500;
+  color: #ff7500;
+  font-weight: 400;
+  box-sizing: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 /*# sourceMappingURL=canteenpage.css.map */

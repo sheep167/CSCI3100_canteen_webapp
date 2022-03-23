@@ -24,5 +24,9 @@ for user in users_list:
 
 mongo.db.users.insert_many(users_list)
 
-canteens_list = [{'name': 'UC Canteen', 'latitude': 22.4210912, 'longitude': 114.2056994, 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': []}]
+#must be updated
+canteens_list = [{'name': 'UC Canteen', 'latitude': 22.4210912, 'longitude': 114.2056994, 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': []},
+                {'name': 'WYS Canteen', 'latitude': 0, 'longitude': 0, 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': []},
+                {'name': 'SHHO Canteen', 'latitude': 0, 'longitude': 0, 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': []}]
+
 mongo.db.canteens.insert_many(canteens_list)
