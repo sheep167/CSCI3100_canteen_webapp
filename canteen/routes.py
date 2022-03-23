@@ -8,19 +8,15 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
 
-
 @app.route('/', methods=['GET'])
-def home_page():
-    return render_template('home_page.html')
-
+def home():
+    # two templates are available: home.html and home2.html
+    # use home.html
+    return render_template('home.html')
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
-
-@app.route('/home')
-def home():
-    return render_template('home.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -93,7 +89,8 @@ def confirm_email(token):
 
 @app.route('/canteen/<canteen_name>')
 def canteen_page(canteen_name):
-    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"] #not complete
+    # this must be changed to get canteen name list from mongodb
+    canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
     if( canteen_name in canteen_name_list ):
         return render_template('canteen_page.html', canteen_name=canteen_name)
     else:
