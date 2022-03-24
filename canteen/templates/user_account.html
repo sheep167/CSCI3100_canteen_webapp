@@ -4,13 +4,13 @@
 Canteen List
 {% endblock %}
 {% block stylesheet %}
-<link rel="stylesheet" href="../static/style/css/user_account.css">
 <link rel="stylesheet" href="../static/bootstrap/css_bootstrap5/bootstrap.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row justify-content-center align-items-center">
+        <!--Photo Part-->
         <div class="col-md-5 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
                     width="150px"
@@ -18,6 +18,7 @@ Canteen List
                     class="font-weight-bold">Username</span><span class="text-black-50">example@mail.com</span><span>
                 </span>
             </div>
+            <!--Upload New Photo-->
             <div class="form-row justify-content-center">
                 <div class="col-md-8 mb-3">
                     <h5>Upload New Photo</h5>
@@ -30,7 +31,9 @@ Canteen List
                 </div>
             </div>
         </div>
+        <!--Username + Password Part-->
         <div class="col-md-7 border-right align-items-center ">
+            <!--Edit Username-->
             <form method="POST" class="my-4">
                 <h4>Edit Username</h4>
                 <div class="form-group">
@@ -40,6 +43,7 @@ Canteen List
                 </div>
                 <a class="btn btn-sm btn-secondary">Save</a>
             </form>
+            <!--Edit Password-->
             <form method="POST" class="my-4">
                 <h4>Modify Password</h4>
                 <div class="form-group">
