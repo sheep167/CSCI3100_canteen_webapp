@@ -63,6 +63,27 @@ button.btn-main-color{
 
 // end side cart css
 
+// pop-up css
+.pop-up{
+  background-color: #fefefe;
+  width: 50%;
+  margin-top: 5%;
+  display: none;
+  overflow: auto;
+}
+
+.display-show{
+  display: block !important;
+}
+
+#food-info-img{
+  padding-bottom: 40%;
+  background-size: cover;
+  background-position: center center;
+}
+
+// end pop-up css
+
 // main page css
 #bg-img{
   padding-bottom: 20%;
