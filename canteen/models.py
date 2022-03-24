@@ -78,7 +78,7 @@ class Order:
         self.at_time: datetime.datetime = created_time
         self.by_user: ObjectId = created_by_user
         self.at_canteen: ObjectId = created_at_canteen
-        self.food: List[ObjectId] = food
+        self.dishes: List[ObjectId] = food
         self.total_price: float = total_price
         self.order_status: str = 'waiting'  # waiting, fulfilled, unfulfilled
 

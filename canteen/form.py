@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField, SelectMultipleField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
 from canteen import mongo
 
@@ -36,4 +36,10 @@ class DataEditForm(FlaskForm):
 class DataEditFormWithImage(FlaskForm):
     text = TextAreaField()
     image = FileField()
+    submit = SubmitField()
+
+
+class DataEditFormWithSelect(FlaskForm):
+    text = TextAreaField()
+    select = SelectMultipleField()
     submit = SubmitField()
