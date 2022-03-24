@@ -18,6 +18,10 @@ def home():
 def user_account():
     return render_template('user_account.html')
 
+@app.route('/canteen_account', methods=['GET', 'POST'])
+def canteen_account():
+    return render_template('canteen_account.html')
+
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
