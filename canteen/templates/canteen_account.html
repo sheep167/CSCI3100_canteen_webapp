@@ -8,10 +8,10 @@ Canteen List
 {% endblock %}
 
 {% block content %}
-<div class="container rounded bg-white mt-5 mb-5">
+<div class="container bg-white mt-5 mb-5">
     <div class="row justify-content-center align-items-center">
         <!--Photo Part-->
-        <div class="col-md-5 border-right">
+        <div class="col-md-4">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
                     width="150px"
                     src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
@@ -32,31 +32,83 @@ Canteen List
             </div>
         </div>
         <!--Username + Password Part-->
-        <div class="col-md-7 border-right align-items-center ">
+        <div class="col-md-8 align-items-center ">
             <!--Edit Canteen's Information-->
             <form method="POST" class="my-4">
                 <h4>Edit Canteen's Information</h4>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Username</label>
-                    <input type="text" class="form-control" id="editusername" aria-describedby="editusername"
+                    <input type="text" class="form-control mb-3" id="editusername" aria-describedby="editusername"
                         placeholder="Username">
                     <label for="exampleInputEmail1">Canteen Name</label>
-                    <input type="text" class="form-control" id="editusername" aria-describedby="editcanteenname"
+                    <input type="text" class="form-control mb-3" id="editusername" aria-describedby="editcanteenname"
                         placeholder="Canteen Name">
-                    
-                    <label for="exampleInputEmail1">Canteen Name</label>
-                    <input type="text" class="form-control" id="editusername" aria-describedby="editcanteenname"
-                        placeholder="Canteen Name">
-                </div>
-                <div class="form-outline timepicker">
-                    <input type="text" class="form-control" id="opening" value="8:00 AM">
-                    <label class="form-label" for="opening">Opening Time</label>
-                    <input type="text" class="form-control" id="closong" value="8:00 AM">
-                    <label class="form-label" for="closing">Closing Time</label>
+                    <div class="form-group row">
+                            <div class="col-md-2">
+                                <label>Opens from</label>
+                                <select class="form-select" aria-label="from">
+                                    <option selected>Select</option>
+                                    <option value="1">SUN</option>
+                                    <option value="2">MON</option>
+                                    <option value="2">TUE</option>
+                                    <option value="2">WED</option>
+                                    <option value="2">THU</option>
+                                    <option value="2">FRI</option>
+                                    <option value="2">SAT</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label>to</label>
+                                <select class="form-select" aria-label="to">
+                                    <option selected>Select</option>
+                                    <option value="1">SUN</option>
+                                    <option value="2">MON</option>
+                                    <option value="2">TUE</option>
+                                    <option value="2">WED</option>
+                                    <option value="2">THU</option>
+                                    <option value="2">FRI</option>
+                                    <option value="2">SAT</option>
+                                </select>
+                            </div>
+                        </div>
+                    <label>Opening Hours</label>
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="openHH" placeholder="HH (00-12)">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="openMM" placeholder="MM (00-59)">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" aria-label="openAMPM">
+                                <option selected>AM / PM</option>
+                                <option value="1">AM</option>
+                                <option value="2">PM</option>
+                              </select>
+                        </div>
+                        <div id="emailHelp" class="form-text">Note: Noon is 12.00PM</div>
+                    </div>
+                    <label>Closing Hours</label>
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="closeHH" placeholder="HH (00-12)">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="closeMM" placeholder="MM (00-59)">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" aria-label="closeAMPM">
+                                <option selected>AM / PM</option>
+                                <option value="1">AM</option>
+                                <option value="2">PM</option>
+                              </select>
+                        </div>
+                        <div id="emailHelp" class="form-text">Note: Noon is 12.00PM</div>
+                    </div>
                 </div>
                 <a class="btn btn-sm btn-secondary">Save</a>
             </form>
-            
+
             <!--Edit Password-->
             <form method="POST" class="my-4">
                 <h4>Modify Password</h4>
