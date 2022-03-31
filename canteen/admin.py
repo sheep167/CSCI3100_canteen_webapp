@@ -19,6 +19,16 @@ class NoSuchUserError(Exception):
     pass
 
 
+@app.route('/reset_password/<_id>')
+@login_required
+def reset_password(_id):
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
+
+    mongo.db.users.update_one({'_id': ObjectId(_id)}, {'$set': {'password': bcrypt.hashpw('123456'.encode('utf-8'), bcrypt.gensalt())}})
+    return redirect('/overview/users')
+
+
 @app.route('/overview/<category>')
 @login_required
 def overview_page(category):
