@@ -95,6 +95,8 @@ def edit_data_page(category, _id):
         return 'Not Authorized', 403
 
     form = DataEditForm()
+    if category == 'canteens':
+        form = DataEditFormWithImage()
     mongo_col = mongo.db[category]
 
     if request.method == 'GET':
@@ -102,16 +104,34 @@ def edit_data_page(category, _id):
             form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'email': 0, 'username': 0, 'password': 0}), indent=4, default=str)
         elif category == 'canteens':
             form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0}), indent=4, default=str)
-        
+
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
+            if category == 'canteens':
+
+                if form.image.data.filename != '':
+                    filename = secure_filename(form.image.data.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
+                        folder_path = './canteen/static/image/%s' % canteen.get('name')
+                        os.makedirs(folder_path, exist_ok=True)
+                        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+                        form.image.data.save(save_path)
+                        data['image_path'] = save_path
+                    else:
+                        raise ValidationError()
+                else:
+                    data['image_path'] = None
+
             mongo_col.update_one({'_id': ObjectId(_id)}, {'$set': data})
             return redirect('/overview/%s' % category)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
 
+    if category == 'canteens':
+        return render_template('data_with_image.html', form=form, method='Edit', category=category)
     return render_template('data.html', form=form, method='Edit', category=category)
 
 
