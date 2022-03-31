@@ -1,3 +1,5 @@
+from bson import ObjectId
+
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user
@@ -96,17 +98,51 @@ def confirm_email(token):
     return redirect(url_for('home'))
 
 
-@app.route('/canteen/<canteen_name>')
-def canteen_page(canteen_name):
+@app.route('/canteens/<_id>')
+def canteen_page(_id):
     # this must be changed to get canteen name list from mongodb
-    attempted_canteen =  mongo.db.canteens.find_one({'name':canteen_name})
-    
+    results = mongo.db.canteens.aggregate([
+        {'$match': {'_id': ObjectId(_id)}},
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'menu',
+             'foreignField': '_id',
+             'as': 'menu'}}
+    ])
+    canteen = list(results)
 
-    # canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
-    if attempted_canteen :
-        return render_template('canteen_page.html', canteen_name=canteen_name)
+    if canteen:
+        canteen = canteen[0]
+        if canteen.get('image_path'):
+            canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            for dish in canteen.get('menu'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        else:
+            canteen['image_path'] = None
+        return render_template('canteen_page.html', canteen=canteen)
     else:
-        return 'Page Not Found' + canteen_name, 404
+        return 'Page Not Found', 404
+
+
+@app.route('/canteens')
+def list_canteens():
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'menu',
+             'foreignField': '_id',
+             'as': 'menu'}}
+    ])
+    canteens = list(results)
+    for canteen in canteens:
+        if canteen.get('image_path'):
+            canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            for dish in canteen.get('menu'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        else:
+            canteen['image_path'] = None
+
+    return render_template('user_canteens.html', canteens=canteens)
 
 
 # @app.route('/test')
