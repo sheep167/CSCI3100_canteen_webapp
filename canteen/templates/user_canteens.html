@@ -10,7 +10,9 @@ Canteen List
         {% for canteen in batch %}
         <div class="col-sm-4">
             <div class="card">
-                <img class="card-img-top" src="{{canteen.image_path}}" alt="No image for this canteen">
+                {% if canteen.image_path %}
+                <img class="card-img-top" src="{{canteen.image_path}}">
+                {% endif %}
                 <div class="card-body">
                     <h3 class="card-title">{{canteen.name}}</h3>
                     <p class="card-text">Open at: {{canteen.open_at}}</p>
@@ -33,7 +35,7 @@ Canteen List
                         <td>{{dish.rating}}</td>
                         <td>
                           {% if dish.image_path %}
-                            <img src={{dish.image_path}} width="400" alt="No image for this dish">
+                            <img src={{dish.image_path}} width="400">
                           {% else %}
                             No image for this dish
                           {% endif %}
