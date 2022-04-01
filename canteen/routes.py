@@ -1,3 +1,4 @@
+import datetime
 from bson import ObjectId
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash, request
@@ -116,7 +117,7 @@ def canteen_page(_id):
 
     if request.method == 'POST':
         add_to_cart(request.form['dish'])
-        flash('Add to Cart!', category='info')
+        flash('Added to Cart!', category='info')
         return redirect(request.url)
 
     if canteen:
@@ -155,20 +156,48 @@ def list_canteens():
 
 @login_required
 def add_to_cart(dish_id):
-    current_user_id = current_user._id
-    mongo.db.users.update_one({'_id': ObjectId(current_user_id)},
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)},
                               {'$push': {'cart': ObjectId(dish_id)}})
 
 
-@app.route('/checkout', methods=['GET', 'POST'])
+@app.route('/cart', methods=['GET', 'POST'])
 @login_required
-def checkout_page():
-    return "Waiting to be implemented"
+def cart_page():
+    if request.method == 'POST':
+        create_order(request.form['payment'])
+        flash('Payment successful')
+        return redirect('/')
 
-# @app.route('/test')
-# def test():
-#     msg = Message('Twilio SendGrid Test Email', recipients=['yiuchunto@gmail.com'])
-#     msg.body = 'This is a test email!'
-#     msg.html = '<p>This is a test email!</p>'
-#     mail.send(msg)
-#     return 'ok'
+    results = mongo.db.users.aggregate([
+        {'$match': {'_id': ObjectId(current_user._id)}},
+        {'$unwind': '$cart'},
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'cart',
+             'foreignField': '_id',
+             'as': 'cart'}},
+        {'$group': {'_id': '$cart', 'count': {'$sum': 1}}}
+    ])
+    cart = list(results)
+    total_price = 0
+    for item in cart:
+        item['details'] = item.pop('_id')[0]
+        item['details']['image_path'] = item.get('details').get('image_path').replace(' ', '%20').replace('./canteen', '')
+        total_price += item.get('details').get('price')
+    return render_template('checkout_page.html', cart=cart, total_price=total_price)
+
+
+@login_required
+def create_order(total_price):
+    total_price = float(total_price)
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+    order = {
+        'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'order_status': 'waiting',
+        'dishes': cart.get('cart'),
+        'total_price': total_price,
+        'by_user': ObjectId(current_user._id)
+    }
+    mongo.db.orders.insert_one(order)
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': []}})
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$inc': {'balance': -total_price}})

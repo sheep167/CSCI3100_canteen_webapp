@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% set active_page = "canteens" %}
+
+{% block title %}
+Checkout Page
+{% endblock %}
+
+{% block content %}
+  <div id="cat-1" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
+    <div class="container m-0 pl-5 pt-4 pb-3">
+      <div class="p-0 h1">Check out</div>
+    </div>
+    {% if cart %}
+    <div class="container-fluid pl-5 pr-5">
+      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
+        {% for item in cart %}
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
+          <button class="food-menu btn btn-outline-secondary h-100 w-100">
+            <div class="container">
+              <div class="flex-row d-flex flex-wrap">
+                <!-- Left side of button -->
+                <div class="d-flex flex-column" style="max-width: 50%;">
+                  <span class="mr-auto pt-2 h5" style="font-size: 40px">{{item.details.name}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">{{item.details.ingredients}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Price: {{item.details.price}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Count: {{item.count}}</span>
+                </div>
+                <!-- Right Side of Button -->
+                <div class="ml-auto">
+                  <img src="{{item.details.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="container m-0 pl-5 pt-4 pb-3">
+      <h1> Total Price </h1>
+      <h1> ${{total_price}} </h1>
+      <form method="post">
+        <button class="btn btn-outline-primary" type="submit" name="payment" value={{total_price}}> Pay Now </button>
+      </form>
+    </div>
+    {% else %}
+    <div class="container m-0 pl-5 pt-4 pb-3">
+      <h1> Your Cart is Empty</h1>
+    </div>
+    {% endif %}
+  </div>
+
+
+
+{% endblock %}
