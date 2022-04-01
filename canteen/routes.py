@@ -163,7 +163,7 @@ def add_to_cart(dish_id):
 @app.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout_page():
-    return str(current_user._id)
+    return "Waiting to be implemented"
 
 # @app.route('/test')
 # def test():
