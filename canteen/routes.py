@@ -1,14 +1,13 @@
 from bson import ObjectId
-
 from canteen import app, mongo, mail
-from flask import render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user, current_user
-
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_user, logout_user, current_user, login_required
 from .form import UserRegistrationForm, UserLoginForm
 from .models import User, LoginUser
 import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
+
 
 @app.route('/', methods=['GET'])
 def home():
@@ -16,17 +15,21 @@ def home():
     # use home.html
     return render_template('home.html')
 
+
 @app.route('/user_account', methods=['GET', 'POST'])
 def user_account():
     return render_template('user_account.html')
+
 
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     return render_template('canteen_account.html')
 
+
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -58,7 +61,7 @@ def register_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if current_user.is_authenticated == True:
+    if current_user.is_authenticated:
         return redirect(url_for('home'))
 
     form = UserLoginForm()
@@ -98,7 +101,7 @@ def confirm_email(token):
     return redirect(url_for('home'))
 
 
-@app.route('/canteens/<_id>')
+@app.route('/canteens/<_id>', methods=['GET', 'POST'])
 def canteen_page(_id):
     # this must be changed to get canteen name list from mongodb
     results = mongo.db.canteens.aggregate([
@@ -111,6 +114,11 @@ def canteen_page(_id):
     ])
     canteen = list(results)
 
+    if request.method == 'POST':
+        add_to_cart(request.form['dish'])
+        flash('Add to Cart!', category='info')
+        return redirect(request.url)
+
     if canteen:
         canteen = canteen[0]
         if canteen.get('image_path'):
@@ -119,7 +127,7 @@ def canteen_page(_id):
                 dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
-        return render_template('canteen_page.html', canteen=canteen)
+        return render_template('new_canteen_page.html', canteen=canteen)
     else:
         return 'Page Not Found', 404
 
@@ -144,6 +152,18 @@ def list_canteens():
 
     return render_template('user_canteens.html', canteens=canteens)
 
+
+@login_required
+def add_to_cart(dish_id):
+    current_user_id = current_user._id
+    mongo.db.users.update_one({'_id': ObjectId(current_user_id)},
+                              {'$push': {'cart': ObjectId(dish_id)}})
+
+
+@app.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout_page():
+    return str(current_user._id)
 
 # @app.route('/test')
 # def test():
