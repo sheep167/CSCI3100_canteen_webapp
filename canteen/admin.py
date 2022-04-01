@@ -319,7 +319,11 @@ def add_canteens_data(canteen_id, category):
 
                 data['at_time'] = datetime.datetime.strptime(data.get('at_time'), '%Y-%m-%d %H:%M:%S')
 
-            mongo.db[category].insert_one(data)
+            _id = mongo.db[category].insert_one(data)
+
+            if category == 'dishes':
+                mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$push': {'menu': ObjectId(_id.inserted_id)}})
+
             return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
 
         except JSONDecodeError:
@@ -414,6 +418,7 @@ def delete_canteens_data(canteen_id, category, _id):
         image_path = mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'image_path': 1}).get('image_path')
         if mongo.db.dishes.count_documents({'image_path': image_path}) == 1:
             delete_image()
+        mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$pull': {'menu': ObjectId(_id)}})
 
     mongo.db[category].delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')
