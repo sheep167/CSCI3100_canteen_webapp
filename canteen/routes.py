@@ -1,4 +1,5 @@
 import datetime
+from collections import Counter
 from bson import ObjectId
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash, request
@@ -116,7 +117,7 @@ def canteen_page(_id):
     canteen = list(results)
 
     if request.method == 'POST':
-        add_to_cart(request.form['dish'])
+        add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
         flash('Added to Cart!', category='info')
         return redirect(request.url)
 
@@ -143,6 +144,7 @@ def list_canteens():
              'as': 'menu'}}
     ])
     canteens = list(results)
+
     for canteen in canteens:
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
@@ -155,49 +157,67 @@ def list_canteens():
 
 
 @login_required
-def add_to_cart(dish_id):
-    mongo.db.users.update_one({'_id': ObjectId(current_user._id)},
-                              {'$push': {'cart': ObjectId(dish_id)}})
+def add_to_cart(canteen_id, dish_id):
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
+    if not cart.get(canteen_name):
+        cart[canteen_name] = {}
+        cart[canteen_name]['cart'] = []
+    cart[canteen_name]['cart'].append(ObjectId(dish_id))
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
 
 
 @app.route('/cart', methods=['GET', 'POST'])
 @login_required
 def cart_page():
     if request.method == 'POST':
-        create_order(request.form['payment'])
+        create_order(canteen_name=request.form['canteen_name'], total_price=request.form['total_price'])
         flash('Payment successful')
-        return redirect('/')
+        # return redirect('/')
+        return redirect(request.url)
 
-    results = mongo.db.users.aggregate([
-        {'$match': {'_id': ObjectId(current_user._id)}},
-        {'$unwind': '$cart'},
-        {'$lookup':
-            {'from': 'dishes',
-             'localField': 'cart',
-             'foreignField': '_id',
-             'as': 'cart'}},
-        {'$group': {'_id': '$cart', 'count': {'$sum': 1}}}
-    ])
-    cart = list(results)
-    total_price = 0
-    for item in cart:
-        item['details'] = item.pop('_id')[0]
-        item['details']['image_path'] = item.get('details').get('image_path').replace(' ', '%20').replace('./canteen', '')
-        total_price += item.get('details').get('price')
-    return render_template('checkout_page.html', cart=cart, total_price=total_price)
+    results = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+
+    # Count the number of each dish and retrieve the details
+    cart = {}
+    for canteen_name, value in results.get('cart').items():
+        cart[canteen_name] = {}
+        cart[canteen_name]['cart'] = []
+        counter = Counter(value.get('cart'))
+        for dish_id, count in counter.items():
+            dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
+            dish_obj['count'] = count
+            cart[canteen_name]['cart'].append(dish_obj)
+
+    # Replace the image_path
+    # Calculate the total_price for each canteen
+    for canteen_name in cart.keys():
+        total_price = 0
+        cart_array = cart[canteen_name]['cart']
+        for dish in cart_array:
+            if dish.get('image_path'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            total_price += dish.get('price') * dish.get('count')
+        cart[canteen_name]['total_price'] = total_price
+    return render_template('checkout_page.html', cart=cart)
 
 
 @login_required
-def create_order(total_price):
+def create_order(canteen_name, total_price):
     total_price = float(total_price)
-    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+    canteen_id = mongo.db.canteens.find_one({'name': canteen_name}).get('_id')
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    # print(cart)
+    target = cart.pop(canteen_name)
+    # print(target)
     order = {
         'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'order_status': 'waiting',
-        'dishes': cart.get('cart'),
+        'dishes': target.get('cart'),
         'total_price': total_price,
+        'at_canteen': ObjectId(canteen_id),
         'by_user': ObjectId(current_user._id)
     }
     mongo.db.orders.insert_one(order)
-    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': []}})
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$inc': {'balance': -total_price}})

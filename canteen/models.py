@@ -21,7 +21,7 @@ class User:
         self.confirmed: int = 0
         self.username: str = username
         self.balance: float = 0  # amount of money
-        self.cart = []
+        self.cart = {}
 
     def to_json(self):
         # This function turns all attributes value to dict (json) for MongoDB
