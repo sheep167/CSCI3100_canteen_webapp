@@ -244,7 +244,7 @@ def add_canteens_data(canteen_id, category):
 
     if request.method == 'GET':
         if category == 'dishes':
-            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
+            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]'}, indent=4)
         elif category == 'comments':
             form.text.data = json.dumps({'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'username': 'str', 'rating': 'int', 'paragraph': 'str'}, indent=4)
         elif category == 'orders':

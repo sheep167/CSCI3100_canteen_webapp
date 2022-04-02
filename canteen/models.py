@@ -69,7 +69,6 @@ class Dishes:
         self.at_canteen: ObjectId = at_canteen
         self.price: float = price
         self.ingredients: List[str] = ingredients
-        self.rating: Union[int, None] = None  # Average rating is updated on every comment
         self.image_path = None  # Image file name
 
     def to_json(self):
