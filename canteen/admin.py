@@ -74,6 +74,7 @@ def add_data_page(category):
                 hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
                 data['password'] = hashed_password
                 data['cart'] = {}
+                data['image_path'] = None
 
             elif category == 'canteens':
                 data['menu'] = []

@@ -1,4 +1,5 @@
 import datetime
+import os
 from collections import Counter
 from bson import ObjectId
 from canteen import app, mongo, mail
@@ -8,6 +9,7 @@ from .form import UserRegistrationForm, UserLoginForm
 from .models import User, LoginUser
 import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from werkzeug.utils import secure_filename
 from flask_mail import Message
 
 
@@ -18,9 +20,65 @@ def home():
     return render_template('home.html')
 
 
+@login_required
 @app.route('/user_account', methods=['GET', 'POST'])
 def user_account():
-    return render_template('user_account.html')
+    def save_image():
+        folder_path = './canteen/static/image/users_profile_pic'
+        os.makedirs(folder_path, exist_ok=True)
+        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+        file.save(save_path)
+        return save_path
+
+    if request.method == 'POST':
+        user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+        if request.files:
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file', category='warning')
+                return redirect(request.url)
+            filename = secure_filename(file.filename)
+            if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                filename = user.get('username') + '.' + filename.rsplit('.', 1)[1].lower()
+                image_path = save_image()
+                mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'image_path': image_path}})
+            else:
+                flash('File not supported', category='warning')
+            return redirect(request.url)
+
+        action = request.form['action']
+        # Change Username
+        if action == 'username':
+            username = request.form.get('username', None)
+            if username:
+                username = request.form['username']
+                if mongo.db.users.find_one({'username': username}):
+                    flash('The username is already taken!', category='warning')
+                    return redirect(request.url)
+                mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'username': username}})
+                flash('Username Changed!', category='info')
+            else:
+                flash('Enter username!', category='warning')
+
+        # Change password
+        else:
+            old_password = request.form.get('old_password', None)
+            new_password = request.form.get('new_password', None)
+            if old_password and new_password:
+                if bcrypt.checkpw(old_password.encode('utf-8'), user.get('password')):
+                    mongo.db.users.update_one({'_id': ObjectId(user.get('_id'))}, {'$set': {'password': bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())}})
+                    flash('Password Changed!', category='info')
+                else:
+                    flash('Wrong Password', category='warning')
+            else:
+                flash('Enter both password!', category='warning')
+        return redirect(request.url)
+
+    user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+    if user.get('image_path'):
+        user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
+    # print(user)
+    return render_template('user_account.html', user=user)
 
 
 @app.route('/canteen_account', methods=['GET', 'POST'])
