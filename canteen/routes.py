@@ -174,6 +174,24 @@ def canteen_page(_id):
     ])
     canteen = list(results)
 
+    results = mongo.db.comments.aggregate([
+        {'$match': {'at_canteen': ObjectId(_id)}},
+        {'$lookup':
+            {'from': 'users',
+             'localField': 'by_user',
+             'foreignField': '_id',
+             'as': 'by_user'}},
+        {'$unwind': '$by_user'},
+        {'$project':
+            {'at_time': 1,
+             'paragraph': 1,
+             'rating': 1,
+             'by_user.username': 1
+        }}
+    ])
+    comments = list(results)
+    print(comments)
+
     if request.method == 'POST':
         add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
         flash('Added to Cart!', category='info')
@@ -184,10 +202,11 @@ def canteen_page(_id):
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
             for dish in canteen.get('menu'):
-                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
-        return render_template('new_canteen_page.html', canteen=canteen)
+        return render_template('new_canteen_page.html', canteen=canteen, comments=comments)
     else:
         return 'Page Not Found', 404
 
@@ -207,11 +226,12 @@ def list_canteens():
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
             for dish in canteen.get('menu'):
-                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
 
-    return render_template('user_canteens.html', canteens=canteens)
+    return render_template('list_canteens.html', canteens=canteens)
 
 
 @login_required
@@ -279,3 +299,27 @@ def create_order(canteen_name, total_price):
     mongo.db.orders.insert_one(order)
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$inc': {'balance': -total_price}})
+
+
+@login_required
+@app.route('/post_comment/<canteen_id>', methods=['GET', 'POST'])
+def post_comment(canteen_id):
+    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    paragraph = ''
+    if request.method == 'POST':
+        paragraph = request.form['paragraph']
+        rating = request.form['rating']
+        if paragraph == '':
+            flash('Please type your comment', category='info')
+        if len(paragraph) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        else:
+            mongo.db.comments.insert_one({
+                'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'rating': int(rating),
+                'paragraph': paragraph.lstrip(),
+                'at_canteen': ObjectId(canteen_id),
+                'by_user': ObjectId(current_user._id)
+            })
+        return redirect('/canteens/%s' % canteen_id)
+    return render_template('post_comment.html', canteen=canteen, paragraph=paragraph)
