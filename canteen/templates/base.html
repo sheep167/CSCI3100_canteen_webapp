@@ -42,8 +42,8 @@
                     <a class="nav-link" href="/overview/canteens">Canteens</a>
                   </li>
                   {% else %}
-                  <li class="nav-item">
-                      <a class="nav-link" href="/canteens">Canteen</a>
+                  <li class="{{'nav-item active' if active_page == 'canteens' else 'nav-item'}}">
+                      <a class="nav-link" href="/canteens">Canteens</a>
                   </li>
                     {% endif %}
                   {% endif %}
@@ -51,7 +51,7 @@
               {% if current_user.is_authenticated %}
               <ul class="navbar-nav">
                   <li class="nav-item">
-                      <a class="nav-link" href="/user_account">Welcome, {{ current_user.username }}</a>
+                      <a class="nav-link" href="/user_account">{{current_user.username}} Page</a>
                   </li>
 
                   {% if current_user.auth_type != 0 %}
