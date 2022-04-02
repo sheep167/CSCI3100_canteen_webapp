@@ -23,6 +23,7 @@
     <div id="canteen-info" class="container-fluid pt-5 pl-5 pb-4">
         <div class="font-weight-bold h1"> {{canteen.name}} </div>
         <div class="font-weight-light h2"> Open from {{canteen.open_at}} to {{canteen.close_at}} </div>
+        <a class="btn btn-outline-success" target="_blank" href="https://maps.google.com/maps?q={{canteen.latitude}},{{canteen.longitude}}" role="button">Open in Google Map</a>
 <!--        <div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>-->
     </div>
 
