@@ -21,6 +21,8 @@ class User:
         self.confirmed: int = 0
         self.username: str = username
         self.balance: float = 0  # amount of money
+        self.cart = {}
+        self.image_path = None
 
     def to_json(self):
         # This function turns all attributes value to dict (json) for MongoDB
@@ -55,19 +57,19 @@ class Canteen:
         self.close_at: datetime.time = close_at
         self.capacity: int = capacity
         self.menu: List[ObjectId] = []  # Dishes are stored in here
+        self.image_path = None
 
     def to_json(self):
         return self.__dict__
 
 
 class Dishes:
-    def __init__(self, name, at_canteen, price, ingredients, image_file_name):
+    def __init__(self, name, at_canteen, price, ingredients, image_path):
         self.name: str = name
         self.at_canteen: ObjectId = at_canteen
         self.price: float = price
         self.ingredients: List[str] = ingredients
-        self.rating: Union[int, None] = None  # Average rating is updated on every comment
-        self.image_file_name: str = image_file_name  # Image file name
+        self.image_path = None  # Image file name
 
     def to_json(self):
         return self.__dict__

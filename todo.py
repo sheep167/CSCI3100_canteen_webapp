@@ -1,7 +1,8 @@
+front-end
+# TODO: 1. The admin user data needs CSS
+# TODO: 2. The canteen list page from user needs CSS
 back-end
-# TODO: 1.1 ObjectId in json text field is shown as the name of the canteen. Later convert to _id in the backend
-# TODO: 2. Fine tune the input section for the admin user. Like having a drop down menu for selecting the user associated with the comments
-# TODO: 3. User POV - All of it.
-# TODO: 4. Shopping Cart Function (?) https://roytuts.com/simple-shopping-cart-using-python-flask-mysql/
-# TODO: 5. data.py - Add more data for initialisation
-# TODO: 6. add feature for user to use their device location as their location
+# TODO: 1. User POV - All of it.
+# TODO: 2. data.py - Add more data for initialisation
+# TODO: 3. cast type in admin form
+# TODO: 5. Canteen Manager to see the order and change the order status

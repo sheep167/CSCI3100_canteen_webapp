@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% set active_page = "canteens" %}
+
+{% block title %}
+Canteen List
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid pl-5 pr-5">
+    <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
+    {% for batch in canteens | batch(3) %}
+    <div class="row">
+        {% for canteen in batch %}
+        <div class="col-lg-4">
+            <div class="card">
+                {% if canteen.image_path %}
+                <img class="card-img-top" src="{{canteen.image_path}}">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{canteen.name}}</h3>
+                    <p class="card-text">Open at: {{canteen.open_at}}</p>
+                    <p class="card-text">Close at: {{canteen.close_at}}</p>
+                    <p class="card-text">Capacity: {{canteen.capacity}}</p>
+                </div>
+                <h4>Menu</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped table-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Price</th>
+                      <th>Rating</th>
+                      <th>Image</th>
+                    </tr>
+                    {% for dish in canteen.menu[:3] %}
+                      <tr>
+                        <td>{{dish.name}}</td>
+                        <td>{{dish.price}}</td>
+                        <td>{{dish.rating}}</td>
+                        <td>
+                          {% if dish.image_path %}
+                            <img src={{dish.image_path}} width="100">
+                          {% else %}
+                            No image for this dish
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+                <div class="card-body">
+                    <a href="/canteens/{{canteen._id}}" class="card-link">To Detailed Page</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+{% endfor %}
+    </div>
+</div>
+
+{% endblock %}

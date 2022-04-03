@@ -19,6 +19,16 @@ class NoSuchUserError(Exception):
     pass
 
 
+@app.route('/reset_password/<_id>')
+@login_required
+def reset_password(_id):
+    if current_user.auth_type != 0:
+        return 'Not Authorized', 403
+
+    mongo.db.users.update_one({'_id': ObjectId(_id)}, {'$set': {'password': bcrypt.hashpw('123456'.encode('utf-8'), bcrypt.gensalt())}})
+    return redirect('/overview/users')
+
+
 @app.route('/overview/<category>')
 @login_required
 def overview_page(category):
@@ -63,6 +73,8 @@ def add_data_page(category):
 
                 hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
                 data['password'] = hashed_password
+                data['cart'] = {}
+                data['image_path'] = None
 
             elif category == 'canteens':
                 data['menu'] = []
@@ -85,6 +97,8 @@ def edit_data_page(category, _id):
         return 'Not Authorized', 403
 
     form = DataEditForm()
+    if category == 'canteens':
+        form = DataEditFormWithImage()
     mongo_col = mongo.db[category]
 
     if request.method == 'GET':
@@ -92,16 +106,34 @@ def edit_data_page(category, _id):
             form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'email': 0, 'username': 0, 'password': 0}), indent=4, default=str)
         elif category == 'canteens':
             form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0}), indent=4, default=str)
-        
+
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
+            if category == 'canteens':
+
+                if form.image.data.filename != '':
+                    filename = secure_filename(form.image.data.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
+                        folder_path = './canteen/static/image/%s' % canteen.get('name')
+                        os.makedirs(folder_path, exist_ok=True)
+                        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+                        form.image.data.save(save_path)
+                        data['image_path'] = save_path
+                    else:
+                        raise ValidationError()
+                else:
+                    data['image_path'] = None
+
             mongo_col.update_one({'_id': ObjectId(_id)}, {'$set': data})
             return redirect('/overview/%s' % category)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
 
+    if category == 'canteens':
+        return render_template('data_with_image.html', form=form, method='Edit', category=category)
     return render_template('data.html', form=form, method='Edit', category=category)
 
 
@@ -212,7 +244,7 @@ def add_canteens_data(canteen_id, category):
 
     if request.method == 'GET':
         if category == 'dishes':
-            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]', 'rating': 'int/null'}, indent=4)
+            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]'}, indent=4)
         elif category == 'comments':
             form.text.data = json.dumps({'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'username': 'str', 'rating': 'int', 'paragraph': 'str'}, indent=4)
         elif category == 'orders':
@@ -289,7 +321,11 @@ def add_canteens_data(canteen_id, category):
 
                 data['at_time'] = datetime.datetime.strptime(data.get('at_time'), '%Y-%m-%d %H:%M:%S')
 
-            mongo.db[category].insert_one(data)
+            _id = mongo.db[category].insert_one(data)
+
+            if category == 'dishes':
+                mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$push': {'menu': ObjectId(_id.inserted_id)}})
+
             return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
 
         except JSONDecodeError:
@@ -384,6 +420,7 @@ def delete_canteens_data(canteen_id, category, _id):
         image_path = mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'image_path': 1}).get('image_path')
         if mongo.db.dishes.count_documents({'image_path': image_path}) == 1:
             delete_image()
+        mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$pull': {'menu': ObjectId(_id)}})
 
     mongo.db[category].delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')

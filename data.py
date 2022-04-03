@@ -21,6 +21,8 @@ users_list = [{'email': 'admin@admin.com', 'password': '123456', 'username': 'ad
               {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000}]
 for user in users_list:
     user['password'] = bcrypt.hashpw(user.get('password').encode('utf-8'), bcrypt.gensalt())
+    user['cart'] = {}
+    user['image_path'] = None
 
 mongo.db.users.insert_many(users_list)
 

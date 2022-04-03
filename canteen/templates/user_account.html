@@ -12,20 +12,25 @@ Canteen List
     <div class="row justify-content-center align-items-center">
         <!--Photo Part-->
         <div class="col-md-5 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                    width="150px"
-                    src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
-                    class="font-weight-bold">Username</span><span class="text-black-50">example@mail.com</span><span>
-                </span>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                {% if user.image_path %}
+                <img src="{{user.image_path}}" width="200px">
+                {% else %}
+                <img class="rounded-circle mt-5"
+                    width="200px"
+                    src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                {% endif %}
+                <span class="font-weight-bold">{{user.username}}</span>
+                <span class="text-black-50">{{user.email}}</span>
             </div>
             <!--Upload New Photo-->
             <div class="form-row justify-content-center">
                 <div class="col-md-8 mb-3">
                     <h5>Upload New Photo</h5>
-                    <form method="POST" class="my-4">
+                    <form method="POST" class="my-4" enctype="multipart/form-data">
                         <div class="form-group">
-                            <input type="file" class="form-control-file mb-3" id="photo">
-                            <a class="btn btn-sm btn-secondary mb-4">Upload</a>
+                            <input type="file" class="form-control-file mb-3" name="file">
+                            <button class="btn btn-sm btn-secondary mb-4" type="submit"> Upload </button>
                         </div>
                     </form>
                 </div>
@@ -37,26 +42,25 @@ Canteen List
             <form method="POST" class="my-4">
                 <h4>Edit Username</h4>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Username</label>
-                    <input type="text" class="form-control" id="editusername" aria-describedby="editusername"
-                        placeholder="Username">
+                    <label>Username</label>
+                    <input type="hidden" class="form-control" name="action" value="username">
+                    <input type="text" class="form-control" name="username" placeholder="Username">
                 </div>
-                <a class="btn btn-sm btn-secondary">Save</a>
+                <button class="btn btn-sm btn-secondary mb-4" type="submit"> Save </button>
             </form>
             <!--Edit Password-->
             <form method="POST" class="my-4">
                 <h4>Modify Password</h4>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Old Password</label>
-                    <input type="password" class="form-control" id="oldpassword" aria-describedby="oldpassword"
-                        placeholder="Old Password">
+                    <label>Old Password</label>
+                    <input type="hidden" class="form-control" name="action" value="password">
+                    <input type="text" class="form-control" name="old_password" placeholder="Old Password">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">New Password</label>
-                    <input type="password" class="form-control" id="oldpassword" aria-describedby="newpassword"
-                        placeholder="New Password">
+                    <label>New Password</label>
+                    <input type="text" class="form-control" name="new_password" placeholder="New Password">
                 </div>
-                <a class="btn btn-sm btn-secondary">Save</a>
+                <button class="btn btn-sm btn-secondary mb-4" type="submit"> Save </button>
             </form>
         </div>
     </div>

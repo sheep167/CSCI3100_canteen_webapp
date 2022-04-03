@@ -1,12 +1,17 @@
+import datetime
+import os
+from collections import Counter
+from bson import ObjectId
 from canteen import app, mongo, mail
-from flask import render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user, current_user
-
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_user, logout_user, current_user, login_required
 from .form import UserRegistrationForm, UserLoginForm
 from .models import User, LoginUser
 import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from werkzeug.utils import secure_filename
 from flask_mail import Message
+
 
 @app.route('/', methods=['GET'])
 def home():
@@ -14,17 +19,77 @@ def home():
     # use home.html
     return render_template('home.html')
 
+
+@login_required
 @app.route('/user_account', methods=['GET', 'POST'])
 def user_account():
-    return render_template('user_account.html')
+    def save_image():
+        folder_path = './canteen/static/image/users_profile_pic'
+        os.makedirs(folder_path, exist_ok=True)
+        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+        file.save(save_path)
+        return save_path
+
+    if request.method == 'POST':
+        user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+        if request.files:
+            file = request.files['file']
+            if file.filename == '':
+                flash('No selected file', category='warning')
+                return redirect(request.url)
+            filename = secure_filename(file.filename)
+            if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                filename = user.get('username') + '.' + filename.rsplit('.', 1)[1].lower()
+                image_path = save_image()
+                mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'image_path': image_path}})
+            else:
+                flash('File not supported', category='warning')
+            return redirect(request.url)
+
+        action = request.form['action']
+        # Change Username
+        if action == 'username':
+            username = request.form.get('username', None)
+            if username:
+                username = request.form['username']
+                if mongo.db.users.find_one({'username': username}):
+                    flash('The username is already taken!', category='warning')
+                    return redirect(request.url)
+                mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'username': username}})
+                flash('Username Changed!', category='info')
+            else:
+                flash('Enter username!', category='warning')
+
+        # Change password
+        else:
+            old_password = request.form.get('old_password', None)
+            new_password = request.form.get('new_password', None)
+            if old_password and new_password:
+                if bcrypt.checkpw(old_password.encode('utf-8'), user.get('password')):
+                    mongo.db.users.update_one({'_id': ObjectId(user.get('_id'))}, {'$set': {'password': bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())}})
+                    flash('Password Changed!', category='info')
+                else:
+                    flash('Wrong Password', category='warning')
+            else:
+                flash('Enter both password!', category='warning')
+        return redirect(request.url)
+
+    user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+    if user.get('image_path'):
+        user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
+    # print(user)
+    return render_template('user_account.html', user=user)
+
 
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     return render_template('canteen_account.html')
 
+
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -56,7 +121,7 @@ def register_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if current_user.is_authenticated == True:
+    if current_user.is_authenticated:
         return redirect(url_for('home'))
 
     form = UserLoginForm()
@@ -96,23 +161,165 @@ def confirm_email(token):
     return redirect(url_for('home'))
 
 
-@app.route('/canteen/<canteen_name>')
-def canteen_page(canteen_name):
+@app.route('/canteens/<_id>', methods=['GET', 'POST'])
+def canteen_page(_id):
     # this must be changed to get canteen name list from mongodb
-    attempted_canteen =  mongo.db.canteens.find_one({'name':canteen_name})
-    
+    results = mongo.db.canteens.aggregate([
+        {'$match': {'_id': ObjectId(_id)}},
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'menu',
+             'foreignField': '_id',
+             'as': 'menu'}}
+    ])
+    canteen = list(results)
 
-    # canteen_name_list = ["WYS", "SHHO", "NA", "CC", "BFC", "CoffeeCorner", "Pommerenke", "UC"]
-    if attempted_canteen :
-        return render_template('canteen_page.html', canteen_name=canteen_name)
+    results = mongo.db.comments.aggregate([
+        {'$match': {'at_canteen': ObjectId(_id)}},
+        {'$lookup':
+            {'from': 'users',
+             'localField': 'by_user',
+             'foreignField': '_id',
+             'as': 'by_user'}},
+        {'$unwind': '$by_user'},
+        {'$project':
+            {'at_time': 1,
+             'paragraph': 1,
+             'rating': 1,
+             'by_user.username': 1
+        }}
+    ])
+    comments = list(results)
+    print(comments)
+
+    if request.method == 'POST':
+        add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
+        flash('Added to Cart!', category='info')
+        return redirect(request.url)
+
+    if canteen:
+        canteen = canteen[0]
+        if canteen.get('image_path'):
+            canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            for dish in canteen.get('menu'):
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        else:
+            canteen['image_path'] = None
+        return render_template('new_canteen_page.html', canteen=canteen, comments=comments)
     else:
-        return 'Page Not Found' + canteen_name, 404
+        return 'Page Not Found', 404
 
 
-# @app.route('/test')
-# def test():
-#     msg = Message('Twilio SendGrid Test Email', recipients=['yiuchunto@gmail.com'])
-#     msg.body = 'This is a test email!'
-#     msg.html = '<p>This is a test email!</p>'
-#     mail.send(msg)
-#     return 'ok'
+@app.route('/canteens')
+def list_canteens():
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'menu',
+             'foreignField': '_id',
+             'as': 'menu'}}
+    ])
+    canteens = list(results)
+
+    for canteen in canteens:
+        if canteen.get('image_path'):
+            canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            for dish in canteen.get('menu'):
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        else:
+            canteen['image_path'] = None
+
+    return render_template('list_canteens.html', canteens=canteens)
+
+
+@login_required
+def add_to_cart(canteen_id, dish_id):
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
+    if not cart.get(canteen_name):
+        cart[canteen_name] = {}
+        cart[canteen_name]['cart'] = []
+    cart[canteen_name]['cart'].append(ObjectId(dish_id))
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
+
+
+@app.route('/cart', methods=['GET', 'POST'])
+@login_required
+def cart_page():
+    if request.method == 'POST':
+        create_order(canteen_name=request.form['canteen_name'], total_price=request.form['total_price'])
+        flash('Payment successful')
+        # return redirect('/')
+        return redirect(request.url)
+
+    results = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+
+    # Count the number of each dish and retrieve the details
+    cart = {}
+    for canteen_name, value in results.get('cart').items():
+        cart[canteen_name] = {}
+        cart[canteen_name]['cart'] = []
+        counter = Counter(value.get('cart'))
+        for dish_id, count in counter.items():
+            dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
+            dish_obj['count'] = count
+            cart[canteen_name]['cart'].append(dish_obj)
+
+    # Replace the image_path
+    # Calculate the total_price for each canteen
+    for canteen_name in cart.keys():
+        total_price = 0
+        cart_array = cart[canteen_name]['cart']
+        for dish in cart_array:
+            if dish.get('image_path'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            total_price += dish.get('price') * dish.get('count')
+        cart[canteen_name]['total_price'] = total_price
+    return render_template('checkout_page.html', cart=cart)
+
+
+@login_required
+def create_order(canteen_name, total_price):
+    total_price = float(total_price)
+    canteen_id = mongo.db.canteens.find_one({'name': canteen_name}).get('_id')
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    # print(cart)
+    target = cart.pop(canteen_name)
+    # print(target)
+    order = {
+        'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'order_status': 'waiting',
+        'dishes': target.get('cart'),
+        'total_price': total_price,
+        'at_canteen': ObjectId(canteen_id),
+        'by_user': ObjectId(current_user._id)
+    }
+    mongo.db.orders.insert_one(order)
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
+    mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$inc': {'balance': -total_price}})
+
+
+@login_required
+@app.route('/post_comment/<canteen_id>', methods=['GET', 'POST'])
+def post_comment(canteen_id):
+    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    paragraph = ''
+    if request.method == 'POST':
+        paragraph = request.form['paragraph']
+        rating = request.form['rating']
+        if paragraph == '':
+            flash('Please type your comment', category='info')
+        if len(paragraph) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        else:
+            mongo.db.comments.insert_one({
+                'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'rating': int(rating),
+                'paragraph': paragraph.lstrip(),
+                'at_canteen': ObjectId(canteen_id),
+                'by_user': ObjectId(current_user._id)
+            })
+        return redirect('/canteens/%s' % canteen_id)
+    return render_template('post_comment.html', canteen=canteen, paragraph=paragraph)
