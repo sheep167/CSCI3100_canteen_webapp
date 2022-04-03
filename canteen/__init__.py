@@ -19,5 +19,5 @@ app.config['MAIL_PASSWORD'] = 'SG.D18oholyRtagqPopcHTDXA.hMDkIc9OxArLEmgD3dkZHCo
 app.config['MAIL_DEFAULT_SENDER'] = 'yiuchunto@gmail.com'
 mail = Mail(app)
 
-from canteen.routes import *
+from canteen.user import *
 from canteen.admin import *
