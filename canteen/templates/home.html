@@ -64,52 +64,100 @@ Canteen List
             <div class="tab-pane fade show active" id="nav-near" role="tabpanel" aria-labelledby="nav-near">
                 <!--Canteen List (Currently Open)-->
                 <h4 class="ml-5 font-weight-normal mt-4">Currently Opened</h4>
+                {% if canteens_opened %}
+                {% for canteen in canteens_opened %}
                 <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        <div class="col-md-4" style="text-align: center;">
+                            {% if canteen.image_path %}
+                            <img src="{{canteen.image_path}}" class="cover" alt="...">
+                            {% else %}
+                            No Image for this canteen
+                            {% endif %}
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">Canteen Name</h4><br>
-                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
-                                    8.45pm)
+                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
+                                <p class="foodlist card-text mb-2">
+                                    <b>Open at: </b> {{canteen.open_at}}
+                                </p>
+                                <p class="foodlist card-text mb-2">
+                                    <b>Close at: </b> {{canteen.close_at}}
                                 </p>
                                 <p class="foodlist card-text mb-2"></p>
-                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
-                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
-                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                                <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
+                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
+                {% else %}
+                <h1>All canteens are closed</h1>
+                {% endif %}
+
                 <!--Canteen List (Currently Closed)-->
                 <h4 class="ml-5 font-weight-normal mt-4">Currently Closed</h4>
+                {% if canteens_closed %}
+                {% for canteen in canteens_closed %}
                 <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        <div class="col-md-4" style="text-align: center;">
+                            {% if canteen.image_path %}
+                            <img src="{{canteen.image_path}}" class="cover" alt="...">
+                            {% else %}
+                            No Image for this canteen
+                            {% endif %}
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">Canteen Name</h4><br>
-                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
-                                    8.45pm)
+                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
+                                <p class="foodlist card-text mb-2">
+                                    <b>Open at: </b> {{canteen.open_at}}
+                                </p>
+                                <p class="foodlist card-text mb-2">
+                                    <b>Close at: </b> {{canteen.close_at}}
                                 </p>
                                 <p class="foodlist card-text mb-2"></p>
-                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
-                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
-                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                                <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
+                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
+                {% else %}
+                <h1>All canteens are opened</h1>
+                {% endif %}
+
             </div>
             <!--Favorite Canteen List-->
             <div class="tab-pane fade" id="nav-fav" role="tabpanel" aria-labelledby="nav-fav">
 
                 <!--Canteen List (Currently Opened)-->
                 <h4 class="ml-5 font-weight-normal mt-4">Currently Opened</h4>
+
+                <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="../static/image/UC/UC1.jpeg" class="cover" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h4 class="foodlist card-title mb-2">Favorite1</h4><br>
+                                <p class="foodlist card-text mb-2"><b>Opening Hours: </b>Monday to Saturday (11.00am -
+                                    8.45pm)
+                                </p>
+                                <p class="foodlist card-text mb-2"></p>
+                                <p class="foodlist card-text mb-2"><b>Star: </b>3.5/5</p>
+                                <p class="foodlist card-text"><b>Average Waiting Time: </b></p>
+                                <a class="btn btn-outline-warning mb-3" href="#product">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="ml-5 font-weight-normal mt-4">Currently Closed</h4>
 
                 <div class="card mx-5 mt-3 mb-5" style="max-height: 250px;">
                     <div class="row g-0">
