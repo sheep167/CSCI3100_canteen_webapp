@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-<main>
+<main id="main">
     
 
   <script >
@@ -27,6 +27,8 @@
       function addToCart(){
         document.querySelector('#enter-food-info').classList.toggle('bg-over-lay');
         document.querySelector('.pop-up').classList.toggle('display-show');
+        var htmlTag = document.getElementsByTagName('html');
+        htmlTag[0].classList.toggle('overflow-hidden')
 
 
       }
@@ -177,9 +179,15 @@
 
   <!-- Enter Food Info -->
   <div id="enter-food-info" class="">
-    <div class="container pop-up pl-0 pr-0" style="background-color: #ffffff; padding-bottom: 80%;">
-      <div class="m-0 p-0" style="overflow: hidden; background-color: #ffffff;">
-        <div id="food-info-img" style="background-image: url(../static/image/UC/Food1.jpeg) ;">  
+    <!-- Container -->
+    <div class="container pop-up pl-0 pr-0" style="background-color: #ffffff; max-height: 90vh;">
+      <div class="m-0 p-0" style="background-color: #ffffff;">
+        <!-- Food Picture -->
+        <div id="food-info-img pr-2" style="background-image: url(../static/image/UC/Food1.jpeg) ;">
+          <!-- Quit Button -->
+          <div class="float-right pr-3 pt-3" onclick="addToCart()" style="color: #ffffff;">
+            X
+          </div> 
         </div>
         <div class="d-flex flex-column w-100">
           <!-- Food Header -->
@@ -188,7 +196,7 @@
             <div class="ml-auto">$PRICE</div>
           </div>
           <hr class="mt-4 mb-1" style="width: 100%;">
-
+          <!-- Choice 1 -->
           <div class="container pt-4 pl-4 pr-4 mr-auto mb-3 h5">Choice1</div>
           <div class="d-inline flex-column"> 
             <label class="radio-box font-weight-light d-flex flex-row"> One
@@ -209,7 +217,7 @@
               <div class="ml-auto price" style="font-weight: 100;">$price</div>
             </label>
           </div>
-
+          <!-- Choice 2 -->
           <div class="container pt-4 pl-4 pr-4 mr-auto mb-3 h5">Choice2</div>
           <div class="d-inline flex-column"> 
             <label class="radio-box font-weight-light d-flex flex-row"> One
@@ -226,6 +234,27 @@
 
             <label class="radio-box font-weight-light d-flex flex-row"> Three
               <input type="radio" checked="checked" name="choice2">
+              <span class="checkmark"></span>
+              <div class="ml-auto price" style="font-weight: 100;">$price</div>
+            </label>
+          </div>
+
+          <div class="container pt-4 pl-4 pr-4 mr-auto mb-3 h5">Choice3</div>
+          <div class="d-inline flex-column"> 
+            <label class="radio-box font-weight-light d-flex flex-row"> One
+              <input type="radio" checked="checked" name="choice3">
+              <span class="checkmark"></span>
+              <div class="ml-auto price" style="font-weight: 100;">$price</div>
+            </label>
+
+            <label class="radio-box font-weight-light d-flex flex-row"> Two
+              <input type="radio" checked="checked" name="choice3">
+              <span class="checkmark"></span>
+              <div class="ml-auto price" style="font-weight: 100;">$price</div>
+            </label>
+
+            <label class="radio-box font-weight-light d-flex flex-row"> Three
+              <input type="radio" checked="checked" name="choice3">
               <span class="checkmark"></span>
               <div class="ml-auto price" style="font-weight: 100;">$price</div>
             </label>
