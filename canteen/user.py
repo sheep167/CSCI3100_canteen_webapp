@@ -61,7 +61,7 @@ def user_account():
                 flash('Enter username!', category='warning')
 
         # Change password
-        else:
+        elif action == 'password':
             old_password = request.form.get('old_password', None)
             new_password = request.form.get('new_password', None)
             if old_password and new_password:
@@ -72,6 +72,16 @@ def user_account():
                     flash('Wrong Password', category='warning')
             else:
                 flash('Enter both password!', category='warning')
+
+        else:
+            amount = request.form.get('top-up', None)
+            if amount and amount.isnumeric() and float(amount) > 0:
+                amount = float(amount)
+                mongo.db.users.update_one({'_id': ObjectId(user.get('_id'))}, {'$inc': {'balance': amount}})
+                flash('Successful top-up!', category='info')
+            else:
+                flash('Positive numeric value only', category='warning')
+
         return redirect(request.url)
 
     user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
