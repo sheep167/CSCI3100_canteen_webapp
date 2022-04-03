@@ -2,37 +2,45 @@
 {% set active_page = "canteens" %}
 
 {% block title %}
-    Admin Page - Dishes Overview
+Admin Page - Dishes Overview
 {% endblock %}
 
 {% block content %}
-  <h1>{{canteen.name}} Dishes</h1>
-  <a class="btn btn-success" href="/add/canteens/{{canteen._id}}/dishes">Add dish</a>
-  <hr>
-  <table class="table table-striped table-dark">
-    <tr>
-      <th>Name</th>
-      <th>Price</th>
-      <th>Rating</th>
-      <th>Image</th>
-      <th>Image Path</th>
-    </tr>
-    {% for dish in dishes %}
-      <tr>
-        <td>{{dish.name}}</td>
-        <td>{{dish.price}}</td>
-        <td>{{dish.rating}}</td>
-        <td>
-          {% if dish.image_path %}
+<div class="container-fluid my-4">
+  <h2 class="mx-4">{{canteen.name}} Dishes</h1>
+  <a class="btn btn-success mx-4" href="/add/canteens/{{canteen._id}}/dishes">Add dish</a>
+  <hr class="mx-4">
+  <div class="row mx-4">
+    <table class="table border-bottom border-right border-left text-center">
+      <thead class="thead-dark my-auto">
+        <tr>
+          <th style="width:20%">Name</th>
+          <th style="width:20%">Price</th>
+          <th style="width:20%">Rating</th>
+          <th style="width:20%">Image</th>
+          <th style="width:20%">Image Path</th>
+        </tr>
+      </thead>
+      {% for dish in dishes %}
+      <tbody>
+        <tr>
+          <td>{{dish.name}}</td>
+          <td>{{dish.price}}</td>
+          <td>{{dish.rating}}</td>
+          <td>
+            {% if dish.image_path %}
             <img src={{dish.image_path}} width="400">
-          {% else %}
+            {% else %}
             No image for this dish
-          {% endif %}
-        </td>
-        <td>{{dish.image_path}}</td>
-        <td><a href="/edit/canteens/{{canteen._id}}/dishes/{{dish._id}}" class="btn btn-primary">Edit</a></td>
-        <td><a href="/delete/canteens/{{canteen._id}}/dishes/{{dish._id}}" class="btn btn-danger">Delete</a></td>
-      </tr>
-    {% endfor %}
-  </table>
+            {% endif %}
+          </td>
+          <td>{{dish.image_path}}</td>
+          <td><a href="/edit/canteens/{{canteen._id}}/dishes/{{dish._id}}" class="btn btn-primary">Edit</a></td>
+          <td><a href="/delete/canteens/{{canteen._id}}/dishes/{{dish._id}}" class="btn btn-danger">Delete</a></td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
+</div>
 {% endblock %}

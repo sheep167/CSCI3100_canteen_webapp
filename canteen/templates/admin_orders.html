@@ -2,30 +2,38 @@
 {% set active_page = "canteens" %}
 
 {% block title %}
-    Admin Page - Orders Overview
+Admin Page - Orders Overview
 {% endblock %}
 
 {% block content %}
-  <h1>{{canteen.name}} Orders</h1>
-  <a class="btn btn-success" href="/add/canteens/{{canteen._id}}/orders">Add Orders</a>
-  <hr>
-  <table class="table table-striped table-dark">
-    <tr>
-      <th>Posted At Time</th>
-      <th>Posted By User</th>
-      <th>Dishes</th>
-      <th>Total Price</th>
-      <th>Order Status</th>
-    </tr>
-    {% for order in orders %}
-      <tr>
-        <td>{{order.at_time}}</td>
-        <td>{{order.by_user}}</td>
-        <td>{{order.dishes}}</td>
-        <td>{{order.total_price}}</td>
-        <td>{{order.order_status}}</td>
-        <td><a href="/delete/canteens/{{canteen._id}}/orders/{{order._id}}" class="btn btn-danger">Delete</a></td>
-      </tr>
-    {% endfor %}
-  </table>
+<div class="container-fluid my-4">
+  <h2 class="mx-4">{{canteen.name}} Orders</h1>
+    <a class="btn btn-success mx-4" href="/add/canteens/{{canteen._id}}/orders">Add Orders</a>
+    <hr class="mx-4">
+    <div class="row mx-4">
+      <table class="table border-bottom border-right border-left text-center">
+        <thead class="thead-dark my-auto">
+          <tr>
+            <th>Posted At Time</th>
+            <th>Posted By User</th>
+            <th>Dishes</th>
+            <th>Total Price</th>
+            <th>Order Status</th>
+          </tr>
+        </thead>
+        {% for order in orders %}
+        <tbody>
+          <tr>
+            <td>{{order.at_time}}</td>
+            <td>{{order.by_user}}</td>
+            <td>{{order.dishes}}</td>
+            <td>{{order.total_price}}</td>
+            <td>{{order.order_status}}</td>
+            <td><a href="/delete/canteens/{{canteen._id}}/orders/{{order._id}}" class="btn btn-danger">Delete</a></td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    </div>
+</div>
 {% endblock %}
