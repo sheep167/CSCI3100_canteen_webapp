@@ -14,7 +14,7 @@ Checkout Page
     {% for canteen_name in cart.keys() %}
     <div class="container-fluid pl-5 pr-5">
       <h2>{{canteen_name}}</h2>
-      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
+      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255)">
         {% for dish in cart[canteen_name]['cart'] %}
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
           <button class="food-menu btn btn-outline-secondary h-100 w-100">
@@ -29,7 +29,7 @@ Checkout Page
                 </div>
                 <!-- Right Side of Button -->
                 <div class="ml-auto">
-                  <img src="" style="object-fit: cover; width: 150px; height: 150px;">
+                  <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
                 </div>
               </div>
             </div>

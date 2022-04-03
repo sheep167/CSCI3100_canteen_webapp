@@ -256,9 +256,11 @@ def add_to_cart(canteen_id, dish_id):
 @login_required
 def cart_page():
     if request.method == 'POST':
-        create_order(canteen_name=request.form['canteen_name'], total_price=request.form['total_price'])
-        flash('Payment successful')
-        # return redirect('/')
+        if mongo.db.users.find_one({'$and': [{'_id': ObjectId(current_user._id)}, {'balance': {'$gte': float(request.form['total_price'])}}]}):
+            create_order(canteen_name=request.form['canteen_name'], total_price=request.form['total_price'])
+            flash('Payment successful', category='info')
+        else:
+            flash('Not enough balance', category='warning')
         return redirect(request.url)
 
     results = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
