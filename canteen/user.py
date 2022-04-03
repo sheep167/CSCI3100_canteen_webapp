@@ -78,7 +78,7 @@ def user_account():
     if user.get('image_path'):
         user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
 
-    return render_template('user_account.html', user=user)
+    return render_template('/user/user_account.html', user=user)
 
 
 @app.route('/canteen_account', methods=['GET', 'POST'])
@@ -116,7 +116,7 @@ def register_page():
         for error_message in form.errors.values():
             flash(error_message, category='danger')
 
-    return render_template('register.html', form=form)
+    return render_template('/user/register.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -138,7 +138,7 @@ def login_page():
         else:
             flash('Email and Password do not match', category='danger')
 
-    return render_template('login.html', form=form)
+    return render_template('/user/login.html', form=form)
 
 
 @app.route('/logout')
@@ -203,7 +203,7 @@ def canteen_page(_id):
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
-        return render_template('new_canteen_page.html', canteen=canteen, comments=comments)
+        return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments)
     else:
         return 'Page Not Found', 404
 
@@ -228,7 +228,7 @@ def list_canteens():
         else:
             canteen['image_path'] = None
 
-    return render_template('list_canteens.html', canteens=canteens)
+    return render_template('/user/list_canteens.html', canteens=canteens)
 
 
 @login_required
@@ -274,7 +274,7 @@ def cart_page():
                 dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
             total_price += dish.get('price') * dish.get('count')
         cart[canteen_name]['total_price'] = total_price
-    return render_template('checkout_page.html', cart=cart)
+    return render_template('/user/checkout_page.html', cart=cart)
 
 
 @login_required
@@ -318,4 +318,4 @@ def post_comment(canteen_id):
                 'by_user': ObjectId(current_user._id)
             })
         return redirect('/canteens/%s' % canteen_id)
-    return render_template('post_comment.html', canteen=canteen, paragraph=paragraph)
+    return render_template('/user/post_comment.html', canteen=canteen, paragraph=paragraph)
