@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% if category == 'users' %}
+{% set active_page = category %}
+{% else %}
+{% set active_page = 'canteens' %}
+{% endif %}
 
 {% block title %}
 Admin Page - Data
