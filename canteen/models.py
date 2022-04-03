@@ -37,9 +37,10 @@ def load_user(user_id):
 
 class LoginUser(UserMixin, User):
     def __init__(self, user_json):
-        super(LoginUser, self).__init__(email=user_json.get('email'), username=user_json.get('username'), password=user_json.get('password'))
-        for key, value in user_json.items():
-            setattr(self, key, value)
+        if( user_json ):
+            super(LoginUser, self).__init__(email=user_json.get('email'), username=user_json.get('username'), password=user_json.get('password'))
+            for key, value in user_json.items():
+                setattr(self, key, value)
 
     # Overriding get_id is required if you don't have the id property
     # Check the source code for UserMixin for details
