@@ -27,17 +27,15 @@ Canteen List
                     <tr>
                       <th>Name</th>
                       <th>Price</th>
-                      <th>Rating</th>
                       <th>Image</th>
                     </tr>
                     {% for dish in canteen.menu[:3] %}
                       <tr>
                         <td>{{dish.name}}</td>
                         <td>{{dish.price}}</td>
-                        <td>{{dish.rating}}</td>
                         <td>
                           {% if dish.image_path %}
-                            <img src={{dish.image_path}} width="100">
+                            <img src={{dish.image_path}} width="200px">
                           {% else %}
                             No image for this dish
                           {% endif %}
