@@ -119,7 +119,11 @@ Canteen List
                                     <b>Close at: </b> {{canteen.close_at}}
                                 </p>
                                 <p class="foodlist card-text mb-2"></p>
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
+                                {% if canteen.avg_rating %}
+                                <p class="foodlist card-text mb-2"><b>Rating: </b>{{canteen.avg_rating}}</p>
+                                {% else %}
+                                <p class="foodlist card-text mb-2"><b>Rating: </b>No rating has been made yet.</p>
+                                {% endif %}
                                 <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
                             </div>
                         </div>

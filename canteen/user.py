@@ -24,6 +24,23 @@ def home():
     ])
     canteens = list(results)
 
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
+            {'from': 'comments',
+             'localField': '_id',
+             'foreignField': 'at_canteen',
+             'as': 'comments'}},
+        {'$unwind': '$comments'},
+        {'$group': {'_id': '$_id', 'avg_rating': {'$avg': '$comments.rating'}}}
+    ])
+    ratings = list(results)
+
+    # add average_rating into canteens
+    for canteen in canteens:
+        for rating in ratings:
+            if canteen.get('_id') == rating.get('_id'):
+                canteen['avg_rating'] = rating.get('avg_rating')
+
     canteens_opened = []
     canteens_closed = []
     time_now = datetime.datetime.now().time()
