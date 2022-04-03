@@ -1,21 +1,30 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Admin Page - Data
+Admin Page - Data
 {% endblock %}
 
 {% block content %}
-    <h1>{{ method }} {{ category }}</h1>
-    <form method="POST" action="">
-        <div class="form-group">
-            {{ form.text(class="form-control form-control-lg", rows="10") }}
+<div class="container-fluid my-4">
+    <div class="row mx-4 justify-content-center">
+        <div class="col-8">
+            <h2>{{ method }} {{ category }}</h2>
+            <form method="POST" action="">
+                <div class="form-group">
+                    {{ form.text(class="form-control form-control-lg", rows="10") }}
+                </div>
+                <br>
+                <h2>
+                    Select Dishes: (Press control to select multiple)
+                </h2>
+                <div class="form-group">
+                    {{ form.select(multiple=True, class="form-control") }}
+                </div>
+                <div class="text-center">
+                    {{ form.submit(class="btn btn-dark") }}
+                </div>
+            </form>
         </div>
-        <h1>
-            Select Dishes: (Press control to select multiple)
-        </h1>
-        <div class="form-group">
-                {{ form.select(multiple=True, class="form-control") }}
-        </div>
-        {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
-    </form>
+    </div>
+</div>
 {% endblock %}
