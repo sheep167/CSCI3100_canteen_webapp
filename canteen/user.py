@@ -77,7 +77,7 @@ def user_account():
     user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
     if user.get('image_path'):
         user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
-    # print(user)
+
     return render_template('user_account.html', user=user)
 
 
@@ -96,7 +96,7 @@ def register_page():
     form = UserRegistrationForm()
 
     if form.validate_on_submit():
-        # print(form.email.data, form.username.data, form.password.data)
+
         hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
 
         user_to_create = User(email=form.email.data,
@@ -127,9 +127,7 @@ def login_page():
     form = UserLoginForm()
     if form.validate_on_submit():
         attempted_user = mongo.db.users.find_one({'email': form.email.data})
-        # print(form.password.data.encode('utf-8'))
-        # print(attempted_user.get('password'))
-        # print(bcrypt.checkpw(form.password.data.encode('utf-8'), attempted_user.get('password')))
+
         if attempted_user and bcrypt.checkpw(form.password.data.encode('utf-8'), attempted_user.get('password')):
             if int(attempted_user.get('confirmed')) == 1:
                 login_user(LoginUser(attempted_user))
@@ -190,7 +188,6 @@ def canteen_page(_id):
         }}
     ])
     comments = list(results)
-    print(comments)
 
     if request.method == 'POST':
         add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
@@ -285,9 +282,8 @@ def create_order(canteen_name, total_price):
     total_price = float(total_price)
     canteen_id = mongo.db.canteens.find_one({'name': canteen_name}).get('_id')
     cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
-    # print(cart)
     target = cart.pop(canteen_name)
-    # print(target)
+
     order = {
         'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'order_status': 'waiting',
