@@ -39,13 +39,10 @@ def overview_page(category):
 
     if category == 'users':
         users = list(mongo.db.users.find())
-        return render_template('admin_users.html', users=users)
+        return render_template('admin/admin_users.html', users=users)
     elif category == 'canteens':
         canteens = list(mongo.db.canteens.find())
-        return render_template('admin_canteens.html', canteens=canteens)
-    elif category == 'comments':
-        comments = list(mongo.db.comments.find())
-        return render_template('admin_comments.html', comments=comments)
+        return render_template('admin/admin_canteens.html', canteens=canteens)
 
     return 'category not found'
 
@@ -105,7 +102,7 @@ def add_data_page(category):
         except TypeError and ValueError:
             flash('Wrong type of values', category='error')
 
-    return render_template('data.html', form=form, method='Add', category=category)
+    return render_template('admin/data.html', form=form, method='Add', category=category)
 
 
 @app.route('/edit/<category>/<_id>', methods=['GET', 'POST'])
@@ -152,8 +149,8 @@ def edit_data_page(category, _id):
             flash('Cannot decode JSON. Please check and try again.', category='error')
 
     if category == 'canteens':
-        return render_template('data_with_image.html', form=form, method='Edit', category=category)
-    return render_template('data.html', form=form, method='Edit', category=category)
+        return render_template('admin/data_with_image.html', form=form, method='Edit', category=category)
+    return render_template('admin/data.html', form=form, method='Edit', category=category)
 
 
 @app.route('/delete/<category>/<_id>', methods=['GET', 'POST'])
@@ -195,7 +192,7 @@ def overview_canteens_dishes(canteen_id, category):
             else:
                 dish['image_path'] = None
 
-        return render_template('admin_dishes.html', canteen=canteen, dishes=dishes)
+        return render_template('admin/admin_dishes.html', canteen=canteen, dishes=dishes)
 
     elif category == 'comments':
 
@@ -212,7 +209,7 @@ def overview_canteens_dishes(canteen_id, category):
         ])
 
         comments = list(results)
-        return render_template('admin_comments.html', canteen=canteen, comments=comments)
+        return render_template('admin/admin_comments.html', canteen=canteen, comments=comments)
 
     elif category == 'orders':
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
@@ -237,7 +234,7 @@ def overview_canteens_dishes(canteen_id, category):
         orders = list(results)
         for order in orders:
             order['dishes'] = ', '.join(order.get('dishes'))
-        return render_template('admin_orders.html', canteen=canteen, orders=orders)
+        return render_template('admin/admin_orders.html', canteen=canteen, orders=orders)
 
 
 @app.route('/add/canteens/<canteen_id>/<category>', methods=['GET', 'POST'])
@@ -357,10 +354,10 @@ def add_canteens_data(canteen_id, category):
             flash('Wrong time format', category='error')
 
     if category == 'dishes':
-        return render_template('data_with_image.html', form=form, method='Edit', category=category)
+        return render_template('admin/data_with_image.html', form=form, method='Edit', category=category)
     if category == 'orders':
-        return render_template('data_with_select.html', form=form, method='Edit')
-    return render_template('data.html', form=form, method='Edit')
+        return render_template('admin/data_with_select.html', form=form, method='Edit')
+    return render_template('admin/data.html', form=form, method='Edit')
 
 
 @app.route('/edit/canteens/<canteen_id>/<category>/<_id>', methods=['GET', 'POST'])
@@ -415,8 +412,8 @@ def edit_canteens_data(canteen_id, category, _id):
             flash('Not supported file type. Only .jpg and .png are allowed', category='error')
 
     if category == 'dishes':
-        return render_template('data_with_image.html', form=form, method='Edit')
-    return render_template('data.html', form=form, method='Edit')
+        return render_template('admin/data_with_image.html', form=form, method='Edit')
+    return render_template('admin/data.html', form=form, method='Edit')
 
 
 @app.route('/delete/canteens/<canteen_id>/<category>/<_id>', methods=['GET', 'POST'])
