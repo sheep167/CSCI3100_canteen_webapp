@@ -6,7 +6,7 @@ from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from .form import UserRegistrationForm, UserLoginForm
-from .models import User, LoginUser
+from .models import Users, LoginUsers
 import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from werkzeug.utils import secure_filename
@@ -99,9 +99,9 @@ def register_page():
 
         hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
 
-        user_to_create = User(email=form.email.data,
-                              username=form.username.data,
-                              password=hashed_password)
+        user_to_create = Users(email=form.email.data,
+                               username=form.username.data,
+                               password=hashed_password)
 
         token = generate_confirmation_token(form.email.data)
 
@@ -130,7 +130,7 @@ def login_page():
 
         if attempted_user and bcrypt.checkpw(form.password.data.encode('utf-8'), attempted_user.get('password')):
             if int(attempted_user.get('confirmed')) == 1:
-                login_user(LoginUser(attempted_user))
+                login_user(LoginUsers(attempted_user))
                 flash('Successfully Logged In as: %s' % attempted_user.get('username'), category='success')
                 return redirect(url_for('home'))
             else:
@@ -285,7 +285,7 @@ def create_order(canteen_name, total_price):
     target = cart.pop(canteen_name)
 
     order = {
-        'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'at_time': datetime.datetime.now(),
         'order_status': 'waiting',
         'dishes': target.get('cart'),
         'total_price': total_price,
@@ -311,7 +311,7 @@ def post_comment(canteen_id):
             flash('300 characters limit exceeded', category='warning')
         else:
             mongo.db.comments.insert_one({
-                'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'at_time': datetime.datetime.now(),
                 'rating': int(rating),
                 'paragraph': paragraph.lstrip(),
                 'at_canteen': ObjectId(canteen_id),

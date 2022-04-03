@@ -9,6 +9,7 @@ import json
 from json import JSONDecodeError
 from bson import ObjectId
 import bcrypt
+from .models import *
 
 
 class ValidationError(Exception):
@@ -26,6 +27,7 @@ def reset_password(_id):
         return 'Not Authorized', 403
 
     mongo.db.users.update_one({'_id': ObjectId(_id)}, {'$set': {'password': bcrypt.hashpw('123456'.encode('utf-8'), bcrypt.gensalt())}})
+    flash('Password is reset to 123456', category='info')
     return redirect('/overview/users')
 
 
@@ -45,6 +47,8 @@ def overview_page(category):
         comments = list(mongo.db.comments.find())
         return render_template('admin_comments.html', comments=comments)
 
+    return 'category not found'
+
 
 @app.route('/add/<category>', methods=['GET', 'POST'])
 @login_required
@@ -53,13 +57,12 @@ def add_data_page(category):
         return 'Not Authorized', 403
 
     form = DataEditForm()
-    mongo_col = mongo.db[category]
 
     if request.method == 'GET':
         if category == 'users':
-            form.text.data = json.dumps({'email': 'str', 'password': 'str', 'username': 'str', 'auth_type': 'int', 'confirmed': 'int', 'balance': 'float'}, indent=4)
+            form.text.data = json.dumps(Users.template_object(), indent=4)
         elif category == 'canteens':
-            form.text.data = json.dumps({'name': 'str', 'longitude': 'float', 'latitude': 'float', 'open_at': 'str', 'close_at': 'str', 'capacity': 'int'}, indent=4)
+            form.text.data = json.dumps(Canteens.template_object(), indent=4)
         else:
             return 'Not Found', 404
 
@@ -68,24 +71,39 @@ def add_data_page(category):
             data = json.loads(form.text.data)
 
             if category == 'users':
-                if mongo_col.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
+                if mongo.db.users.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
                     raise ValidationError()
 
                 hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
-                data['password'] = hashed_password
-                data['cart'] = {}
-                data['image_path'] = None
+
+                user_to_insert = Users(email=data.get('email'),
+                                       password=hashed_password,
+                                       username=data.get('username')
+                                       )
+
+                mongo.db.users.insert_one(user_to_insert.to_json())
 
             elif category == 'canteens':
-                data['menu'] = []
+                if mongo.db.canteens.find_one({'name': data.get('name')}):
+                    raise ValidationError()
 
-            mongo_col.insert_one(data)
+                canteen_to_insert = Canteens(name=data.get('name'),
+                                             longitude=data.get('longitude'),
+                                             latitude=data.get('latitude'),
+                                             open_at=data.get('open_at'),
+                                             close_at=data.get('close_at'),
+                                             capacity=data.get('capacity'))
+
+                mongo.db.canteens.insert_one(canteen_to_insert.to_json())
+
             return redirect('/overview/%s' % category)
 
         except JSONDecodeError:
             flash('Cannot decode JSON. Please check and try again.', category='error')
         except ValidationError:
             flash('Duplicate keys with the database', category='error')
+        except TypeError and ValueError:
+            flash('Wrong type of values', category='error')
 
     return render_template('data.html', form=form, method='Add', category=category)
 
@@ -103,19 +121,20 @@ def edit_data_page(category, _id):
 
     if request.method == 'GET':
         if category == 'users':
-            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'email': 0, 'username': 0, 'password': 0}), indent=4, default=str)
+            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'auth_type': 1, 'confirmed': 1, 'balance': 1}), indent=4, default=str)
         elif category == 'canteens':
-            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0}), indent=4, default=str)
+            form.text.data = json.dumps(mongo_col.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'menu': 0, 'image_path': 0}), indent=4, default=str)
 
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
             if category == 'canteens':
 
+                canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
+
                 if form.image.data.filename != '':
                     filename = secure_filename(form.image.data.filename)
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
-                        canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
                         folder_path = './canteen/static/image/%s' % canteen.get('name')
                         os.makedirs(folder_path, exist_ok=True)
                         save_path = os.path.join(folder_path, filename).replace('\\', '/')
@@ -124,7 +143,7 @@ def edit_data_page(category, _id):
                     else:
                         raise ValidationError()
                 else:
-                    data['image_path'] = None
+                    data['image_path'] = canteen.get('image_path')
 
             mongo_col.update_one({'_id': ObjectId(_id)}, {'$set': data})
             return redirect('/overview/%s' % category)
@@ -244,11 +263,11 @@ def add_canteens_data(canteen_id, category):
 
     if request.method == 'GET':
         if category == 'dishes':
-            form.text.data = json.dumps({'name': 'str', 'price': 'float', 'ingredients': 'List[str]'}, indent=4)
+            form.text.data = json.dumps(Dishes.template_object(), indent=4)
         elif category == 'comments':
-            form.text.data = json.dumps({'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'username': 'str', 'rating': 'int', 'paragraph': 'str'}, indent=4)
+            form.text.data = json.dumps(Comments.template_object(), indent=4)
         elif category == 'orders':
-            form.text.data = json.dumps({'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'username': 'str', 'order_status': 'waiting, fulfilled, unfulfilled'}, indent=4)
+            form.text.data = json.dumps(Orders.template_object(), indent=4)
 
             dishes = mongo.db.dishes.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}},
@@ -338,7 +357,7 @@ def add_canteens_data(canteen_id, category):
             flash('Wrong time format', category='error')
 
     if category == 'dishes':
-        return render_template('data_with_image.html', form=form, method='Edit')
+        return render_template('data_with_image.html', form=form, method='Edit', category=category)
     if category == 'orders':
         return render_template('data_with_select.html', form=form, method='Edit')
     return render_template('data.html', form=form, method='Edit')
@@ -372,8 +391,8 @@ def edit_canteens_data(canteen_id, category, _id):
             form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
         elif category == 'comments':
             form.text.data = json.dumps(mongo.db.comments.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'at_canteen': 0, 'by_user': 0, 'at_time': 0}), indent=4, default=str)
-        # Editing the orders is not supported as this action is complicated
-        # in both database query and editing them on screen
+        elif category == 'orders':
+            form.text.data = json.dumps(mongo.db.orders.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'order_status': 1, 'total_price': 1}), indent=4)
 
     if request.method == 'POST':
         try:

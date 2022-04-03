@@ -13,14 +13,14 @@ class bcrypt_password(str):
     pass
 
 
-class User:
-    def __init__(self, email, password, username):
-        self.email: str = email
+class Users:
+    def __init__(self, email, password, username, auth_type=2, confirmed=0, balance=0):
+        self.email = str(email)
         self.password: bcrypt_password = password  # This should be a bcrypt-encrypted password
-        self.auth_type: int = 2  # 0: administrator, 1: canteen owner, 2: student
-        self.confirmed: int = 0
-        self.username: str = username
-        self.balance: float = 0  # amount of money
+        self.username = str(username)
+        self.auth_type = int(auth_type)  # 0: administrator, 1: canteen owner, 2: student
+        self.confirmed = int(confirmed)
+        self.balance = float(balance)  # amount of money
         self.cart = {}
         self.image_path = None
 
@@ -28,17 +28,28 @@ class User:
         # This function turns all attributes value to dict (json) for MongoDB
         return self.__dict__
 
+    @staticmethod
+    def template_object():
+        return {
+            'email': 'str',
+            'password': 'str',
+            'username': 'str',
+            'auth_type': 'int',
+            'confirmed': 'int',
+            'balance': 'float'
+        }
+
 
 @login_manager.user_loader
 def load_user(user_id):
     user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
-    return LoginUser(user_json)
+    return LoginUsers(user_json)
 
 
-class LoginUser(UserMixin, User):
+class LoginUsers(UserMixin, Users):
     def __init__(self, user_json):
         if( user_json ):
-            super(LoginUser, self).__init__(email=user_json.get('email'), username=user_json.get('username'), password=user_json.get('password'))
+            super(LoginUsers, self).__init__(email=user_json.get('email'), username=user_json.get('username'), password=user_json.get('password'))
             for key, value in user_json.items():
                 setattr(self, key, value)
 
@@ -49,53 +60,89 @@ class LoginUser(UserMixin, User):
         return str(object_id)
 
 
-class Canteen:
+class Canteens:
     def __init__(self, name, longitude, latitude, open_at, close_at, capacity):
-        self.name: str = name
-        self.longitude: float = longitude
-        self.latitude: float = latitude
-        self.open_at: datetime.time = open_at
-        self.close_at: datetime.time = close_at
-        self.capacity: int = capacity
-        self.menu: List[ObjectId] = []  # Dishes are stored in here
+        self.name = str(name)
+        self.longitude = str(longitude)
+        self.latitude = str(latitude)
+        self.open_at = str(open_at)
+        self.close_at = str(close_at)
+        self.capacity = int(capacity)
+        self.menu = []  # List of ObjectId of Dishes are stored in here
         self.image_path = None
 
     def to_json(self):
         return self.__dict__
 
+    @staticmethod
+    def template_object():
+        return {
+            'name': 'str',
+            'longitude': 'str',
+            'latitude': 'str',
+            'open_at': 'str',
+            'close_at': 'str',
+            'capacity': 'int'
+        }
+
 
 class Dishes:
-    def __init__(self, name, at_canteen, price, ingredients, image_path):
-        self.name: str = name
-        self.at_canteen: ObjectId = at_canteen
-        self.price: float = price
-        self.ingredients: List[str] = ingredients
-        self.image_path = None  # Image file name
+    def __init__(self, name, at_canteen, price, ingredients):
+        self.name = str(name)
+        self.at_canteen = at_canteen  # ObjectId
+        self.price = float(price)
+        self.ingredients = ingredients  # List of str
+        self.image_path = None
 
     def to_json(self):
         return self.__dict__
 
+    @staticmethod
+    def template_object():
+        return {
+            'name': 'str',
+            'price': 'float',
+            'ingredients': 'List[str]'
+        }
 
-class Order:
+
+class Orders:
     def __init__(self, created_time, created_by_user, created_at_canteen, food, total_price):
-        self.at_time: datetime.datetime = created_time
-        self.by_user: ObjectId = created_by_user
-        self.at_canteen: ObjectId = created_at_canteen
-        self.dishes: List[ObjectId] = food
-        self.total_price: float = total_price
-        self.order_status: str = 'waiting'  # waiting, fulfilled, unfulfilled
+        self.at_time = created_time  # datetime.datetime object
+        self.by_user = created_by_user  # ObjectId
+        self.at_canteen = created_at_canteen  # ObjectId
+        self.dishes = food  # List of ObjectId
+        self.total_price = total_price  # float
+        self.order_status = 'waiting'  # waiting, fulfilled, unfulfilled
 
     def to_json(self):
         return self.__dict__
 
+    @staticmethod
+    def template_object():
+        return {
+            'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'username': 'str',
+            'order_status': 'waiting, fulfilled, unfulfilled',
+        }
 
-class Comment:
+
+class Comments:
     def __init__(self, posted_time, posted_by_user, posted_at_canteen, rating, paragraph):
-        self.at_time: datetime.datetime = posted_time
-        self.by_user: ObjectId = posted_by_user
-        self.at_canteen: ObjectId = posted_at_canteen
-        self.rating: int = rating
-        self.paragraph: str = paragraph
+        self.at_time = posted_time  # datetime.datetime object
+        self.by_user = posted_by_user  # ObjectId
+        self.at_canteen = posted_at_canteen  # ObjectId
+        self.rating = rating
+        self.paragraph = paragraph
 
     def to_json(self):
         return self.__dict__
+
+    @staticmethod
+    def template_object():
+        return {
+            'at_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'username': 'str',
+            'rating': 'int',
+            'paragraph': 'str',
+        }
