@@ -2,8 +2,8 @@
 {% set active_page = "canteens" %}
 
 {% block title %}
-    {{canteen.name}} Canteen Page
-    <!-- Or change to Canteen Webapp -->
+{{canteen.name}} Canteen Page
+<!-- Or change to Canteen Webapp -->
 {% endblock %}
 
 {% block stylesheet %}
@@ -17,24 +17,28 @@
   <div class="m-0 p-0" style="overflow: hidden; background-color: #ffffff;">
     {% if canteen.image_path %}
     <div id="bg-img" style="background-image: url({{canteen.image_path}}) ;">
-    {% endif %}
+      {% endif %}
     </div>
 
     <div id="canteen-info" class="container-fluid pt-5 pl-5 pb-4">
-        <div class="font-weight-bold h1"> {{canteen.name}} </div>
-        <div class="font-weight-light h2"> Open from {{canteen.open_at}} to {{canteen.close_at}} </div>
-        <a class="btn btn-outline-success" target="_blank" href="https://maps.google.com/maps?q={{canteen.latitude}},{{canteen.longitude}}" role="button">Open in Google Map</a>
-<!--        <div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>-->
+      <div class="h1"> {{canteen.name}} </div>
+      <div class="font-weight-light h4"> Open from {{canteen.open_at}} to {{canteen.close_at}} </div>
+      <!--image from flaticon-->
+      <img src="../../static/image/icon/map.png" class="mr-2" style="float:left;" alt="map" width="30" height="30"><a
+        class="btn btn-outline-success btn-sm" target="_blank"
+        href="https://maps.google.com/maps?q={{canteen.latitude}},{{canteen.longitude}}" role="button">Open in Google
+        Map</a>
+      <!--        <div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>-->
     </div>
 
   </div>
 
   <div id="cat-1" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
-      <div class="p-0 h1">Menu</div>
+      <div class="p-0 h2">Menu</div>
     </div>
 
-    <div class="container-fluid pl-5 pr-5">
+    <div class="container-fluid">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
         {% for dish in canteen.menu %}
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
@@ -44,8 +48,10 @@
                 <!-- Left side of button -->
                 <div class="d-flex flex-column" style="max-width: 50%;">
                   <span class="mr-auto pt-2 h5" style="font-size: 40px">{{dish.name}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">{{dish.ingredients}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Price: {{dish.price}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left"
+                    style="font-size: 20px">{{dish.ingredients}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Price:
+                    {{dish.price}}</span>
                 </div>
                 <!-- Right Side of Button -->
                 <div class="ml-auto">
@@ -58,7 +64,8 @@
           </button>
           <div style="text-align: right">
             <form method="post">
-              <button class="btn btn-outline-primary" type="submit" name="dish" value="{{dish._id}}"> Add to Cart</button>
+              <button class="btn btn-outline-primary btn-sm" type="submit" name="dish" value="{{dish._id}}"> Add to
+                Cart</button>
             </form>
           </div>
         </div>
@@ -69,12 +76,13 @@
 
   <div id="cat-2" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-5 pt-4 pb-3">
-      <div class="p-0 h1">
-        Comment
-        <a href="/post_comment/{{canteen._id}}">
-          <button class="btn btn-outline-primary">Post a comment</button>
-        </a>
-      </div>
+      <h2>Comment</h2>
+      <br>
+      <img src="../../static/image/icon/comment.png" class="mr-2" style="float:left;" alt="comments" width="35" height="35">
+            <a href="/post_comment/{{canteen._id}}">
+              <button class="btn btn-outline-primary btn-sm">Post a comment</button>
+            </a>
+         
     </div>
 
     <div class="container-fluid pl-5 pr-5">
@@ -88,8 +96,10 @@
                 <div class="d-flex flex-column" style="max-width: 50%;">
                   <span class="mr-auto pt-2 h5" style="font-size: 40px">{{comment.by_user.username}} </span>
                   <span class="mr-auto pt-2 h5" style="font-size: 20px">{{comment.rating}} </span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">{{comment.paragraph}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">{{comment.at_time}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left"
+                    style="font-size: 20px">{{comment.paragraph}}</span>
+                  <span class="mr-auto font-weight-light h6 text-left"
+                    style="font-size: 20px">{{comment.at_time}}</span>
                 </div>
               </div>
             </div>
@@ -105,11 +115,9 @@
 
 {% block style %}
 <style>
-      /* body {
+  /* body {
       background-color: #212121;
       color: white
       } */
-   </style>
+</style>
 {% endblock %}
-
-
