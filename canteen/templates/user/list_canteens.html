@@ -7,10 +7,9 @@ Canteen List
 
 {% block content %}
 <div class="container-fluid pl-5 pr-5">
-    <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255); justify-content: space-between;">
-    {% for batch in canteens | batch(3) %}
+    <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
     <div class="row">
-        {% for canteen in batch %}
+        {% for canteen in canteens %}
         <div class="col-lg-4">
             <div class="card">
                 {% if canteen.image_path %}
@@ -55,7 +54,6 @@ Canteen List
         {% endfor %}
     </div>
     <br>
-{% endfor %}
     </div>
 </div>
 
