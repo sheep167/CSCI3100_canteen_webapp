@@ -15,9 +15,52 @@ from flask_mail import Message
 
 @app.route('/', methods=['GET'])
 def home():
-    # two templates are available: home.html and home2.html
-    # use home.html
-    return render_template('home.html')
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
+            {'from': 'dishes',
+             'localField': 'menu',
+             'foreignField': '_id',
+             'as': 'menu'}}
+    ])
+    canteens = list(results)
+
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
+            {'from': 'comments',
+             'localField': '_id',
+             'foreignField': 'at_canteen',
+             'as': 'comments'}},
+        {'$unwind': '$comments'},
+        {'$group': {'_id': '$_id', 'avg_rating': {'$avg': '$comments.rating'}}}
+    ])
+    ratings = list(results)
+
+    # add average_rating into canteens
+    for canteen in canteens:
+        for rating in ratings:
+            if canteen.get('_id') == rating.get('_id'):
+                canteen['avg_rating'] = rating.get('avg_rating')
+
+    canteens_opened = []
+    canteens_closed = []
+    time_now = datetime.datetime.now().time()
+    for canteen in canteens:
+        if canteen.get('image_path'):
+            canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
+            for dish in canteen.get('menu'):
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        else:
+            canteen['image_path'] = None
+
+        open_at = datetime.datetime.strptime(canteen.get('open_at'), '%H:%M').time()
+        close_at = datetime.datetime.strptime(canteen.get('close_at'), '%H:%M').time()
+        if open_at <= time_now <= close_at:
+            canteens_opened.append(canteen)
+        else:
+            canteens_closed.append(canteen)
+
+    return render_template('home.html', canteens_opened=canteens_opened, canteens_closed=canteens_closed)
 
 
 @login_required
