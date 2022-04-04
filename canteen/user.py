@@ -243,13 +243,17 @@ def canteen_page(_id):
     comments = list(results)
 
     if request.method == 'POST':
-        add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
-        flash('Added to Cart!', category='info')
+        if( request.form.get('add-dish')):
+            add_to_cart(canteen_id=_id, dish_id=request.form['add-dish'])
+            flash('Added to Cart!', category='info')
+        elif( request.form.get('remove-dish')):
+            remove_from_cart(canteen_id=_id, dish_id=request.form['remove-dish'])
+            flash('Removed from Cart!', category='info')
         return redirect(request.url)
 
     if canteen:
 
-        #UNFINISHED ADD CART FOR IN-PAGE CART
+        #ADD CART FOR IN-PAGE CART
         cart={}
         cart_from_user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
 
@@ -319,6 +323,20 @@ def add_to_cart(canteen_id, dish_id):
         cart[canteen_name]['cart'] = []
     cart[canteen_name]['cart'].append(ObjectId(dish_id))
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
+
+@login_required
+def remove_from_cart(canteen_id, dish_id):
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
+    if not cart.get(canteen_name):
+        pass
+    else:
+        print( cart[canteen_name]['cart'] )
+        try:
+            cart[canteen_name]['cart'].remove(ObjectId(dish_id))
+            mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
+        except:
+            pass
 
 
 @app.route('/cart', methods=['GET', 'POST'])

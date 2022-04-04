@@ -51,7 +51,7 @@
         </div>
         <div class="h6 font-weight-light">No items in your cart</div>
       </div>
-      <div class="pb-2">Your order from #CANTEEN NAME</div>
+      <div class="pb-2">Your order from {{canteen.name}}</div>
             
       {% if cart %}
         {% for dish in cart[canteen.name]["cart"] %}
@@ -61,7 +61,15 @@
                 <div class="mr-auto text-maincolor">{{dish.name}}</div>
                 <div class="ml-auto">${{dish.price}}</div>
               </div>
-              <div class="ml-auto">- {{dish.count}} +</div>
+              <div class="ml-auto flex-row d-flex plus_sign" >
+                <form name="remove-dish" id="remove-dish" method="post">
+                  <button class="pl-2" type="submit" name="remove-dish" value="{{dish._id}}" style="background-color: transparent; border: 0px;">-</button>
+                </form>
+                <div>{{dish.count}}</div>
+                <form name="add-dish" id="add-dish" method="post">
+                  <button class="pl-2" type="submit" name="add-dish" value="{{dish._id}}" style="background-color: transparent; border: 0px;">+</button>
+                </form>
+              </div>
             </div>
           </div>
         {% endfor %}
@@ -135,7 +143,7 @@
         {% for dish in canteen.menu %}
         <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
           <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="dish" value="{{dish._id}}" style="height: 132px;">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="{{dish._id}}" style="height: 132px;">
               <div class="container m-0">
                 <div class="flex-row d-flex flex-wrap">
                   <!-- Left side of button -->
