@@ -134,11 +134,6 @@ def user_account():
     return render_template('/user/user_account.html', user=user)
 
 
-@app.route('/canteen_account', methods=['GET', 'POST'])
-def canteen_account():
-    return render_template('canteen_account.html')
-
-
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])

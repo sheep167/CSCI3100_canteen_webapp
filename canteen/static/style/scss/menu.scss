@@ -1,0 +1,42 @@
+$main-color:#ff7500;
+
+div.block{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+@mixin div-comment-theme(){
+    background-color: transparent;
+    color: $main-color;
+    font-weight: 400;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
+div.comment{
+    @include div-comment-theme();
+    border: 0;
+}
+
+div.comment:hover{
+    @include div-comment-theme();
+}
+
+thead{
+    background-color: #ffdec1;
+}
+
+.labl {
+    width: 430px;
+}
+
+.labl > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+.labl > input + div{ /* DIV STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+    background-color: #ffd6bb;
+    border: 1px solid #ff6600;
+}

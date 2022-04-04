@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% block title %}
+Canteen List
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../static/style/css/menu.css">
+{% endblock %}
+
+{% block content %}
+  <div id="cat-1" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-4 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
+    <div class="container pt-4 pl-4 h1 m-0">Menu Edits</div>
+  </div>
+
+  <div id="cat-2" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-4 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
+    <div class="pl-4 pt-4 m-0">
+        <div class="container p-0 h1 m-0">Set</div>
+
+        <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row">
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+            <!-- One Block -->
+                <input type="radio" name="set" value="set1" checked="checked">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 1</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                <!-- One Block -->
+                <input type="radio" name="set" value="set2">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 2</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                <!-- One Block -->
+                <input type="radio" name="set" value="set3">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 3</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                <!-- One Block -->
+                <input type="radio" name="set" value="set4">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px; max-width: 430px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 4</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                <!-- One Block -->
+                <input type="radio" name="set" value="set5">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px; max-width: 430px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 5</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                <!-- One Block -->
+                <input type="radio" name="set" value="set6">
+                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px; max-width: 430px;">
+                    <div class="pt-2 m-0 ">
+                        <div class="pt-2 m-0 h4 text-left">Set 6</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Main Dish</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dish 1</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Dish 2</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Dish 3</td>
+                            </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Drink</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Drink 1</td>
+                            </tr>
+                        </table>        
+                    </div>
+                </div>
+            </label>
+
+            </form>
+            
+        </div>
+
+    </div>
+
+
+  </div>
+
+  <div id="cat-2" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-4 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
+    <div class="container pt-4 pl-4 h1 m-0">Groups</div>
+  </div>
+
+
+
+{% endblock %}

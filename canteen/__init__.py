@@ -21,3 +21,4 @@ mail = Mail(app)
 
 from canteen.user import *
 from canteen.admin import *
+from canteen.canteen import *
