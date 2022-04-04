@@ -54,13 +54,8 @@
                       <a class="nav-link" href="/user_account">{{current_user.username}} Settings</a>
                   </li>
 
-                  {% if current_user.auth_type != 0 %}
-                      <li class="nav-item">
-                          <a class="nav-link" href="/cart">Cart
-                              <i class="bi bi-cart2" style="color: black; font-size: 16px;"></i>
-                          </a>
-                      </li>
-                  {% endif %}
+                  {% block navcart %}
+                  {% endblock %}
                   
                   <li class="nav-item">
                       <a class="nav-link" href="{{url_for('logout_page')}}">Logout</a>

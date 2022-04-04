@@ -1,3 +1,7 @@
+.text-maincolor {
+  color: #ff7500;
+}
+
 .bg-over-lay {
   position: fixed;
   width: 100vw;
@@ -200,6 +204,34 @@ button.food-menu:focus {
   font-weight: 400;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-color: #ff7500;
+}
+
+div.comment {
+  background-color: transparent;
+  color: #ff7500;
+  font-weight: 400;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 0;
+}
+
+div.comment:hover {
+  background-color: transparent;
+  color: #ff7500;
+  font-weight: 400;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+div.comment:focus {
+  background-color: transparent;
+  color: #ff7500;
+  font-weight: 400;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  background-color: white;
+  border-color: #ff7500;
+}
+
+div.plus_sign:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 /*# sourceMappingURL=canteenpage.css.map */

@@ -5,49 +5,52 @@
 Checkout Page
 {% endblock %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="../static/style/css/checkout_page.css">
+{% endblock %}
+
 {% block content %}
-  <div id="cat-1" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
+  <div id="cat-1" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-4 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h1">Check out</div>
     </div>
     {% if cart %}
     {% for canteen_name in cart.keys() %}
     <div class="container-fluid pl-5 pr-5">
-      <h2>{{canteen_name}}</h2>
+      <h2 class="mb-0">{{canteen_name}}</h2>
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255)">
         {% for dish in cart[canteen_name]['cart'] %}
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <button class="food-menu btn btn-outline-secondary h-100 w-100">
-            <div class="container">
-              <div class="flex-row d-flex flex-wrap">
-                <!-- Left side of button -->
-                <div class="d-flex flex-column" style="max-width: 50%;">
-                  <span class="mr-auto pt-2 h5" style="font-size: 40px">{{dish.name}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">{{dish.ingredients}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Price: {{dish.price}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Count: {{dish.count}}</span>
-                </div>
-                <!-- Right Side of Button -->
-                <div class="ml-auto">
-                  <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
-                </div>
-              </div>
+        <div class="container-fluid m-0 pt-1 pb-3 pr-3 pl-0 col-12" style="max-height: 30vh;">
+          <div class="flex-row d-flex flex-wrap">
+            <!-- Left side of button -->
+            <div class="d-flex flex-column" style="max-width: 50%;">
+              <span class="mr-auto pt-2" style="font-size: 30px">{{dish.name}} <span class="font-weight-light" style="font-size: 25px;">x {{dish.count}}</span></span>
+              <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">
+                {{ dish.ingredients[0] }}
+                {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
+                {% endfor %}</span>
+              <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
             </div>
-          </button>
+            <!-- Right Side of Button -->
+            <div class="ml-auto">
+              <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
+            </div>
+          </div>
         </div>
         {% endfor %}
+        <hr>
       </div>
     </div>
+    {% endfor %}
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Total Price </h1>
-      <h1> ${{cart[canteen_name]['total_price']}} </h1>
+      <div class="h3 font-weight-light"> ${{all_canteen_total}} </div>
       <form method="post">
         <input type="hidden" name="canteen_name" value="{{canteen_name}}">
-        <input type="hidden" name="total_price" value="{{cart[canteen_name]['total_price']}}">
+        <input type="hidden" name="total_price" value="{{all_canteen_total}}">
         <button class="btn btn-outline-primary" type="submit"> Pay Now </button>
       </form>
     </div>
-    {% endfor %}
     {% else %}
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Your Cart is Empty</h1>

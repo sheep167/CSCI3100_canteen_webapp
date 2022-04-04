@@ -243,11 +243,41 @@ def canteen_page(_id):
     comments = list(results)
 
     if request.method == 'POST':
-        add_to_cart(canteen_id=_id, dish_id=request.form['dish'])
-        flash('Added to Cart!', category='info')
+        if( request.form.get('add-dish')):
+            add_to_cart(canteen_id=_id, dish_id=request.form['add-dish'])
+            flash('Added to Cart!', category='info')
+        elif( request.form.get('remove-dish')):
+            remove_from_cart(canteen_id=_id, dish_id=request.form['remove-dish'])
+            flash('Removed from Cart!', category='info')
         return redirect(request.url)
 
     if canteen:
+
+        #ADD CART FOR IN-PAGE CART
+        cart={}
+        cart_from_user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+
+        if( cart_from_user.get('cart') ):
+            for canteen_name, value in cart_from_user.get('cart').items():
+                cart[canteen_name] = {}
+                cart[canteen_name]['cart'] = []
+                counter = Counter(value.get('cart'))
+                for dish_id, count in counter.items():
+                    dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
+                    dish_obj['count'] = count
+                    cart[canteen_name]['cart'].append(dish_obj)
+
+            # Replace the image_path
+            # Calculate the total_price for each canteen
+            for canteen_name in cart.keys():
+                total_price = 0
+                cart_array = cart[canteen_name]['cart']
+                for dish in cart_array:
+                    if dish.get('image_path'):
+                        dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+                    total_price += dish.get('price') * dish.get('count')
+                cart[canteen_name]['total_price'] = total_price
+
         canteen = canteen[0]
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
@@ -256,7 +286,7 @@ def canteen_page(_id):
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
-        return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments)
+        return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments, cart=cart)
     else:
         return 'Page Not Found', 404
 
@@ -294,6 +324,20 @@ def add_to_cart(canteen_id, dish_id):
     cart[canteen_name]['cart'].append(ObjectId(dish_id))
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
 
+@login_required
+def remove_from_cart(canteen_id, dish_id):
+    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
+    if not cart.get(canteen_name):
+        pass
+    else:
+        print( cart[canteen_name]['cart'] )
+        try:
+            cart[canteen_name]['cart'].remove(ObjectId(dish_id))
+            mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
+        except:
+            pass
+
 
 @app.route('/cart', methods=['GET', 'POST'])
 @login_required
@@ -313,6 +357,7 @@ def cart_page():
 
     #temporary fix
     if( results.get('cart') ):
+        all_canteen_total = 0
         for canteen_name, value in results.get('cart').items():
             cart[canteen_name] = {}
             cart[canteen_name]['cart'] = []
@@ -332,7 +377,8 @@ def cart_page():
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
                 total_price += dish.get('price') * dish.get('count')
             cart[canteen_name]['total_price'] = total_price
-    return render_template('/user/checkout_page.html', cart=cart)
+            all_canteen_total += total_price
+    return render_template('/user/checkout_page.html', cart=cart, all_canteen_total=all_canteen_total)
 
 
 @login_required
