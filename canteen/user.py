@@ -267,25 +267,28 @@ def cart_page():
 
     # Count the number of each dish and retrieve the details
     cart = {}
-    for canteen_name, value in results.get('cart').items():
-        cart[canteen_name] = {}
-        cart[canteen_name]['cart'] = []
-        counter = Counter(value.get('cart'))
-        for dish_id, count in counter.items():
-            dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
-            dish_obj['count'] = count
-            cart[canteen_name]['cart'].append(dish_obj)
 
-    # Replace the image_path
-    # Calculate the total_price for each canteen
-    for canteen_name in cart.keys():
-        total_price = 0
-        cart_array = cart[canteen_name]['cart']
-        for dish in cart_array:
-            if dish.get('image_path'):
-                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
-            total_price += dish.get('price') * dish.get('count')
-        cart[canteen_name]['total_price'] = total_price
+    #temporary fix
+    if( results.get('cart') ):
+        for canteen_name, value in results.get('cart').items():
+            cart[canteen_name] = {}
+            cart[canteen_name]['cart'] = []
+            counter = Counter(value.get('cart'))
+            for dish_id, count in counter.items():
+                dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
+                dish_obj['count'] = count
+                cart[canteen_name]['cart'].append(dish_obj)
+
+        # Replace the image_path
+        # Calculate the total_price for each canteen
+        for canteen_name in cart.keys():
+            total_price = 0
+            cart_array = cart[canteen_name]['cart']
+            for dish in cart_array:
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+                total_price += dish.get('price') * dish.get('count')
+            cart[canteen_name]['total_price'] = total_price
     return render_template('/user/checkout_page.html', cart=cart)
 
 
