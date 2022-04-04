@@ -54,7 +54,7 @@
       <div class="pb-2">Your order from #CANTEEN NAME</div>
             
       {% if cart %}
-        {% for dish in cart[canteen_name]["cart"] %}
+        {% for dish in cart[canteen.name]["cart"] %}
           <div class="flex-column container flex-wrap p-0 overflow-auto" style="max-height:40vh">
             <div class="nav-link d-flex flex-wrap flex-column">
               <div class="flex-row flex-wrap d-flex">
@@ -85,7 +85,7 @@
         <div class="flex-row flex-wrap d-flex pb-2">
           <div class="mr-auto">Total</div>
           {% if cart %}
-            <div class="ml-auto">${{cart[canteen_name]['total_price']}}</div>
+            <div class="ml-auto">${{cart[canteen.name]['total_price']}}</div>
           {% else %}
             <div class="ml-auto">$0</div>
           {% endif %}
