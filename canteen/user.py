@@ -357,6 +357,7 @@ def cart_page():
 
     #temporary fix
     if( results.get('cart') ):
+        all_canteen_total = 0
         for canteen_name, value in results.get('cart').items():
             cart[canteen_name] = {}
             cart[canteen_name]['cart'] = []
@@ -376,7 +377,8 @@ def cart_page():
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
                 total_price += dish.get('price') * dish.get('count')
             cart[canteen_name]['total_price'] = total_price
-    return render_template('/user/checkout_page.html', cart=cart)
+            all_canteen_total += total_price
+    return render_template('/user/checkout_page.html', cart=cart, all_canteen_total=all_canteen_total)
 
 
 @login_required
