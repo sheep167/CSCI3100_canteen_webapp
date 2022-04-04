@@ -33,77 +33,97 @@
 
   </div>
 
-  <div id="cat-1" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
-    <div class="container m-0 pl-5 pt-4 pb-3">
+  <div id="cat-1" class="mt-4 mb-4 pt-0 pl-5 pr-4 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
+    <div class="container m-0 pt-4 pb-3 pl-0">
       <div class="p-0 h2">Menu</div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid p-0">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
+
         {% for dish in canteen.menu %}
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <button class="food-menu btn btn-outline-secondary h-100 w-100">
-            <div class="container">
-              <div class="flex-row d-flex flex-wrap">
-                <!-- Left side of button -->
-                <div class="d-flex flex-column" style="max-width: 50%;">
-                  <span class="mr-auto pt-2 h5" style="font-size: 40px">{{dish.name}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left"
-                    style="font-size: 20px">
-                    {%for ingredients in dish.ingredients %}
-                      {{ ingredients }}
-                    {% endfor %}
-                  </span>
-                  <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">Price:
-                    {{dish.price}}</span>
-                </div>
-                <!-- Right Side of Button -->
-                <div class="ml-auto">
-                  {% if dish.image_path %}
-                  <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
-                  {% endif %}
+        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
+          <form method="post">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="dish" value="{{dish._id}}" style="height: 132px;">
+              <div class="container m-0">
+                <div class="flex-row d-flex flex-wrap">
+                  <!-- Left side of button -->
+                  <div class="d-flex flex-column" style="max-width: 50%;">
+                    <span class="mr-auto pt-2 h4">{{dish.name}}</span>
+                    <span class="mr-auto font-weight-light h6 text-left"
+                      style="font-size: 15px">
+                      <!-- only show 3 ingredients -->
+                      {{ dish.ingredients[0] }}
+                      {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
+                      {% endfor %}
+                    </span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
+                  </div>
+                  <!-- Right Side of Button -->
+                  <div class="ml-auto">
+                    {% if dish.image_path %}
+                    <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
+                    {% endif %}
+                  </div>
                 </div>
               </div>
-            </div>
-          </button>
-          <div style="text-align: right">
-            <form method="post">
-              <button class="btn btn-outline-primary btn-sm" type="submit" name="dish" value="{{dish._id}}"> Add to
-                Cart</button>
-            </form>
-          </div>
+            </button>
+          </form>
         </div>
+
+
         {% endfor %}
       </div>
     </div>
   </div>
 
-  <div id="cat-2" class="mt-4 mb-4 pt-0 pl-0 pr-0 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
-    <div class="container m-0 pl-5 pt-4 pb-3">
+  <div id="cat-2" class="mt-4 mb-4 pt-0 pl-5 pr-4 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
+    <div class="container m-0 pl-0 pt-4 pb-3">
       <h2>Comment</h2>
+      <div class="h5 font-weight-light">200 comments</div>
       <br>
       <img src="../../static/image/icon/comment.png" class="mr-2" style="float:left;" alt="comments" width="35" height="35">
             <a href="/post_comment/{{canteen._id}}">
               <button class="btn btn-outline-primary btn-sm">Post a comment</button>
             </a>
-         
     </div>
 
-    <div class="container-fluid pl-5 pr-5">
+    <div class="container-fluid pl-0 pr-0">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
         {% for comment in comments %}
-        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <button class="food-menu btn btn-outline-secondary h-100 w-100">
-            <div class="container">
-              <div class="flex-row d-flex flex-wrap">
-                <!-- Left side of button -->
-                <div class="d-flex flex-column" style="max-width: 50%;">
-                  <span class="mr-auto pt-2 h5" style="font-size: 40px">{{comment.by_user.username}} </span>
-                  <span class="mr-auto pt-2 h5" style="font-size: 20px">{{comment.rating}} </span>
-                  <span class="mr-auto font-weight-light h6 text-left"
-                    style="font-size: 20px">{{comment.paragraph}}</span>
-                  <span class="mr-auto font-weight-light h6 text-left"
-                    style="font-size: 20px">{{comment.at_time}}</span>
+        <!-- Comment Block-->
+        <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-12">
+          <button class="food-menu btn btn-outline-secondary w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+            <div class="container mr-0 ml-0 mt-0">
+              <div class="flex-wrap">
+                <div class="d-flex flex-row">
+                  <!-- User Image and Rating -->
+                  <div class="pt-4 d-flex flex-column">
+                    <img src="../../static/image/tmp/user_profile_sample.png" style="object-fit: cover; width: 50px; height: 50px;">
+                    <div class="d-flex flex-inline pl-1 pt-2">
+                      <img src="../../static/image/icon/star.png" style="width: 20px; height: 20px;">
+                      <div class="h6 font-weight-light text-center pl-2" style="font-size: 20px">{{comment.rating}} </div>
+                    </div>
+                  </div>
+
+                  <!-- Account Name, Comment and Time Stamp -->
+                  <div class="pl-4 pt-4" style="max-width: 100%;">
+                    <!-- Account Name -->
+                    <div class="d-flex flex-column"> 
+                      <span class="mr-auto h4" >{{comment.by_user.username}} </span>
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="text-left">
+                      <div class="font-weight-light" style="font-size: 20px; word-wrap: break-word;">{{comment.paragraph}}</div>
+                    </div>
+                    <br>
+                    <div class="text-left pb-2 text-secondary">
+                      <span class="font-weight-light"
+                        style="font-size: 15px">{{comment.at_time}}</span>
+                    </div>
+                  </div>
+                
                 </div>
               </div>
             </div>
