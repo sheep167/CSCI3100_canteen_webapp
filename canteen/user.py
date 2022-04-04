@@ -248,6 +248,32 @@ def canteen_page(_id):
         return redirect(request.url)
 
     if canteen:
+
+        #UNFINISHED ADD CART FOR IN-PAGE CART
+        cart={}
+        cart_from_user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+
+        if( cart_from_user.get('cart') ):
+            for canteen_name, value in cart_from_user.get('cart').items():
+                cart[canteen_name] = {}
+                cart[canteen_name]['cart'] = []
+                counter = Counter(value.get('cart'))
+                for dish_id, count in counter.items():
+                    dish_obj = mongo.db.dishes.find_one({'_id': ObjectId(dish_id)})
+                    dish_obj['count'] = count
+                    cart[canteen_name]['cart'].append(dish_obj)
+
+            # Replace the image_path
+            # Calculate the total_price for each canteen
+            for canteen_name in cart.keys():
+                total_price = 0
+                cart_array = cart[canteen_name]['cart']
+                for dish in cart_array:
+                    if dish.get('image_path'):
+                        dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+                    total_price += dish.get('price') * dish.get('count')
+                cart[canteen_name]['total_price'] = total_price
+
         canteen = canteen[0]
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
@@ -256,7 +282,7 @@ def canteen_page(_id):
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
-        return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments)
+        return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments, cart=cart)
     else:
         return 'Page Not Found', 404
 

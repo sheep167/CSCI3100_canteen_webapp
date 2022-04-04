@@ -10,8 +10,98 @@
 <link rel="stylesheet" href="../static/style/css/canteenpage.css">
 {% endblock %}
 
+{% block navcart %}
+  {% if current_user.auth_type != 0 %}
+      <li class="nav-item">
+          <div class="nav-link" href="" onclick="toggleCart()">Cart
+              <i class="bi bi-cart2" style="color: black; font-size: 16px;"></i>
+          </div>
+      </li>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
+
+<script >
+  function toggleCart(){
+    document.querySelector('#sidecart').classList.toggle('bg-over-lay');
+    document.querySelector('.sidecart').classList.toggle('open-cart');
+  }
+  function addToCart(){
+    document.querySelector('#enter-food-info').classList.toggle('bg-over-lay');
+    document.querySelector('.pop-up').classList.toggle('display-show');
+    var htmlTag = document.getElementsByTagName('html');
+    htmlTag[0].classList.toggle('overflow-hidden')
+
+
+  }
+</script>
+
 <main>
+
+  <!-- Sidecart -->
+  <div id="sidecart" class="">
+    <div class="sidecart bg-light text-center">
+    
+    <div class="nav flex-column container">
+      <div class="text-secondary m-0 px-4 text-center container pt-4">
+        <div class="h4 font-weight-light text-center">
+          Your Cart 
+          <div class="d-inline float-right" style="margin-right: 0 auto;" onclick="toggleCart()">x</div>  <!-- THIS BLOCK EFFECTS THE CENTRE, IF LOOK CAREFULLY "YOUR CART" IS NOT CENTERED -->
+        </div>
+        <div class="h6 font-weight-light">No items in your cart</div>
+      </div>
+      <div class="pb-2">Your order from #CANTEEN NAME</div>
+            
+      {% if cart %}
+        {% for dish in cart[canteen_name]["cart"] %}
+          <div class="flex-column container flex-wrap p-0 overflow-auto" style="max-height:40vh">
+            <div class="nav-link d-flex flex-wrap flex-column">
+              <div class="flex-row flex-wrap d-flex">
+                <div class="mr-auto text-maincolor">{{dish.name}}</div>
+                <div class="ml-auto">${{dish.price}}</div>
+              </div>
+              <div class="ml-auto">- {{dish.count}} +</div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="flex-column container flex-wrap p-0 overflow-auto" style="max-height:40vh">
+          <div class="nav-link d-flex flex-wrap flex-column">
+            <div class="flex-row flex-wrap d-flex">
+              <div class="mr-auto text-maincolor">Your cart is empty.</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    
+
+    </div>
+    <hr>
+
+    <div class="nav flex-column container" >
+      <div class="nav-link d-flex flex-wrap flex-column">
+        
+        <div class="flex-row flex-wrap d-flex pb-2">
+          <div class="mr-auto">Total</div>
+          {% if cart %}
+            <div class="ml-auto">${{cart[canteen_name]['total_price']}}</div>
+          {% else %}
+            <div class="ml-auto">$0</div>
+          {% endif %}
+        </div>
+          
+
+        <div class="pt-2">
+          <a href="/cart">
+            <button type="button" class="pt-2 btn btn-main-color w-100">Go to checkout</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    </div>
+  </div>
 
   <!-- Canteen Thumbnail and Info -->
   <div class="m-0 p-0" style="overflow: hidden; background-color: #ffffff;">
@@ -33,6 +123,7 @@
 
   </div>
 
+  <!-- Menu Section -->
   <div id="cat-1" class="mt-4 mb-4 pt-0 pl-5 pr-4 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pt-4 pb-3 pl-0">
       <div class="p-0 h2">Menu</div>
@@ -77,6 +168,7 @@
     </div>
   </div>
 
+  <!-- Comment Section -->
   <div id="cat-2" class="mt-4 mb-4 pt-0 pl-5 pr-4 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-0 pt-4 pb-3">
       <h2>Comment</h2>
@@ -93,7 +185,7 @@
         {% for comment in comments %}
         <!-- Comment Block-->
         <div class="container m-0 pt-3 pb-3 pr-3 pl-0 col-12">
-          <button class="food-menu btn btn-outline-secondary w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+          <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
             <div class="container mr-0 ml-0 mt-0">
               <div class="flex-wrap">
                 <div class="d-flex flex-row">
@@ -127,7 +219,7 @@
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
         {% endfor %}
       </div>

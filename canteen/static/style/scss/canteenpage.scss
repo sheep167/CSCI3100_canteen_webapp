@@ -3,6 +3,10 @@ $main-color: #ff7500;
 
 $side-card-width: 400px;
 
+.text-maincolor{
+  color: $main-color;
+}
+
 .bg-over-lay{
   position: fixed;
   width: 100vw;
@@ -205,7 +209,6 @@ div.canteen-pic{
 button.food-menu{
   @include btn-food-menu-theme();
   border: 0;
-  
 }
 
 button.food-menu:hover{
@@ -216,6 +219,28 @@ button.food-menu:hover{
 
 button.food-menu:focus{
   @include btn-food-menu-theme();
+  border-color: $main-color;
+}
+
+@mixin div-comment-theme(){
+  background-color: transparent;
+  color: $main-color;
+  font-weight: 400;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+div.comment{
+  @include div-comment-theme();
+  border: 0;
+}
+
+div.comment:hover{
+  @include div-comment-theme();
+}
+
+div.comment:focus{
+  @include div-comment-theme();
+  background-color: white;
   border-color: $main-color;
 }
 
