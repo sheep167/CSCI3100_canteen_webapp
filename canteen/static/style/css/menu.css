@@ -6,6 +6,11 @@ div.block {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+div.headblock {
+  background-color: #ffd6bb;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 div.comment {
   background-color: transparent;
   color: #ff7500;
@@ -47,6 +52,18 @@ thead {
   /* (RADIO CHECKED) DIV STYLES */
   background-color: #ffd6bb;
   border: 1px solid #ff6600;
+}
+
+.btn-maincolor {
+  background-color: #ff7500;
+}
+
+.btn-maincolor-semi {
+  background-color: #ffbc82;
+}
+
+.btn-maincolor-soft {
+  background-color: #ffd6bb;
 }
 
 /*# sourceMappingURL=menu.css.map */

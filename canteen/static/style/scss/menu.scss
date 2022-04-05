@@ -1,10 +1,17 @@
 $main-color:#ff7500;
+$main-color-semi:#ffbc82;
+$main-color-soft: #ffd6bb;
 
 .text-maincolor{
     color: $main-color;
-  }
+}
 
 div.block{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+div.headblock{
+    background-color: $main-color-soft;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -44,3 +51,16 @@ thead{
     background-color: #ffd6bb;
     border: 1px solid #ff6600;
 }
+
+.btn-maincolor{
+    background-color: $main-color;
+}
+
+.btn-maincolor-semi{
+    background-color: $main-color-semi;
+}
+
+.btn-maincolor-soft{
+    background-color: $main-color-soft;
+}
+
