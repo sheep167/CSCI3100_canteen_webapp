@@ -22,3 +22,6 @@ def menu_page():
 def canteen_account():
     return render_template('canteen/canteen_account.html')
 
+@app.route('/canteen_account/order', methods=['GET'])
+def order_page():   
+    return render_template('canteen/order.html')
