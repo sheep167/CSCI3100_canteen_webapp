@@ -27,7 +27,7 @@ th td {
 }
 
 thead, tbody { 
-    display: block; 
+    /* display: block;  */
     width: 100%;
     border: 1px solid;
 }
