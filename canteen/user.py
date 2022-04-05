@@ -276,11 +276,14 @@ def canteen_page(_id):
         canteen = canteen[0]
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
-            for dish in canteen.get('menu'):
-                if dish.get('image_path'):
-                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
+
+        for dish in canteen.get('menu'):
+            if dish.get('image_path'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        
+        
         return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments, cart=cart)
     else:
         return 'Page Not Found', 404
@@ -300,11 +303,12 @@ def list_canteens():
     for canteen in canteens:
         if canteen.get('image_path'):
             canteen['image_path'] = canteen.get('image_path').replace(' ', '%20').replace('./canteen', '')
-            for dish in canteen.get('menu'):
-                if dish.get('image_path'):
-                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
         else:
             canteen['image_path'] = None
+        for dish in canteen.get('menu'):
+            if dish.get('image_path'):
+                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        
 
     return render_template('/user/list_canteens.html', canteens=canteens)
 
