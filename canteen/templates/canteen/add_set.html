@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Type
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../../static/style/css/add_set.css">
+{% endblock %}
+
+{% block content %}
+    <div class="block m-4"> 
+        <div class="h2 p-3 headtitle">Add Set</div>
+        <div class="p-3">
+            <div class="h5">Type A: </div>
+            <div class="block mb-4">
+                <table class="table m-0 p-0" cellspacing="0" style="table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="align-middle" width="24.5%">#</th>
+                            <th scope="col" class="align-middle" width="25%">Main Dish</th>
+                            <th scope="col" class="align-middle">Price</th>
+                            <th class="d-flex flex-row align-items-center">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="max-height: 252px; overflow: auto;">
+                    <table class="table m-0 p-0" style="table-layout: fixed;">
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>asdfasdfads</td>
+                            <td>$100</td>
+                            <td class="text-left">
+                                <div>
+                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Dish 1</td>
+                            <td>$100</td>
+                            <td class="text-left">
+                                <div>
+                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Dish 1</td>
+                            <td>$100</td>
+                            <td class="text-left">
+                                <div>
+                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Dish 1</td>
+                            <td>$100</td>
+                            <td class="text-left">
+                                <div>
+                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Dish 1</td>
+                            <td>$100</td>
+                            <td class="text-left">
+                                <div>
+                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <form class="form-group">
+                <label for="inputTypeName">Type Name: </label>
+                <input type="" class="form-control" id="type-name" placeholder="Enter Type Name"></input>
+                <small id="type-name-help" class="form-text text-muted">This serves as a menu type for your canteen.</small>
+            </form>
+
+            <button class="btn btn-secondary btn-main-color">
+                Submit
+            </button>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Type
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../../static/style/css/add_type.css">
+{% endblock %}
+
+{% block content %}
+    <div class="block m-4"> 
+        <div class="h2 p-3 headtitle">Add New Type</div>
+        <div class="p-3">
+            <form class="form-group">
+                <label for="inputTypeName">Type Name: </label>
+                <input type="" class="form-control" id="type-name" placeholder="Enter Type Name"></input>
+                <small id="type-name-help" class="form-text text-muted">This serves as a menu type for your canteen.</small>
+            </form>
+
+            <button class="btn btn-secondary btn-main-color">
+                Submit
+            </button>
+        </div>
+    </div>
+{% endblock %}

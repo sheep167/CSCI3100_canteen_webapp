@@ -25,3 +25,11 @@ def canteen_account():
 @app.route('/canteen_account/order', methods=['GET'])
 def order_page():   
     return render_template('canteen/order.html')
+
+@app.route('/canteen_account/add_type')
+def add_type():
+    return render_template('canteen/add_type.html')
+
+@app.route('/canteen_account/add_set')
+def add_set():
+    return render_template('canteen/add_set.html')
