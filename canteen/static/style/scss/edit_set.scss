@@ -31,3 +31,74 @@ button.btn-main-color:focus{
 thead{
     background-color: #ffdec1;
 }
+
+
+label.radio-box{
+    display: block;
+    position: relative;
+    padding-left: 50px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  label.radio-box:hover{
+    background-color: $main-color-soft;
+  }
+  
+  label.radio-box input{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .checkmark{
+    position: absolute;
+    top: 17px;
+    left: 20px;
+    height: 15px;
+    width: 15px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+  
+  label.radio-box:hover input ~ .checkmark{
+    background-color: #ccc;
+  }
+  
+  label.radio-box input:checked ~ .checkmark{
+    background-color: $main-color;
+  }
+  
+  .checkmark::after{
+    content: '';
+    position: absolute;
+    display: none;
+  }
+  
+  label.radio-box input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+//   label.radio-box .checkmark::after {
+//    top: 6px;
+//    left: 6px;
+//    width: 4px;
+//    height: 4px;
+//    border-radius: 50%;
+//    background: white;
+//   }
+  
+  label.radio-box .price{
+    padding-right: 20px;
+  }
+
+form.form-checkbox{
+    border: 1px solid $main-color;
+}
