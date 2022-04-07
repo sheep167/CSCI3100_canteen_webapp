@@ -13,306 +13,106 @@ Add Type
         <div class="h2 p-3 headtitle">Edit Set</div>
         <div class="p-3">
 
-            <div class="mb-2 p-0 ">
-                <div class="h4 pl-3 pb-1">Type A</div>
-                <div class="p-0 m-0 container-fluid d-flex flex-row flex-wrap">
-                    <div class="col-lg-6 col-12">
-                        <div class="h5">Current items in Type A</div>
-                        <!-- Table -->
-                        <div class="block mb-4">
-                            <table class="table m-0 p-0" cellspacing="0" style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="align-middle" width="24.5%">#</th>
-                                        <th scope="col" class="align-middle" width="25%">Type A</th>
-                                        <th scope="col" class="align-middle">Price</th>
-                                        <th class="d-flex flex-row align-items-center">Action</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div style="max-height: 252px; overflow: auto;">
-                                <table class="table m-0 p-0" style="table-layout: fixed;">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>asdfasdfads</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 col-12">
-                        <div class="h5">Choose item from this table</div>
-                        <div class="block mb-4">
-                            <table class="table m-0 p-0" cellspacing="0" style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="align-middle" width="24.5%">#</th>
-                                        <th scope="col" class="align-middle" width="25%">Type A</th>
-                                        <th scope="col" class="align-middle">Price</th>
-                                        <th class="d-flex flex-row align-items-center">Action</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div style="max-height: 252px; overflow: auto;">
-                                <table class="table m-0 p-0" style="table-layout: fixed;">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>asdfasdfads</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+            <form class="form-group"> 
+                <label for="inputTypeName">Set Name: </label>
+                <input type="" class="form-control" id="type-name" placeholder="Enter Set Name"></input>
+                <small id="type-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
+            </form>
 
-                    </div>
-                </div>
+            <div class="mb-3 p-0 ">
+                <div class="h4 pl-3 pb-1">Type A</div>
+                <div class="d-inline flex-column">
+                    <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
+                        <label class="radio-box font-weight-light d-flex flex-row"> One
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
+            
+                        <label class="radio-box font-weight-light d-flex flex-row"> Two
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
+            
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                    </form> 
+                  </div>
             </div>
 
-            <div class="mb-2 p-0 ">
+            <div class="mb-3 p-0 ">
                 <div class="h4 pl-3 pb-1">Type B</div>
-                <div class="p-0 m-0 container-fluid d-flex flex-row flex-wrap">
-                    <div class="col-lg-6 col-12">
-                        <div class="h5">Current items in Type B</div>
-                        <!-- Table -->
-                        <div class="block mb-4">
-                            <table class="table m-0 p-0" cellspacing="0" style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="align-middle" width="24.5%">#</th>
-                                        <th scope="col" class="align-middle" width="25%">Type B</th>
-                                        <th scope="col" class="align-middle">Price</th>
-                                        <th class="d-flex flex-row align-items-center">Action</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div style="max-height: 252px; overflow: auto;">
-                                <table class="table m-0 p-0" style="table-layout: fixed;">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>asdfasdfads</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 col-12">
-                        <div class="h5">Choose item from this table</div>
-                        <div class="block mb-4">
-                            <table class="table m-0 p-0" cellspacing="0" style="table-layout: fixed;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="align-middle" width="24.5%">#</th>
-                                        <th scope="col" class="align-middle" width="25%">Type B</th>
-                                        <th scope="col" class="align-middle">Price</th>
-                                        <th class="d-flex flex-row align-items-center">Action</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div style="max-height: 252px; overflow: auto;">
-                                <table class="table m-0 p-0" style="table-layout: fixed;">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>asdfasdfads</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                        <td>$100</td>
-                                        <td class="text-left">
-                                            <div>
-                                                <span></span><a href="" class="btn btn-success">Add</a></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                <div class="d-inline flex-column">
+                    <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
+                        <label class="radio-box font-weight-light d-flex flex-row"> One
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
+            
+                        <label class="radio-box font-weight-light d-flex flex-row"> Two
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
+            
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                        <input type="checkbox" name="choice1">
+                        <span class="checkmark"></span>
+                        </label>
 
-                    </div>
-                </div>
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="radio-box font-weight-light d-flex flex-row"> Three
+                            <input type="checkbox" name="choice1">
+                            <span class="checkmark"></span>
+                        </label>
+
+                    </form> 
+                  </div>
             </div>
             
             
               
             <!-- Add set -->
-            <button class="btn btn-secondary btn-main-color btn-lg">
-                Save Set
-            </button>
+            <div class="d-flex flex-row flex-wrap">
+                <button class="ml-auto btn btn-secondary btn-main-color btn-lg">
+                    Save Set
+                </button>
+            </div>
         </div>
     </div>
 {% endblock %}
