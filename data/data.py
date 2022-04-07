@@ -40,6 +40,8 @@ canteens_list = [
     #I (Maneemala) added LWS Canteen through a web page
     {'name': 'LWS Canteen', 'latitude': '22.4224862', 'longitude': '114.2043131', 'open_at': '9:00', 'close_at': '17:00', 'capacity': 85, 'menu': []}
 ]
+mongo.db.canteens.insert_many(canteens_list)
+
 
 #testing only
 orders_list = [
@@ -57,10 +59,11 @@ types_list=[
 ]
 mongo.db.types.insert_many(types_list)
 
-sets_list=[
-    {'at_canteen'}
-]
+# sets_list=[
+#     {'at_canteen'},
+#     {}
+# ]
 
-self.name = str(name)
-        self.at_canteen = at_canteen  # ObjectId
-        self.types = []  # List of dish
+# self.name = str(name)
+#         self.at_canteen = at_canteen  # ObjectId
+#         self.types = []  # List of dish
