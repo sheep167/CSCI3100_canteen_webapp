@@ -368,10 +368,9 @@ def cart_page():
     
     # Count the number of each dish and retrieve the details
     cart = {}
-
+    all_canteen_total=0
     #temporary fix
     if( results.get('cart') ):
-        all_canteen_total = 0
         for canteen_name, value in results.get('cart').items():
             cart[canteen_name] = {}
             cart[canteen_name]['cart'] = []
