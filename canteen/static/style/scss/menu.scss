@@ -48,7 +48,7 @@ thead{
     border:2px solid transparent;
 }
 .labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
-    background-color: #ffd6bb;
+    background-color: $main-color-soft;
     border: 1px solid #ff6600;
 }
 

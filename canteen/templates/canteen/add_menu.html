@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Type
+{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../../static/style/css/add_menu.css">
+{% endblock %}
+
+{% block content %}
+    <div class="block m-4"> 
+        <div class="h2 p-3 headtitle">Add menu</div>
+        <div class="p-3">
+            <div class="h4 mb-3">Menu Information</div>
+
+            <form class="form-group row">
+                <label for="inputTypeName" class="pl-3 col-form-label pr-0">Menu Name: </label>
+                <div class="col pl-3">
+                    <input type="" class="form-control" id="type-name" placeholder="Enter Menu Name"></input>
+                </div>
+            </form>
+
+            <form class="form-group row">
+                <label for="inputTypeName" class="pl-3 col-form-label pr-0">Price: </label>
+                <div class="col pl-3">
+                    <input type="" class="form-control" id="type-name" placeholder="Enter price (up to 2 decimal points)"></input>
+                </div>
+            </form>
+
+            <div class="row pl-3 mb-3">
+                <div >
+                    <div>Current </div>
+                    <div>Ingredients:</div>
+                </div>
+                <div class="ml-2 col d-flex flex-row flex-wrap">
+                    <button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button>
+                    <button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button><button class="btn btn-outline-info btn-main-color btn-sm mr-2 mb-2">Ingredients1 X</button>
+                </div>
+            </div>
+            
+            <form class="form-group row">
+                <label for="inputTypeName" class="pl-3 col-form-label pr-0">Ingredients: </label>
+                <div class="col pl-3">
+                    <input type="" class="form-control" id="type-name" placeholder="Ingredients, press Enter to input"></input>
+                </div>
+            </form>
+
+            <di class="d-flex">
+                <button class="btn btn-main-color ml-auto">
+                    Add Menu
+                </button>
+            </div>
+
+            
+
+        </div>
+    </div>
+{% endblock %}

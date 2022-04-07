@@ -99,3 +99,23 @@ def add_data(category):
             flash('Wrong type of values', category='error')
 
     return render_template('admin/data.html', form=form, method='Add', category=category)
+@app.route('/canteen_account/add_type')
+def add_type():
+    return render_template('canteen/add_type.html')
+
+@app.route('/canteen_account/add_set')
+def add_set():
+    return render_template('canteen/add_set.html')
+
+@app.route('/canteen_account/edit_set')
+def edit_set():
+    return render_template('canteen/edit_set.html')
+
+@app.route('/canteen_account/add_menu')
+def add_menu():
+    return render_template('canteen/add_menu.html')
+
+@app.route('/canteen_account/edit_menu')
+def edit_menu():
+    return render_template('canteen/edit_menu.html')
+
