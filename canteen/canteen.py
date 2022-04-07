@@ -1,4 +1,5 @@
 import datetime
+from nis import match
 import os
 from collections import Counter
 from bson import ObjectId
@@ -11,6 +12,9 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from werkzeug.utils import secure_filename
 from flask_mail import Message
+from flask_wtf import FlaskForm # 1.
+from wtforms import StringField # 2.
+from wtforms.validators import DataRequired # 3.
 
 """
 order page
@@ -39,66 +43,16 @@ def menu_page():
 def canteen_account():
     return render_template('canteen/canteen_account.html')
 
-@app.route('/canteen_account/order', methods=['GET'])
-def order_page():   
-    return render_template('canteen/order.html')
-
-@app.route('/canteen_site/add/<category>')
-@login_required
-def add_data(category):
-    if current_user.auth_type != 2:
-        return 'Not Authorized', 403
-
-    form = DataEditForm()
-
+@app.route('/canteen_account/order', methods=['GET', 'POST'])
+def order_page():
     if request.method == 'GET':
-        if category == 'users':
-            form.text.data = json.dumps(Users.template_object(), indent=4)
-        elif category == 'canteens':
-            form.text.data = json.dumps(Canteens.template_object(), indent=4)
-        else:
-            return 'Not Found', 404
+        results = mongo.db.orders.aggregate([
+        { '$match' : { 'at_cantee' : ObjectId(current_user._id)} }
+        ])
 
-    if request.method == 'POST':
-        try:
-            data = json.loads(form.text.data)
-
-            if category == 'users':
-                if mongo.db.users.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
-                    raise ValidationError()
-
-                hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
-
-                user_to_insert = Users(email=data.get('email'),
-                                       password=hashed_password,
-                                       username=data.get('username')
-                                       )
-
-                mongo.db.users.insert_one(user_to_insert.to_json())
-
-            elif category == 'canteens':
-                if mongo.db.canteens.find_one({'name': data.get('name')}):
-                    raise ValidationError()
-
-                canteen_to_insert = Canteens(name=data.get('name'),
-                                             longitude=data.get('longitude'),
-                                             latitude=data.get('latitude'),
-                                             open_at=data.get('open_at'),
-                                             close_at=data.get('close_at'),
-                                             capacity=data.get('capacity'))
-
-                mongo.db.canteens.insert_one(canteen_to_insert.to_json())
-
-            return redirect('/overview/%s' % category)
-
-        except JSONDecodeError:
-            flash('Cannot decode JSON. Please check and try again.', category='error')
-        except ValidationError:
-            flash('Duplicate keys with the database', category='error')
-        except TypeError and ValueError:
-            flash('Wrong type of values', category='error')
-
-    return render_template('admin/data.html', form=form, method='Add', category=category)
+        
+    return render_template('canteen/order.html', orders = results)
+    
 @app.route('/canteen_account/add_type')
 def add_type():
     return render_template('canteen/add_type.html')

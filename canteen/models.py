@@ -87,7 +87,7 @@ class Canteens:
 
 
 class Dishes:
-    def __init__(self, name, at_canteen, price, ingredients):
+    def __init__(self, name, at_canteen, price, ingredients, type):
         self.name = str(name)
         self.at_canteen = at_canteen  # ObjectId
         self.price = float(price)
@@ -146,3 +146,38 @@ class Comments:
             'rating': 'int',
             'paragraph': 'str',
         }
+
+
+class Set:
+    def __init__(self, name, at_canteen):
+        self.name = str(name)
+        self.at_canteen = at_canteen  # ObjectId
+        self.dishes = []  # List of dish
+
+    def to_json(self):
+        return self.__dict__
+
+    def name_set(self, name):
+        self.name = str(name)
+        return str(self.name)
+    
+    def add_dish(self, dish):
+        self.dishes.append(dish)
+        return self.dishes[len(self.dishes) - 1] # last element
+
+class Type:
+    def __init__(self, name, at_canteen):
+        self.name = str(name)
+        self.at_canteen = at_canteen  # ObjectId
+        self.dishes = []  # List of dish
+
+    def to_json(self):
+        return self.__dict__
+
+    def name_set(self, name):
+        self.name = str(name)
+        return str(self.name)
+    
+    def add_dish(self, dish):
+        self.dishes.append(dish)
+        return self.dishes[len(self.dishes) - 1] # last element
