@@ -42,8 +42,5 @@ class DataEditFormWithSelect(FlaskForm):
     select = SelectMultipleField()
     submit = SubmitField()
 
-
-# FORM FOR CANTEEN PAGE
-# class AddTypeForm(FlaskForm):
-#     text = StringField()
-#     submit = SubmitField()
+class AddMenuForm(FlaskForm):
+    text = TextAreaField()

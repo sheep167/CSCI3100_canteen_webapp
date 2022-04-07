@@ -74,16 +74,18 @@ def menu_page():
         return 'Not Authorized', 403
     if request.method == 'GET':
         results = mongo.db.sets.aggregate([
-        { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
+            { '$match' : { 'at_canteen' : current_user.staff_of}}
         ])
         sets = list(results)
+
         results = mongo.db.types.aggregate([
-        { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
+            { '$match' : { 'at_canteen' : current_user.staff_of}}
         ])
         types = list(results)
-    return render_template('canteen/menu.html', sets = sets, types = types)
+        print(types)
+    return render_template('canteen/menu.html', sets=sets, types=types)
 
-@app.route('/add/set', methods=['GET', 'POST'])
+@app.route('/canteen_account/add_set', methods=['GET', 'POST'])
 @login_required
 def add_set():
     if current_user.auth_type != 2:
@@ -96,13 +98,12 @@ def add_set():
 
     if request.method == 'POST':
         name = request.form.get("set_name")
-    return render_template('canteen/order.html', types = types)
+    return render_template('canteen/add_set.html', types = types)
     
     
 @app.route('/canteen_account/add_type', methods=['GET', 'POST'])
 @login_required
 def add_type():
-    # canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
     typename = ''
     if request.method == 'POST':
         typename = request.form['typename']
@@ -113,15 +114,11 @@ def add_type():
         else:
             mongo.db.types.insert_one({
                 'name': typename,
-                'at_canteen': None,
+                'at_canteen': current_user.staff_of,
                 'dishes':None
             })
         return redirect('/canteen_account/menu')
     return render_template('canteen/add_type.html')
-
-@app.route('/canteen_account/add_set')
-def add_set1():
-    return render_template('canteen/add_set.html')
 
 @app.route('/canteen_account/edit_set')
 def edit_set():
@@ -129,6 +126,7 @@ def edit_set():
 
 @app.route('/canteen_account/add_menu')
 def add_menu():
+    form 
     return render_template('canteen/add_menu.html')
 
 @app.route('/canteen_account/edit_menu')

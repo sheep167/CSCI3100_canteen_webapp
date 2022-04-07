@@ -145,169 +145,94 @@ Canteen List
     <div class="container-fluid pt-4 pl-4 pb-4 m-0 pr-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 mb-3 d-flex d-row">
             <div>Type</div>
-            <div class="ml-auto"><button class="btn btn-success">Add Type</button></div>
+            <div class="ml-auto"><a class="btn btn-success" href="{{url_for('add_type')}}">Add Type</a></div>
         </div>
         
         <div class="container-fluid pl-0 pr-0 d-flex flex-row flex-wrap">
         <!-- Main Dish -->
-        <div class="mb-4 col-6">
-            <div class="h5 text-maincolor"> Main Dish </div>
-            <div class="block mr-4">
-                <table class="table m-0 p-0" >
-                    <thead>
-                        <tr>
-                            <th scope="col" class="align-middle" width="10%">#</th>
-                            <th scope="col" class="align-middle" width="20%">Main Dish</th>
-                            <th scope="col" class="align-middle" width="20%">Price</th>
-                            <th class="d-flex flex-row align-items-center">
-                                <div class="">Action</div>
-                                <span class="ml-auto"><a class="btn btn-maincolor-semi">Add Menu</a></span>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <div style="max-height: 252px; overflow: auto;">
-                    <table class="table m-0 p-0">
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-        
-            </div>
-        </div>
 
-        <!-- Drink -->
-        <div class="mb-4 col-6">
-            <div class="h5 text-maincolor"> Drink </div>
-            <div class="block mr-4">
-                <table class="table m-0 p-0">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="align-middle" width="10%">#</th>
-                            <th scope="col" class="align-middle" width="20%">Main Dish</th>
-                            <th scope="col" class="align-middle" width="20%">Price</th>
-                            <th class="d-flex flex-row align-items-center">
-                                <div class="">Action</div>
-                                <span class="ml-auto"><a class="btn btn-maincolor-semi">Add Menu</a></span>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <div style="max-height: 252px; overflow: auto;">
-                    <table class="table m-0 p-0">
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Dish 1</td>
-                            <td>$100</td>
-                            <td class="text-left">
-                                <div>
-                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                    <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+        {% if types %}
+            {% for type in types %}
+                <div class="mb-4 col-6">
+                    <div class="h5 text-maincolor"> {{ type.name }} </div>
+                    <div class="block mr-4">
+                        <table class="table m-0 p-0" >
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-middle" width="10%">#</th>
+                                    <th scope="col" class="align-middle" width="20%">Main Dish</th>
+                                    <th scope="col" class="align-middle" width="20%">Price</th>
+                                    <th class="d-flex flex-row align-items-center">
+                                        <div class="">Action</div>
+                                        <span class="ml-auto"><a class="btn btn-maincolor-semi">Add Menu</a></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="max-height: 252px; overflow: auto;">
+                            <table class="table m-0 p-0">
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Dish 1</td>
+                                    <td>$100</td>
+                                    <td class="text-left">
+                                        <div>
+                                            <span><a href="" class="btn btn-primary">Edit</a></span>
+                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Dish 1</td>
+                                    <td>$100</td>
+                                    <td class="text-left">
+                                        <div>
+                                            <span><a href="" class="btn btn-primary">Edit</a></span>
+                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Dish 1</td>
+                                    <td>$100</td>
+                                    <td class="text-left">
+                                        <div>
+                                            <span><a href="" class="btn btn-primary">Edit</a></span>
+                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Dish 1</td>
+                                    <td>$100</td>
+                                    <td class="text-left">
+                                        <div>
+                                            <span><a href="" class="btn btn-primary">Edit</a></span>
+                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Dish 1</td>
+                                    <td>$100</td>
+                                    <td class="text-left">
+                                        <div>
+                                            <span><a href="" class="btn btn-primary">Edit</a></span>
+                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                
+                    </div>
                 </div>
-        
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
 
         
 
