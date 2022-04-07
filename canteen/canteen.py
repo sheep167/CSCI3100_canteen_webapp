@@ -47,7 +47,7 @@ def canteen_account():
 def order_page():
     if request.method == 'GET':
         results = mongo.db.orders.aggregate([
-        { '$match' : { 'at_cantee' : ObjectId(current_user._id)} }
+        { '$match' : { 'at_canteen' : 'UC Canteen'} }
         ])
         orders = list(results)
     return render_template('canteen/order.html', orders = orders)

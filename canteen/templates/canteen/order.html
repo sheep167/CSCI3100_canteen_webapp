@@ -10,12 +10,12 @@ Order List
 
 {% block content %}
 
-{% if canteens_opened %}
-    {% for canteen in canteens_opened %}
+{% if orders %}
+    {% for order in orders %}
     <p>1</p>
     {% endfor %}
 {% else %}
-    <p>All canteens are closed</p>
+    <p>There are no order</p>
 {% endif %}
 
 <script src="../../static/style/js/finishedorder.js"></script>
