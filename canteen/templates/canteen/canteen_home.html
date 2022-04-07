@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Canteen Home
+{% endblock %}
+{% block stylesheet %}
+{% endblock %}
+
+{% block content %}
+
+{% set i = 0 %}
+
+<div align="center">
+	<table>
+		<tr>
+		<td width="300px">Dish</td>
+		<td width="70px" align="center">Price</td>
+		<td align="center">Sold Out</td>
+		</tr>
+
+		{% for d in data%}
+		<tr>
+			<td width="300px">{{d.dish}}</td>
+			<td width="70px" align="center">${{d.price}}</td>
+			<td align="center">{{d.sold}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<p>Total sold out: {{dishes}}</p>
+	<p>Revenue: ${{revenue}}</p>
+</div>
+
+{% endblock %}
