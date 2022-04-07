@@ -10,6 +10,14 @@ Order List
 
 {% block content %}
 
+{% if canteens_opened %}
+    {% for canteen in canteens_opened %}
+    <p>1</p>
+    {% endfor %}
+{% else %}
+    <p>All canteens are closed</p>
+{% endif %}
+
 <script src="../../static/style/js/finishedorder.js"></script>
 
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">

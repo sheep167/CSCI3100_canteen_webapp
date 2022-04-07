@@ -49,9 +49,8 @@ def order_page():
         results = mongo.db.orders.aggregate([
         { '$match' : { 'at_cantee' : ObjectId(current_user._id)} }
         ])
-
-        
-    return render_template('canteen/order.html', orders = results)
+        orders = list(results)
+    return render_template('canteen/order.html', orders = orders)
     
 @app.route('/canteen_account/add_type')
 def add_type():
