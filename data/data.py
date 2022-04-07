@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_pymongo import PyMongo
+from bson import ObjectId
 import bcrypt
 
 print('This script will DROP the CANTEEN DATABASE and recreate it.')
@@ -22,7 +23,11 @@ users_list = [
     {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
     {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
     {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000}
+    {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':'SHHO Canteen'},
+    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':'UC Canteen'},
+    
+
 ]
 for user in users_list:
     user['password'] = bcrypt.hashpw(user.get('password').encode('utf-8'), bcrypt.gensalt())
@@ -59,10 +64,10 @@ types_list=[
 ]
 mongo.db.types.insert_many(types_list)
 
-# sets_list=[
-#     {'at_canteen'},
-#     {}
-# ]
+sets_list=[
+    {'at_canteen'},
+    {}
+]
 
 # self.name = str(name)
 #         self.at_canteen = at_canteen  # ObjectId

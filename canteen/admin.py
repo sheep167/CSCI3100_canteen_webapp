@@ -261,7 +261,6 @@ def add_canteens_data(canteen_id, category):
     if request.method == 'GET':
         if category == 'dishes':
             form.text.data = json.dumps(Dishes.template_object(), indent=4)
-            print(form.text)
         elif category == 'comments':
             form.text.data = json.dumps(Comments.template_object(), indent=4)
         elif category == 'orders':
@@ -289,6 +288,7 @@ def add_canteens_data(canteen_id, category):
             if category == 'dishes':
 
                 data['at_canteen'] = ObjectId(canteen_id)
+                data['price'] = float(data['price'])
 
                 if form.image.data.filename != '':
                     filename = secure_filename(form.image.data.filename)
