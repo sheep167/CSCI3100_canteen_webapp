@@ -56,3 +56,11 @@ types_list=[
     {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
 ]
 mongo.db.types.insert_many(types_list)
+
+sets_list=[
+    {'at_canteen'}
+]
+
+self.name = str(name)
+        self.at_canteen = at_canteen  # ObjectId
+        self.types = []  # List of dish

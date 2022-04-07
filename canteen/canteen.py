@@ -59,10 +59,12 @@ def menu_page():
         { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
         ])
         sets = list(results)
+        print(sets)
         results = mongo.db.types.aggregate([
         { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
         ])
         types = list(results)
+        print(types)
     return render_template('canteen/menu.html', sets = sets, types = types)
 
 @app.route('/add/set', methods=['GET', 'POST'])
