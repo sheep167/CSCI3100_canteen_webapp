@@ -13,6 +13,12 @@ Add Type
         <div class="h2 p-3 headtitle">Edit Set</div>
         <div class="p-3">
 
+            <form class="form-group"> 
+                <label for="inputTypeName">Set Name: </label>
+                <input type="" class="form-control" id="type-name" placeholder="Enter Set Name"></input>
+                <small id="type-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
+            </form>
+
             <div class="mb-2 p-0 ">
                 <div class="h4 pl-3 pb-1">Type A</div>
                 <div class="p-0 m-0 container-fluid d-flex flex-row flex-wrap">
@@ -310,9 +316,11 @@ Add Type
             
               
             <!-- Add set -->
-            <button class="btn btn-secondary btn-main-color btn-lg">
-                Save Set
-            </button>
+            <div class="d-flex flex-row flex-wrap">
+                <button class="ml-auto btn btn-secondary btn-main-color btn-lg">
+                    Save Set
+                </button>
+            </div>
         </div>
     </div>
 {% endblock %}
