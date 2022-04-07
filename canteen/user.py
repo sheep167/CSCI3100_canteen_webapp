@@ -127,7 +127,10 @@ def user_account():
 
         return redirect(request.url)
 
-    user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+    try:
+        user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+    except AttributeError as error:
+        return redirect('/login')
     if user.get('image_path'):
         user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
 
@@ -250,7 +253,10 @@ def canteen_page(_id):
 
         #ADD CART FOR IN-PAGE CART
         cart={}
-        cart_from_user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+        try:
+            cart_from_user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+        except AttributeError as error:
+            return redirect('/login')
 
         if( cart_from_user.get('cart') ):
             for canteen_name, value in cart_from_user.get('cart').items():
@@ -315,7 +321,10 @@ def list_canteens():
 
 @login_required
 def add_to_cart(canteen_id, dish_id):
-    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    try:
+        cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    except AttributeError as error:
+        return redirect('/login')
     canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
     if not cart.get(canteen_name):
         cart[canteen_name] = {}
@@ -325,7 +334,10 @@ def add_to_cart(canteen_id, dish_id):
 
 @login_required
 def remove_from_cart(canteen_id, dish_id):
-    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    try:
+        cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    except AttributeError as error:
+        return redirect('/login')
     canteen_name = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)}).get('name')
     if not cart.get(canteen_name):
         pass
@@ -349,8 +361,11 @@ def cart_page():
             flash('Not enough balance', category='warning')
         return redirect(request.url)
 
-    results = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
-
+    try:
+        results = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1})
+    except AttributeError as error:
+        return redirect('/login')
+    
     # Count the number of each dish and retrieve the details
     cart = {}
 
@@ -384,7 +399,10 @@ def cart_page():
 def create_order(canteen_name, total_price):
     total_price = float(total_price)
     canteen_id = mongo.db.canteens.find_one({'name': canteen_name}).get('_id')
-    cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    try:
+        cart = mongo.db.users.find_one({'_id': ObjectId(current_user._id)}, {'_id': 0, 'cart': 1}).get('cart')
+    except AttributeError as error:
+        return redirect('/login')
     target = cart.pop(canteen_name)
 
     order = {
@@ -403,7 +421,11 @@ def create_order(canteen_name, total_price):
 @login_required
 @app.route('/post_comment/<canteen_id>', methods=['GET', 'POST'])
 def post_comment(canteen_id):
-    canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    try:
+        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    except AttributeError as error:
+        return redirect('/login')
+   
     paragraph = ''
     if request.method == 'POST':
         paragraph = request.form['paragraph']
