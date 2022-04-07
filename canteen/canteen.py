@@ -33,3 +33,16 @@ def add_type():
 @app.route('/canteen_account/add_set')
 def add_set():
     return render_template('canteen/add_set.html')
+
+@app.route('/canteen_account/edit_set')
+def edit_set():
+    return render_template('canteen/edit_set.html')
+
+@app.route('/canteen_account/add_menu')
+def add_menu():
+    return render_template('canteen/add_menu.html')
+
+@app.route('/canteen_account/edit_menu')
+def edit_menu():
+    return render_template('canteen/edit_menu.html')
+

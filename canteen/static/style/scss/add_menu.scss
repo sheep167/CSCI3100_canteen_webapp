@@ -1,0 +1,33 @@
+$main-color:#ff7500;
+$main-color-semi:#ffbc82;
+$main-color-soft: #ffd6bb;
+
+div.block{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+div.headtitle{
+    background-color: $main-color-soft;
+}
+
+button.btn-main-color{
+    background-color: $main-color-soft;
+    color:#212529;
+    border: 0px;
+}
+
+button.btn-main-color:hover{
+    background-color: $main-color;
+    color:#212529;
+    border: 0px;
+}
+
+button.btn-main-color:focus{
+    background-color: $main-color;
+    color:#212529;
+    border: 0px;
+}
+
+thead{
+    background-color: #ffdec1;
+}
