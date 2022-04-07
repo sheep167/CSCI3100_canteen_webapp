@@ -98,7 +98,7 @@ def add_set():
     return render_template('canteen/order.html', types = types)
     
     
-@app.route('/canteen_account/add_type', methods=['GET', 'POST'])
+@app.route('/canteen_account/add/type', methods=['GET', 'POST'])
 @login_required
 def add_type():
     typename = ''
@@ -117,16 +117,15 @@ def add_type():
         return redirect('/canteen_account/menu')
     return render_template('canteen/add_type.html')
 
-@app.route('/canteen_account/edit_set')
+@app.route('/canteen_account/edit/set')
 def edit_set():
     return render_template('canteen/edit_set.html')
 
-@app.route('/canteen_account/add_menu')
+@app.route('/canteen_account/add/menu')
 def add_menu():
-    form 
     return render_template('canteen/add_menu.html')
 
-@app.route('/canteen_account/edit_menu')
+@app.route('/canteen_account/edit/menu')
 def edit_menu():
     return render_template('canteen/edit_menu.html')
 
