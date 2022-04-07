@@ -20,7 +20,7 @@ Order List
         <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
             <h2 class="mx-4">Wating Order</h2>
         </div>
-
+        {% if orders %}
         {% set count = namespace(value=0) %}
         {% for order in orders %}
         {% set count.value = count.value + 1 %}
@@ -112,6 +112,10 @@ Order List
         </div>
         {% endif %}
 
+        {% else %}
+        <p>There is no current order.</p>
+        {% endif %}
+        
         <!--card showing waiting order (Not Late)-->
         <div class="row">
             <!--First Column-->
