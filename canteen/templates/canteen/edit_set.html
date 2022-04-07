@@ -5,17 +5,17 @@ Add Type
 {% endblock %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="../../static/style/css/add_set.css">
+<link rel="stylesheet" href="../../static/style/css/edit_set.css">
 {% endblock %}
 
 {% block content %}
     <div class="block m-4"> 
-        <div class="h2 p-3 headtitle">Add Set</div>
+        <div class="h2 p-3 headtitle">Edit Set</div>
         <div class="p-3">
 
             <form class="form-group"> 
                 <label for="inputTypeName">Set Name: </label>
-                <input type="" class="form-control" id= "set_name" name = "set_name" placeholder="Enter Set Name"></input>
+                <input type="" class="form-control" id="type-name" placeholder="Enter Set Name"></input>
                 <small id="type-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
             </form>
 
@@ -109,8 +109,8 @@ Add Type
               
             <!-- Add set -->
             <div class="d-flex flex-row flex-wrap">
-                <button type = "submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">
-                    Add Set
+                <button class="ml-auto btn btn-secondary btn-main-color btn-lg">
+                    Save Set
                 </button>
             </div>
         </div>

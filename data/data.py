@@ -41,4 +41,18 @@ canteens_list = [
     {'name': 'LWS Canteen', 'latitude': '22.4224862', 'longitude': '114.2043131', 'open_at': '9:00', 'close_at': '17:00', 'capacity': 85, 'menu': []}
 ]
 
-mongo.db.canteens.insert_many(canteens_list)
+#testing only
+orders_list = [
+    {'at_time': '15.00', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '100', 'waiting': 'red'},
+    {'at_time': '15.01', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '200', 'waiting': 'red'},
+    {'at_time': '15.10', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '500', 'waiting': 'yellow'},
+    {'at_time': '15.20', 'by_user': 'test2', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '750', 'waiting': 'yellow'},
+    {'at_time': '15.30', 'by_user': 'test2', 'at_canteen': 'WYS Canteen', 'dishes': None, 'total_price': '390', 'waiting': 'yellow'},
+]
+mongo.db.orders.insert_many(orders_list)
+
+types_list=[
+    {'name':'type a', 'at_canteen':'UC Canteen', 'dishes':None},
+    {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
+]
+mongo.db.types.insert_many(types_list)

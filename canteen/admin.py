@@ -261,6 +261,7 @@ def add_canteens_data(canteen_id, category):
     if request.method == 'GET':
         if category == 'dishes':
             form.text.data = json.dumps(Dishes.template_object(), indent=4)
+            print(form.text)
         elif category == 'comments':
             form.text.data = json.dumps(Comments.template_object(), indent=4)
         elif category == 'orders':

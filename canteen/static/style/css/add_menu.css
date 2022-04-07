@@ -1,0 +1,31 @@
+div.block {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+div.headtitle {
+  background-color: #ffd6bb;
+}
+
+button.btn-main-color {
+  background-color: #ffd6bb;
+  color: #212529;
+  border: 0px;
+}
+
+button.btn-main-color:hover {
+  background-color: #ff7500;
+  color: #212529;
+  border: 0px;
+}
+
+button.btn-main-color:focus {
+  background-color: #ff7500;
+  color: #212529;
+  border: 0px;
+}
+
+thead {
+  background-color: #ffdec1;
+}
+
+/*# sourceMappingURL=add_menu.css.map */
