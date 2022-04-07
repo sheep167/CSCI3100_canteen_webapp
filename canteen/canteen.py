@@ -33,12 +33,6 @@ menu page:
 - delete_set
 """
 
-@app.route('/canteen_account/menu', methods=['GET'])
-def menu_page():
-    
-    return render_template('canteen/menu.html')
-
-
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     return render_template('canteen/canteen_account.html')
@@ -55,7 +49,7 @@ def order_page():
         orders = list(results)
     return render_template('canteen/order.html', orders = orders)
 
-@app.route('/canteen_account/order', methods=['GET', 'POST'])
+@app.route('/canteen_account/menu', methods=['GET', 'POST'])
 @login_required
 def menu_page():
     if current_user.auth_type != 2:
@@ -69,7 +63,7 @@ def menu_page():
         { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
         ])
         types = list(results)
-    return render_template('canteen/order.html', sets = sets, types = types)
+    return render_template('canteen/menu.html', sets = sets, types = types)
 
 @app.route('/add/set', methods=['GET', 'POST'])
 @login_required
@@ -84,14 +78,27 @@ def add_set():
 
     if request.method == 'POST':
         name = request.form.get("set_name")
-
-
-
     return render_template('canteen/order.html', types = types)
     
     
-@app.route('/canteen_account/add_type')
+@app.route('/canteen_account/add_type', methods=['GET', 'POST'])
+@login_required
 def add_type():
+    # canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+    typename = ''
+    if request.method == 'POST':
+        typename = request.form['typename']
+        if typename == '':
+            flash('Please add your type name', category='info')
+        if len(typename) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        else:
+            mongo.db.types.insert_one({
+                'name': typename,
+                'at_canteen': None,
+                'dishes':None
+            })
+        return redirect('/canteen_account/menu')
     return render_template('canteen/add_type.html')
 
 @app.route('/canteen_account/add_set')

@@ -14,7 +14,7 @@ class bcrypt_password(str):
 
 
 class Users:
-    def __init__(self, email, password, username, auth_type=2, confirmed=0, balance=0):
+    def __init__(self, email, password, username, at_canteen=None ,auth_type=2, confirmed=0, balance=0):
         self.email = str(email)
         self.password: bcrypt_password = password  # This should be a bcrypt-encrypted password
         self.username = str(username)
@@ -23,6 +23,7 @@ class Users:
         self.balance = float(balance)  # amount of money
         self.cart = {}
         self.image_path = None
+        self.staff_of = str(at_canteen)
 
     def to_json(self):
         # This function turns all attributes value to dict (json) for MongoDB

@@ -12,15 +12,14 @@ Add Type
     <div class="block m-4"> 
         <div class="h2 p-3 headtitle">Add New Type</div>
         <div class="p-3">
-            <form class="form-group">
-                <label for="inputTypeName">Type Name: </label>
-                <input type="" class="form-control" id="type-name" placeholder="Enter Type Name"></input>
+            <form class="form-group" method="POST">
+                <label for="typename">Type Name: </label>
+                <input type="" class="form-control" id="typename" name="typename" placeholder="Enter Type Name"></input>
                 <small id="type-name-help" class="form-text text-muted">This serves as a menu type for your canteen.</small>
+                <button class="btn btn-secondary btn-main-color" type="submit">
+                    Submit
+                </button>
             </form>
-
-            <button class="btn btn-secondary btn-main-color">
-                Submit
-            </button>
         </div>
     </div>
 {% endblock %}
