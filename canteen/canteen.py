@@ -62,7 +62,7 @@ def order_page():
         return 'Not Authorized', 403
     if request.method == 'GET':
         results = mongo.db.orders.aggregate([
-        { '$match' : { 'at_canteen' : "UC Canteen"} } # edit!!!
+        { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of) }} # edit!!!
         ])
         orders = list(results)
     return render_template('canteen/order.html', orders = orders)
@@ -74,18 +74,18 @@ def menu_page():
         return 'Not Authorized', 403
     if request.method == 'GET':
         results = mongo.db.sets.aggregate([
-            { '$match' : { 'at_canteen' : current_user.staff_of}}
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} } # edit!!!
         ])
         sets = list(results)
 
         results = mongo.db.types.aggregate([
-            { '$match' : { 'at_canteen' : current_user.staff_of}}
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} } # edit!!!
         ])
         types = list(results)
         print(types)
     return render_template('canteen/menu.html', sets=sets, types=types)
 
-@app.route('/canteen_account/add_set', methods=['GET', 'POST'])
+@app.route('/canteen_account/add/set', methods=['GET', 'POST'])
 @login_required
 def add_set():
     if current_user.auth_type != 2:
@@ -95,10 +95,7 @@ def add_set():
         { '$match' : { 'at_canteen' : ObjectId(current_user._id)} }
         ])
         types = list(results)
-
-    if request.method == 'POST':
-        name = request.form.get("set_name")
-    return render_template('canteen/add_set.html', types = types)
+    return render_template('canteen/order.html', types = types)
     
     
 @app.route('/canteen_account/add_type', methods=['GET', 'POST'])
