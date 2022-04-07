@@ -82,7 +82,6 @@ def menu_page():
             { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} } # edit!!!
         ])
         types = list(results)
-        print(types)
     return render_template('canteen/menu.html', sets=sets, types=types)
 
 @app.route('/canteen_account/add/set', methods=['GET', 'POST'])
@@ -121,8 +120,34 @@ def add_type():
 def edit_set():
     return render_template('canteen/edit_set.html')
 
-@app.route('/canteen_account/add/menu')
-def add_menu():
+@app.route('/canteen_account/add/menu/<typeID>', methods=['GET','POST'])
+def add_menu(typeID):
+    def isFloat(num):
+        try:
+            float(num)
+            return True
+        except:
+            return False
+
+    if request.method == 'POST':
+        menuName=request.form['menu-name']
+        price=request.form['price']
+        if menuName == '':
+            flash('Please add your menu name', category='info')
+        if len(menuName) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        if price == '':
+            flash('Please input your menu price', category='info')
+        if not isFloat(price):
+            flash('Please input your price as a number', category='warning')
+        else:
+            mongo.db.dishes.insert_one({
+                'name': str(menuName),
+                'at_canteen': current_user.staff_of,
+                'price':float(price),
+                'in_type':ObjectId(typeID)
+            })
+            return redirect('/canteen_account/menu')
     return render_template('canteen/add_menu.html')
 
 @app.route('/canteen_account/edit/menu')

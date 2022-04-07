@@ -92,6 +92,7 @@ class Dishes:
         self.name = str(name)
         self.at_canteen = at_canteen  # ObjectId
         self.price = float(price)
+        self.in_type = None
         self.ingredients = ingredients  # List of str
         self.image_path = None
 

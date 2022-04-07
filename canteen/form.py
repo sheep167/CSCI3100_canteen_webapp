@@ -42,5 +42,3 @@ class DataEditFormWithSelect(FlaskForm):
     select = SelectMultipleField()
     submit = SubmitField()
 
-class AddMenuForm(FlaskForm):
-    text = TextAreaField()
