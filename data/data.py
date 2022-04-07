@@ -19,23 +19,6 @@ admin = {'email': 'admin@admin.com', 'password': '123456', 'username': 'admin', 
 admin['password'] = bcrypt.hashpw(admin.get('password').encode('utf-8'), bcrypt.gensalt())
 mongo.db.users.insert_one(admin)
 
-users_list = [
-    {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':'SHHO Canteen'},
-    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':'UC Canteen'},
-    
-
-]
-for user in users_list:
-    user['password'] = bcrypt.hashpw(user.get('password').encode('utf-8'), bcrypt.gensalt())
-    user['cart'] = {}
-    user['image_path'] = None
-print(users_list)
-mongo.db.users.insert_many(users_list)
-
 # must be updated
 canteens_list = [
     {'name': 'UC Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 150, 'menu': []},
@@ -46,6 +29,29 @@ canteens_list = [
     {'name': 'LWS Canteen', 'latitude': '22.4224862', 'longitude': '114.2043131', 'open_at': '9:00', 'close_at': '17:00', 'capacity': 85, 'menu': []}
 ]
 mongo.db.canteens.insert_many(canteens_list)
+
+users_list = [
+    {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"UC Canteen"},
+    {'email': 'test@na.com', 'password': '123456', 'username': 'na', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"NA Canteen"},
+    {'email': 'test@wys.com', 'password': '123456', 'username': 'wys', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"WYS Canteen"},
+    {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"SHHO Canteen"},
+    {'email': 'test@lws.com', 'password': '123456', 'username': 'lws', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"LWS Canteen"},
+]
+for user in users_list:
+    user['password'] = bcrypt.hashpw(user.get('password').encode('utf-8'), bcrypt.gensalt())
+    user['cart'] = {}
+    user['image_path'] = None
+    if 'staff_of' in user:
+        results = mongo.db.canteens.aggregate([
+                    {'$match': {"name": user['staff_of']}},
+                ])
+        user['staff_of'] = list(results)[0]['_id']
+
+mongo.db.users.insert_many(users_list)
 
 
 #testing only

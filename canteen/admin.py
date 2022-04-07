@@ -209,6 +209,7 @@ def overview_canteens_dishes(canteen_id, category):
         ])
 
         comments = list(results)
+        print(comments)
         return render_template('admin/admin_comments.html', canteen=canteen, comments=comments)
 
     elif category == 'orders':
