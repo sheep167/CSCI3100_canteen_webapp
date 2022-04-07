@@ -47,7 +47,7 @@ orders_list = [
     {'at_time': '15.01', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '200', 'waiting': 'red'},
     {'at_time': '15.10', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '500', 'waiting': 'yellow'},
     {'at_time': '15.20', 'by_user': 'test2', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '750', 'waiting': 'yellow'},
-    {'at_time': '15.30', 'by_user': 'test2', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '390', 'waiting': 'yellow'},
+    {'at_time': '15.30', 'by_user': 'test2', 'at_canteen': 'WYS Canteen', 'dishes': None, 'total_price': '390', 'waiting': 'yellow'},
 ]
 
 mongo.db.orders.insert_many(orders_list)

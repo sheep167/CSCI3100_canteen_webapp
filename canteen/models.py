@@ -152,7 +152,7 @@ class Set:
     def __init__(self, name, at_canteen):
         self.name = str(name)
         self.at_canteen = at_canteen  # ObjectId
-        self.dishes = []  # List of dish
+        self.types = []  # List of dish
 
     def to_json(self):
         return self.__dict__
@@ -161,9 +161,13 @@ class Set:
         self.name = str(name)
         return str(self.name)
     
-    def add_dish(self, dish):
-        self.dishes.append(dish)
-        return self.dishes[len(self.dishes) - 1] # last element
+    def add_dishes(self, dish, type):
+        self.types[type].append(dish)
+        return self.types[type][len(self.dishes) - 1] # last element
+
+    def delete_dishes(self, dish, type):
+        deleted_dish = self.types[type].delete(dish)
+        return deleted_dish  # last element
 
 class Type:
     def __init__(self, name, at_canteen):
