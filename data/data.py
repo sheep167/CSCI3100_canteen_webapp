@@ -75,12 +75,15 @@ types_list=[
     {'name':'type a', 'at_canteen':'UC Canteen', 'dishes':None},
     {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
 ]
+
 mongo.db.types.insert_many(types_list)
 
-sets_list=[
-    {'at_canteen'},
-    {}
-]
+self.name = str(name)
+self.at_canteen = at_canteen  # ObjectId
+self.price = float(price)
+self.ingredients = ingredients  # List of str
+self.image_path = None
+
 
 # self.name = str(name)
 #         self.at_canteen = at_canteen  # ObjectId

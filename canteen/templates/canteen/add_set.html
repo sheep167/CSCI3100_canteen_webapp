@@ -19,94 +19,29 @@ Add Type
                 <small id="type-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
             </form>
 
-            <div class="mb-3 p-0 ">
-                <div class="h4 pl-3 pb-1">Type A</div>
-                <div class="d-inline flex-column">
-                    <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
-                        <label class="radio-box font-weight-light d-flex flex-row"> One
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
+            {% if types %}
+                {% for type in types %}
+                <div class="mb-3 p-0 ">
+                    <div class="h4 pl-3 pb-1">{{type.name}}</div>
+                    <div class="d-inline flex-column">
+                        <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
+                            {% for dish in types.dish %}
+                                <label class="radio-box font-weight-light d-flex flex-row">One
+                                <input type="checkbox" name="choice1">
+                                <span class="checkmark"></span>
+                                </label>
+
+                                <label class="radio-box font-weight-light d-flex flex-row">One
+                                <input type="checkbox" name="choice1">
+                                <span class="checkmark"></span>
+                                </label>
+                            {% endfor %}
+                        </form> 
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
             
-                        <label class="radio-box font-weight-light d-flex flex-row"> Two
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
-            
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                    </form> 
-                  </div>
-            </div>
-
-            <div class="mb-3 p-0 ">
-                <div class="h4 pl-3 pb-1">Type B</div>
-                <div class="d-inline flex-column">
-                    <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
-                        <label class="radio-box font-weight-light d-flex flex-row"> One
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
-            
-                        <label class="radio-box font-weight-light d-flex flex-row"> Two
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
-            
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                        <input type="checkbox" name="choice1">
-                        <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="radio-box font-weight-light d-flex flex-row"> Three
-                            <input type="checkbox" name="choice1">
-                            <span class="checkmark"></span>
-                        </label>
-
-                    </form> 
-                  </div>
-            </div>
-            
-            
-              
             <!-- Add set -->
             <div class="d-flex flex-row flex-wrap">
                 <button type = "submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">

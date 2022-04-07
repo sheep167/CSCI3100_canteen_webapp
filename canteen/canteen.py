@@ -91,11 +91,11 @@ def add_set():
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
     if request.method == 'GET':
-        results = mongo.db.type.aggregate([
-        { '$match' : { 'at_canteen' : ObjectId(current_user._id)} }
+        results = mongo.db.types.aggregate([
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
         ])
         types = list(results)
-    return render_template('canteen/order.html', types = types)
+    return render_template('canteen/add_set.html', types = types)
     
     
 @app.route('/canteen_account/add/type', methods=['GET', 'POST'])
