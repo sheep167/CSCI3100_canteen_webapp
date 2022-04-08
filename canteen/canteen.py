@@ -149,9 +149,50 @@ def add_type():
         return redirect('/canteen_account/menu')
     return render_template('canteen/add_type.html')
 
-@app.route('/canteen_account/edit/set')
-def edit_set():
-    return render_template('canteen/edit_set.html')
+@app.route('/canteen_account/edit/set/<set_id>', methods=['GET','POST'])
+def edit_set(set_id):
+    if current_user.auth_type != 2:
+        return 'Not Authorized', 403
+
+    if request.method == 'POST':
+        _set_name = request.form.get('set-name')
+
+        if _set_name == '':
+            flash('Please add your set name', category='info')
+        else:
+            _dish_dict = {}
+            types = list(mongo.db.types.aggregate([
+                { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
+            ]))
+            for _type in types:
+                checkboxAns = request.form.getlist(_type['name'])
+                _dish_dict[_type['name']] = checkboxAns
+            print(checkboxAns)
+            mongo.db.sets.update_one( {'_id': ObjectId(set_id)},{'$set': {'types': _dish_dict}} )
+
+            return redirect('/canteen_account/menu') 
+
+    # types=[]
+    if request.method == 'GET':
+        types = list(mongo.db.types.aggregate([
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
+        ]))
+        _set = list(mongo.db.sets.aggregate([
+            { '$match' : { '_id' : ObjectId(set_id)} }
+        ]))[0]
+        # print(_set)
+        type_with_indicated=[]
+        for _type in types:
+            for_type=[_type['name']]
+            for_type.append([])
+            for dish in _type['dishes']:
+                if dish['name'] in _set['types'][_type['name']]:
+                    for_type[1].append([dish['name'], 1])
+                else:
+                    for_type[1].append([dish['name'], 0])
+            type_with_indicated.append(for_type)
+        print( type_with_indicated )
+    return render_template('canteen/edit_set.html', type_with_indicated=type_with_indicated, _set=_set)
 
 @app.route('/canteen_account/add/menu/<typeID>', methods=['GET','POST'])
 def add_menu(typeID):
