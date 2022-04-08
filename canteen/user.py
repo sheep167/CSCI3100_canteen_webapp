@@ -26,6 +26,26 @@ def home():
 
     results = mongo.db.canteens.aggregate([
         {'$lookup':
+            {'from': 'orders',
+             'localField': '_id',
+             'foreignField': 'at_canteen',
+             'as': 'order_num'}}
+    ])
+    crowd = list(results)
+
+    for canteen in crowd :
+        canteen['order_num'] = len(canteen['order_num'])
+        if canteen['order_num'] >= 30 :
+            canteen['crowd'] = 'busy'
+        elif canteen['order_num'] >= 15 :
+            canteen['crowd'] = 'normal'
+        for can in canteens :
+            if can['_id'] == canteen['_id'] :
+                can['order_num'] = canteen['order_num']
+
+    
+    results = mongo.db.canteens.aggregate([
+        {'$lookup':
             {'from': 'comments',
              'localField': '_id',
              'foreignField': 'at_canteen',
@@ -60,7 +80,7 @@ def home():
         else:
             canteens_closed.append(canteen)
 
-    return render_template('home.html', canteens_opened=canteens_opened, canteens_closed=canteens_closed)
+    return render_template('home.html', canteens_opened=canteens_opened, canteens_closed=canteens_closed,)
 
 
 @login_required

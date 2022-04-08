@@ -15,7 +15,6 @@ from wtforms import StringField  # 2.
 from wtforms.validators import DataRequired  # 3.
 import threading
 import time
-from turbo_flask import turbo
 
 """
 order page
