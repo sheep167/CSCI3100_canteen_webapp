@@ -368,10 +368,9 @@ def cart_page():
     
     # Count the number of each dish and retrieve the details
     cart = {}
-
+    all_canteen_total=0
     #temporary fix
     if( results.get('cart') ):
-        all_canteen_total = 0
         for canteen_name, value in results.get('cart').items():
             cart[canteen_name] = {}
             cart[canteen_name]['cart'] = []
@@ -444,3 +443,8 @@ def post_comment(canteen_id):
             })
         return redirect('/canteens/%s' % canteen_id)
     return render_template('/user/post_comment.html', canteen=canteen, paragraph=paragraph)
+
+@login_required
+@app.route('/order_history', methods=['GET', 'POST'])
+def order_history():
+    return render_template('/user/order_history.html')

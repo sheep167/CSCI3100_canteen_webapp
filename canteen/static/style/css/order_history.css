@@ -1,0 +1,21 @@
+div.subblock {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+  
+div.headblock {
+    background-color: #ffd6bb;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/*css for card*/
+
+/*css add shadow to card*/
+.card {
+    box-shadow: rgba(49, 48, 48, 0.24) 0px 3px 8px;
+}
+
+/*css for card with LATE status*/
+#cardCurrent.card {
+    background-color: rgba(246, 150, 99, 0.2);
+    color: #df5607;
+}

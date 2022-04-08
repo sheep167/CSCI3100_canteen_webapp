@@ -41,6 +41,10 @@
                   <li class="{{'nav-item active' if active_page == 'canteens' else 'nav-item'}}">
                     <a class="nav-link" href="/overview/canteens">Canteens</a>
                   </li>
+                  {% elif current_user.auth_type == 1 %}
+                  <li class="{{'nav-item active' if active_page == 'canteens' else 'nav-item'}}">
+                    <a class="nav-link" href="/canteens">Canteens</a>
+                  </li>
                   {% elif current_user.auth_type == 2 %}
                   <li class="{{'nav-item active' if active_page == 'Order' else 'nav-item'}}">
                     <a class="nav-link" href="/canteen_account/order">Order</a>
