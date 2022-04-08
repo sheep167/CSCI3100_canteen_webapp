@@ -41,7 +41,6 @@ Checkout Page
         <hr>
       </div>
     </div>
-    {% endfor %}
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Total Price </h1>
       <div class="h3 font-weight-light"> ${{all_canteen_total}} </div>
@@ -51,6 +50,7 @@ Checkout Page
         <button class="btn btn-outline-primary" type="submit"> Pay Now </button>
       </form>
     </div>
+    {% endfor %}
     {% else %}
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Your Cart is Empty</h1>
