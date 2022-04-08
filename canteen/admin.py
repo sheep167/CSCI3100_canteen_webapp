@@ -167,32 +167,51 @@ def delete_data_page(category, _id):
 
 @app.route('/overview/canteens/<canteen_id>/<category>')
 @login_required
-def overview_canteens_dishes(canteen_id, category):
+def overview_canteens_data(canteen_id, category):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
     if category == 'dishes':
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        if request.method == 'GET':
+            results = mongo.db.sets.aggregate([
+                {'$match': {'at_canteen': ObjectId(canteen_id)}}
+            ])
+            sets = list(results)
+            for _set in sets:
+                to_remove = []
+                for _type in _set['types']:
+                    if len(_set['types'][_type]) == 0:
+                        to_remove.append(_type)
 
-        results = mongo.db.dishes.aggregate([
-            {'$match': {'at_canteen': ObjectId(canteen_id)}},
-            {'$lookup':
-                {'from': 'canteens',
-                 'localField': 'at_canteen',
-                 'foreignField': '_id',
-                 'as': 'at_canteen'}},
-            {'$set': {'at_canteen': {'$arrayElemAt': ['$at_canteen', 0]}}},
-            {'$set': {'at_canteen': '$at_canteen.name'}}
-        ])
+                for _type in to_remove:
+                    del _set['types'][_type]
 
-        dishes = list(results)
-        for dish in dishes:
-            if dish.get('image_path'):
-                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
-            else:
-                dish['image_path'] = None
-
-        return render_template('admin/admin_dishes.html', canteen=canteen, dishes=dishes)
+            results = mongo.db.types.aggregate([
+                {'$match': {'at_canteen': ObjectId(canteen_id)}}
+            ])
+            types = list(results)
+        return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
+        # canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        #
+        # results = mongo.db.dishes.aggregate([
+        #     {'$match': {'at_canteen': ObjectId(canteen_id)}},
+        #     {'$lookup':
+        #         {'from': 'canteens',
+        #          'localField': 'at_canteen',
+        #          'foreignField': '_id',
+        #          'as': 'at_canteen'}},
+        #     {'$set': {'at_canteen': {'$arrayElemAt': ['$at_canteen', 0]}}},
+        #     {'$set': {'at_canteen': '$at_canteen.name'}}
+        # ])
+        #
+        # dishes = list(results)
+        # for dish in dishes:
+        #     if dish.get('image_path'):
+        #         dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        #     else:
+        #         dish['image_path'] = None
+        #
+        # return render_template('admin/admin_dishes.html', canteen=canteen, dishes=dishes)
 
     elif category == 'comments':
 
