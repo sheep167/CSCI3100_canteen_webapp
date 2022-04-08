@@ -443,3 +443,8 @@ def post_comment(canteen_id):
             })
         return redirect('/canteens/%s' % canteen_id)
     return render_template('/user/post_comment.html', canteen=canteen, paragraph=paragraph)
+
+@login_required
+@app.route('/order_history', methods=['GET', 'POST'])
+def order_history():
+    return render_template('/user/order_history.html')
