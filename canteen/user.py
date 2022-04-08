@@ -39,7 +39,7 @@ def home():
             canteen['crowd'] = 'busy'
         elif canteen['order_num'] >= 15 :
             canteen['crowd'] = 'normal'
-        else;
+        else:
             canteen['crowd'] = 'few people'
         for can in canteens :
             if can['_id'] == canteen['_id'] :

@@ -115,7 +115,7 @@ class Orders:
         self.at_canteen = created_at_canteen  # ObjectId
         self.dishes = food  # List of ObjectId
         self.total_price = total_price  # float
-        self.order_status = 'waiting'  # waiting, fulfilled, unfulfilled
+        self.order_status = 'waiting'  # just arrive, normal, rush, finished
 
     def to_json(self):
         return self.__dict__
