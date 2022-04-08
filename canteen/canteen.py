@@ -101,6 +101,7 @@ def menu_page():
             { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
         ])
         types = list(results)
+
     return render_template('canteen/menu.html', sets=sets, types=types)
 
 @app.route('/canteen_account/add/set', methods=['GET', 'POST'])
@@ -233,17 +234,20 @@ def add_menu(typeID):
                 'in_type':ObjectId(typeID)
             })
 
-            results = list(mongo.db.types.aggregate([
+            dish_id = list(mongo.db.dishes.aggregate([
+                { '$match' : { 'name' : menuName } }
+            ]))[0]['_id']
+
+            dishes = list( mongo.db.types.aggregate([
                 { '$match' : { '_id' : ObjectId(typeID) } }
-            ]))
+            ]))[0]['dishes']
 
-
-            dishes = results[0]['dishes']
             dishes.append({
                 'name': str(menuName),
                 'at_canteen': current_user.staff_of,
                 'price':float(price),
-                'in_type':ObjectId(typeID)
+                'in_type':ObjectId(typeID),
+                '_id':ObjectId(dish_id)
             })
 
             mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
@@ -254,4 +258,34 @@ def add_menu(typeID):
 @app.route('/canteen_account/edit/menu')
 def edit_menu():
     return render_template('canteen/edit_menu.html')
+
+@app.route('/canteen_account/delete/<category>/<id>')
+def delete_item(category, id):
+    if category == 'dishes':
+        # delete from types
+        target_dish = list(mongo.db.dishes.aggregate([
+            {'$match': { '_id' : ObjectId(id) }},
+        ]))[0]
+
+        in_type = target_dish['in_type']
+        print(target_dish)
+        target_type = list(mongo.db.types.aggregate([
+            {'$match': { '_id': ObjectId(in_type) }},
+        ]))[0]
+
+        dishes = target_type["dishes"]
+        new_dishes = []
+        for _dish in dishes:
+            if _dish["_id"] == ObjectId(id):
+                continue
+            new_dishes.append(_dish)
+        mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
+
+        # delete from dishes
+        mongo.db.dishes.delete_one({"_id": ObjectId(id)})        
+        
+    else:
+        mongo.db[category].delete_one({"_id": ObjectId(id)})
+
+    return redirect('/canteen_account/menu')
 
