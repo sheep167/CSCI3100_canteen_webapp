@@ -78,13 +78,7 @@ types_list=[
 
 mongo.db.types.insert_many(types_list)
 
-self.name = str(name)
-self.at_canteen = at_canteen  # ObjectId
-self.price = float(price)
-self.ingredients = ingredients  # List of str
-self.image_path = None
-
-
-# self.name = str(name)
-#         self.at_canteen = at_canteen  # ObjectId
-#         self.types = []  # List of dish
+sets_list=[
+    {}
+]
+mongo.db.sets.insert_many(sets_list)

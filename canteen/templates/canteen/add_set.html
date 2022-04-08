@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Add Type
+Add Set
 {% endblock %}
 
 {% block stylesheet %}
@@ -13,36 +13,40 @@ Add Type
         <div class="h2 p-3 headtitle">Add Set</div>
         <div class="p-3">
 
-            <form class="form-group"> 
-                <label for="inputTypeName">Set Name: </label>
-                <input type="" class="form-control" id= "set_name" name = "set_name" placeholder="Enter Set Name"></input>
-                <small id="type-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
-            </form>
-
-            {% if types %}
-                {% for type in types %}
-                <div class="mb-3 p-0 ">
-                    <div class="h4 pl-3 pb-1">{{type.name}}</div>
-                    <div class="d-inline flex-column">
-                        <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
-                            {% for dish in types.dish %}
-                                <label class="radio-box font-weight-light d-flex flex-row">One
-                                <input type="checkbox" name="choice1">
-                                <span class="checkmark"></span>
-                                </label>
-                            {% endfor %}
-                        </form> 
-                    </div>
+            <form class="form-group" method="POST"> 
+                <div>
+                    <label for="set-name">Set Name: </label>
+                    <input type="text" class="form-control" id= "set-name" name="set-name" placeholder="Enter Set Name"></input>
+                    <small id="set-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
                 </div>
-                {% endfor %}
-            {% endif %}
+
+                {% if types %}
+                    {% for type in types %}
+                    <div class="mb-3 p-0 ">
+                        <div class="h4 pl-3 pb-1">{{type.name}}</div>
+                        <div class="d-inline flex-column">
+                            <div class="form-checkbox" style="max-height: 250px; overflow: auto;">
+                                {% if type.dishes %}
+                                    {% for dish in type.dishes %}
+                                        <label class="radio-box font-weight-light d-flex flex-row">{{dish.name}}
+                                        <input type="checkbox" name="{{type.name}}" value="{{dish.name}}">
+                                        <span class="checkmark"></span>
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div> 
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
             
-            <!-- Add set -->
-            <div class="d-flex flex-row flex-wrap">
-                <button type = "submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">
-                    Add Set
-                </button>
-            </div>
+                <!-- Add set -->
+                <div class="d-flex flex-row flex-wrap">
+                    <button type="submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">
+                        Add Set
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

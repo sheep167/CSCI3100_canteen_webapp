@@ -21,116 +21,50 @@ Canteen List
         </div>
 
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
-
             <form>
-                <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
-                <!-- One Block -->
-                    <input type="radio" name="set" value="set1" checked="checked">
-                    <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
-                        <div class="pt-2 m-0 ">
-                            <div class="d-flex flex-row mb-2 pt-2">
-                                <div class="m-0 h4 text-left">Set 1</div>
-                                <div class="ml-auto">
-                                    <a class="btn btn-primary btn-sm" href="">Edit</a>
-                                    <a class="btn btn-warning btn-sm" href="">Duplicate</a>
-                                    <a class="btn btn-danger btn-sm" href="">Delete</a>
-                                </div>
-                            </div>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Main Dish</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Dish 2</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Dish 3</td>
-                                </tr>
-                                </tbody>
-                                <thead>
-                                    <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Drink</th>
-                                    </tr>
-                                </thead>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Drink 1</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Drink 1</td>
-                                </tr>
-                            </table>        
-                        </div>
-                    </div>
-                </label>
-
-                <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
-                    <!-- One Block -->
-                        <input type="radio" name="set" value="set2">
-                        <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
-                            <div class="pt-2 m-0 ">
-                                <div class="d-flex flex-row mb-2 pt-2">
-                                    <div class="m-0 h4 text-left">Set 2</div>
-                                    <div class="ml-auto">
-                                        <a class="btn btn-primary btn-sm" href="">Edit</a>
-                                        <a class="btn btn-warning btn-sm" href="">Duplicate</a>
-                                        <a class="btn btn-danger btn-sm" href="">Delete</a>
+                {% if sets %}
+                    {% for set in sets %}
+                        <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                        <!-- One Block -->
+                            <input type="radio" name="set" value="set1" checked="checked">
+                            <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                                <div class="pt-2 m-0 ">
+                                    <div class="d-flex mb-2 pt-2">
+                                        <div class="m-0 h4 text-left">{{set.name}}</div>
                                     </div>
+                                    <table class="table">
+                                        {% for type_name in set.types %}
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">{{type_name}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for dish_name in set.types[type_name] %}
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{dish_name}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        {% endfor %}
+                                    </table>        
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Main Dish</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Dish 1</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Dish 2</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Dish 3</td>
-                                    </tr>
-                                    </tbody>
-                                    <thead>
-                                        <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Drink</th>
-                                        </tr>
-                                    </thead>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>Drink 1</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>Drink 1</td>
-                                    </tr>
-                                </table>        
+                                <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
+                                    <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100" href="">Edit</a></div>
+                                    <div class="col-4 p-1"><a class="btn btn-warning btn-sm w-100" href="">Duplicate</a></div>
+                                    <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="">Delete</a></div>
+                                </div>
                             </div>
-                        </div>
-                    </label>
+                        </label>
+                    {% endfor %}
+                {% endif %}
+
 
 
             </form>
+
             
         </div>
 
@@ -160,7 +94,7 @@ Canteen List
                             <thead>
                                 <tr>
                                     <th scope="col" class="align-middle" width="10%">#</th>
-                                    <th scope="col" class="align-middle" width="20%">Main Dish</th>
+                                    <th scope="col" class="align-middle" width="20%">{{ type.name }}</th>
                                     <th scope="col" class="align-middle" width="20%">Price</th>
                                     <th class="d-flex flex-row align-items-center">
                                         <div class="">Action</div>
@@ -171,61 +105,21 @@ Canteen List
                         </table>
                         <div style="max-height: 252px; overflow: auto;">
                             <table class="table m-0 p-0">
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                    <td>$100</td>
-                                    <td class="text-left">
-                                        <div>
-                                            <span><a href="" class="btn btn-primary">Edit</a></span>
-                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                    <td>$100</td>
-                                    <td class="text-left">
-                                        <div>
-                                            <span><a href="" class="btn btn-primary">Edit</a></span>
-                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                    <td>$100</td>
-                                    <td class="text-left">
-                                        <div>
-                                            <span><a href="" class="btn btn-primary">Edit</a></span>
-                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                    <td>$100</td>
-                                    <td class="text-left">
-                                        <div>
-                                            <span><a href="" class="btn btn-primary">Edit</a></span>
-                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Dish 1</td>
-                                    <td>$100</td>
-                                    <td class="text-left">
-                                        <div>
-                                            <span><a href="" class="btn btn-primary">Edit</a></span>
-                                            <span></span><a href="" class="btn btn-danger">Delete</a></span>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {% if type.dishes %}
+                                    {% for dish in type.dishes %}
+                                        <tr>
+                                            <th scope="row">{{loop.index}}</th>
+                                            <td>{{ dish.name }}</td>
+                                            <td>${{ dish.price }}</td>
+                                            <td class="text-left">
+                                                <div>
+                                                    <span><a href="" class="btn btn-primary">Edit</a></span>
+                                                    <span><a href="" class="btn btn-danger">Delete</a></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
                             </table>
                         </div>
                 

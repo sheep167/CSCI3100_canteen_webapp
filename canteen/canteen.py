@@ -74,12 +74,20 @@ def menu_page():
         return 'Not Authorized', 403
     if request.method == 'GET':
         results = mongo.db.sets.aggregate([
-            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} } # edit!!!
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
         ])
         sets = list(results)
+        for _set in sets:
+            to_remove = []
+            for _type in _set['types']:
+                if len(_set['types'][_type]) == 0:
+                    to_remove.append(_type)
+
+            for _type in to_remove:
+                del _set['types'][_type]
 
         results = mongo.db.types.aggregate([
-            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} } # edit!!!
+            { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
         ])
         types = list(results)
     return render_template('canteen/menu.html', sets=sets, types=types)
@@ -89,12 +97,37 @@ def menu_page():
 def add_set():
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
+
+    if request.method == 'POST':
+        _set_name = request.form.get('set-name')
+
+        if _set_name == '':
+            flash('Please add your set name', category='info')
+        else:
+            _dish_dict = {}
+            types = list(mongo.db.types.aggregate([
+                { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
+            ]))
+            for _type in types:
+                checkboxAns = request.form.getlist(_type['name'])
+                _dish_dict[_type['name']] = checkboxAns
+                 
+            mongo.db.sets.insert_one({
+                'name': _set_name,
+                'at_canteen': ObjectId(current_user.staff_of),
+                'types': _dish_dict
+            })
+            return redirect('/canteen_account/menu') 
+
+    types=[]
     if request.method == 'GET':
         results = mongo.db.types.aggregate([
             { '$match' : { 'at_canteen' : ObjectId(current_user.staff_of)} }
         ])
         types = list(results)
-    return render_template('canteen/add_set.html', types = types)
+
+    
+    return render_template('canteen/add_set.html', types=types)
     
     
 @app.route('/canteen_account/add/type', methods=['GET', 'POST'])
@@ -111,7 +144,7 @@ def add_type():
             mongo.db.types.insert_one({
                 'name': typename,
                 'at_canteen': current_user.staff_of,
-                'dishes':None
+                'dishes': []
             })
         return redirect('/canteen_account/menu')
     return render_template('canteen/add_type.html')
@@ -147,6 +180,22 @@ def add_menu(typeID):
                 'price':float(price),
                 'in_type':ObjectId(typeID)
             })
+
+            results = list(mongo.db.types.aggregate([
+                { '$match' : { '_id' : ObjectId(typeID) } }
+            ]))
+
+
+            dishes = results[0]['dishes']
+            dishes.append({
+                'name': str(menuName),
+                'at_canteen': current_user.staff_of,
+                'price':float(price),
+                'in_type':ObjectId(typeID)
+            })
+
+            mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
+
             return redirect('/canteen_account/menu')
     return render_template('canteen/add_menu.html')
 
