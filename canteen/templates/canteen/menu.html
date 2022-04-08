@@ -53,8 +53,7 @@ Canteen List
                                 </div>
                                 <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
                                     <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100" href='/canteen_account/edit/set/{{set._id}}'>Edit</a></div>
-                                    <div class="col-4 p-1"><a class="btn btn-warning btn-sm w-100" href="">Duplicate</a></div>
-                                    <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="">Delete</a></div>
+                                    <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="/canteen_account/delete/sets/{{set._id}}">Delete</a></div>
                                 </div>
                             </div>
                         </label>
@@ -114,7 +113,7 @@ Canteen List
                                             <td class="text-left">
                                                 <div>
                                                     <span><a href="" class="btn btn-primary">Edit</a></span>
-                                                    <span><a href="" class="btn btn-danger">Delete</a></span>
+                                                    <span><a href="/canteen_account/delete/dishes/{{dish._id}}" class="btn btn-danger">Delete</a></span>
                                                 </div>
                                             </td>
                                         </tr>
