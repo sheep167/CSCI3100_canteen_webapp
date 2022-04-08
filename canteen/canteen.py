@@ -15,6 +15,10 @@ from flask_mail import Message
 from flask_wtf import FlaskForm # 1.
 from wtforms import StringField # 2.
 from wtforms.validators import DataRequired # 3.
+import threading
+import time
+from turbo_flask import turbo
+
 
 """
 order page
@@ -58,6 +62,7 @@ def canteen_account():
 @app.route('/canteen_account/order', methods=['GET', 'POST'])
 @login_required
 def order_page():
+    threading.Thread(target=update_order).start()
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
     if request.method == 'GET':
@@ -66,6 +71,12 @@ def order_page():
         ])
         orders = list(results)
     return render_template('canteen/order.html', orders = orders)
+
+def update_order():
+    with app.app_context():
+        while True:
+            time.sleep(1)
+            turbo.push(turbo.replace(render_template('canteen/partial_order.html'), 'load'))
 
 @app.route('/canteen_account/menu', methods=['GET', 'POST'])
 @login_required
