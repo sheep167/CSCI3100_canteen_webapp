@@ -255,8 +255,60 @@ def add_menu(typeID):
             return redirect('/canteen_account/menu')
     return render_template('canteen/add_menu.html')
 
-@app.route('/canteen_account/edit/menu')
-def edit_menu():
+@app.route('/canteen_account/edit/menu/<menu_id>')
+def edit_menu(menu_id):
+    def isFloat(num):
+        try:
+            float(num)
+            return True
+        except:
+            return False
+
+    if request.method == 'POST':
+        menuName=request.form['menu-name']
+        price=request.form['price']
+        if menuName == '':
+            flash('Please add your menu name', category='info')
+        if len(menuName) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        if price == '':
+            flash('Please input your menu price', category='info')
+        if not isFloat(price):
+            flash('Please input your price as a number', category='warning')
+        else:
+            mongo.db.dishes.insert_one({
+                'name': str(menuName),
+                'at_canteen': current_user.staff_of,
+                'price':float(price),
+                'in_type':ObjectId(typeID)
+            })
+
+            # dish_id = list(mongo.db.dishes.aggregate([
+            #     { '$match' : { 'name' : menuName } }
+            # ]))[0]['_id']
+
+            # dishes = list( mongo.db.types.aggregate([
+            #     { '$match' : { '_id' : ObjectId(typeID) } }
+            # ]))[0]['dishes']
+
+            # dishes.append({
+            #     'name': str(menuName),
+            #     'at_canteen': current_user.staff_of,
+            #     'price':float(price),
+            #     'in_type':ObjectId(typeID),
+            #     '_id':ObjectId(dish_id)
+            # })
+
+            # mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
+            # return redirect('/canteen_account/menu')
+    if request.method == 'GET':
+        menuName=list(mongo.db.dishes.aggregate([
+            { '$match' : { '_id' : ObjectId(menu_id) } }
+        ]))[0]['name']
+        
+         
+
+        
     return render_template('canteen/edit_menu.html')
 
 @app.route('/canteen_account/delete/<category>/<id>')
