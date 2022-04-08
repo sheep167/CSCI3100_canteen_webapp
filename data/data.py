@@ -75,14 +75,13 @@ types_list=[
     {'name':'type a', 'at_canteen':'UC Canteen', 'dishes':None},
     {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
 ]
+for type in types_list:
+    result = mongo.db.canteens.aggregate([
+                {'$match': {"name": order['at_canteen']}},
+            ])
+    type['at_canteen'] = list(result)[0]['_id']
 
 mongo.db.types.insert_many(types_list)
-
-self.name = str(name)
-self.at_canteen = at_canteen  # ObjectId
-self.price = float(price)
-self.ingredients = ingredients  # List of str
-self.image_path = None
 
 
 # self.name = str(name)

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% set active_page = "Menu" %}
 
 {% block title %}
 Add Type
@@ -26,11 +27,6 @@ Add Type
                     <div class="d-inline flex-column">
                         <form class="form-checkbox" style="max-height: 250px; overflow: auto;">
                             {% for dish in types.dish %}
-                                <label class="radio-box font-weight-light d-flex flex-row">One
-                                <input type="checkbox" name="choice1">
-                                <span class="checkmark"></span>
-                                </label>
-
                                 <label class="radio-box font-weight-light d-flex flex-row">One
                                 <input type="checkbox" name="choice1">
                                 <span class="checkmark"></span>
