@@ -39,9 +39,11 @@ def home():
             canteen['crowd'] = 'busy'
         elif canteen['order_num'] >= 15 :
             canteen['crowd'] = 'normal'
+        else;
+            canteen['crowd'] = 'few people'
         for can in canteens :
             if can['_id'] == canteen['_id'] :
-                can['order_num'] = canteen['order_num']
+                can['crowd'] = canteen['crowd']
 
     
     results = mongo.db.canteens.aggregate([
