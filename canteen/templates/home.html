@@ -21,19 +21,9 @@ Canteen List
 <div id="top" class="container-fluid mb-5">
     <div class="row mb-3 justify-content-center">
         <div id="textabove" class="col-6 text-center">
-            <h1 data-aos="fade-right" style="font-family: Parisienne; font-size: 50px;">CU Food Order</h1>
-            <h6 data-aos="fade-right" style="font-family: Vollkorn;">We offer good food with our care.</h6><br>
-            <div class="row justify-content-center">
-                <div class="col-9">
-                    <div class="input-group mb-1" data-aos="fade-right">
-                        <input type="text" class="form-control" placeholder="Choose your preferred type of food"
-                            aria-label="Type of food" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h1 data-aos="fade-right" style="font-family: Parisienne; font-size: 70px;">CU Food Order</h1>
+            <hr class="mx-5" style="border: 70;">
+            <h6 data-aos="fade-right" style="font-family: Vollkorn; font-size: 30px;">We offer good food with our care.</h6><br>
         </div>
         <div id="textabove" class="col-1 text-center"></div>
         <div id="imgcol" class="float-right col-5 justify-content-center">
@@ -48,23 +38,13 @@ Canteen List
     </div>
     <div class="row justify-content-center">
         <!--source picture: https://www.flaticon.com-->
-        <img src="../static/image/home/forkspoon.png" style="object-fit: cover; width: 40px; height: 40px;" class="center" data-aos="fade-down">
+        <img src="../static/image/home/forkspoon.png" style="object-fit: cover; width: 40px; height: 40px;"
+            class="center" data-aos="fade-down">
     </div>
     <hr data-aos="fade-down">
     <div class="row justify-content-center text-center">
-        <h4 style="font-family: Vollkorn;">See restaurants near you or choose your favorites</h4>
+        <h4 style="font-family: Vollkorn;">See Canteens</h4>
         <br>
-    </div>
-    <div class="row justify-content-center">
-        <!--Tab to choose filter (Near me / Favorites)-->
-        <nav>
-            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active px-3 mx-3" id="nav-near-tab" data-toggle="tab" href="#nav-near"
-                    role="tab" aria-controls="nav-near" aria-selected="true">Near Me</a>
-                <a class="nav-item nav-link px-3 mx-3" id="nav-fav-tab" data-toggle="tab" href="#nav-fav" role="tab"
-                    aria-controls="nav-fav" aria-selected="false">Favorites</a>
-            </div>
-        </nav>
     </div>
 </div>
 
@@ -72,160 +52,83 @@ Canteen List
 <div class="container" id="tabs">
     <div class="row justify-content-center">
         <!--Canteen List: separate opened and closed canteens-->
-        <div class="tab-content px-3 px-sm-0" id="nav-tabContent">
-            <!--Near Me Canteen List-->
-            <div class="tab-pane fade show active" id="nav-near" role="tabpanel" aria-labelledby="nav-near">
-                <!--Canteen List (Currently Open)-->
-                <h4 class="font-weight-normal">Currently Opened</h4>
-                {% if canteens_opened %}
-                {% for canteen in canteens_opened %}
-                <div class="card mt-3 mb-5" data-aos="zoom-in-up">
-                    <div class="row g-0">
-                        <div class="col-md-4" style="text-align: center;">
-                            {% if canteen.image_path %}
-                            <img src="{{canteen.image_path}}" class="cover" alt="...">
-                            {% else %}
-                            No Image for this canteen
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Open at: </b> {{canteen.open_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Close at: </b> {{canteen.close_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2"></p>
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
-                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
-                            </div>
+
+        <!--Near Me Canteen List-->
+        <div class="tab-pane fade show active" id="nav-near" role="tabpanel" aria-labelledby="nav-near">
+            <!--Canteen List (Currently Open)-->
+            <h4 class="font-weight-normal">Currently Opened</h4>
+            {% if canteens_opened %}
+            {% for canteen in canteens_opened %}
+            <div class="card mt-3 mb-5" data-aos="zoom-in-up">
+                <div class="row g-0">
+                    <div class="col-md-4" style="text-align: center;">
+                        {% if canteen.image_path %}
+                        <img src="{{canteen.image_path}}" class="cover" alt="...">
+                        {% else %}
+                        No Image for this canteen
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
+                            <p class="foodlist card-text mb-2">
+                                <b>Open at: </b> {{canteen.open_at}}
+                            </p>
+                            <p class="foodlist card-text mb-2">
+                                <b>Close at: </b> {{canteen.close_at}}
+                            </p>
+                            <p class="foodlist card-text mb-2"></p>
+                            <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
+                            <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-                {% else %}
-                <p>All canteens are closed</p>
-                {% endif %}
-
-                <hr>
-
-                <!--Canteen List (Currently Closed)-->
-                <h4 class="font-weight-normal mt-4">Currently Closed</h4>
-                {% if canteens_closed %}
-                {% for canteen in canteens_closed %}
-                <div id="closed" class="card mt-3 mb-5">
-                    <div class="row g-0">
-                        <div class="col-md-4" style="text-align: center;">
-                            {% if canteen.image_path %}
-                            <img src="{{canteen.image_path}}" class="cover" alt="...">
-                            {% else %}
-                            No Image for this canteen
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Open at: </b> {{canteen.open_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Close at: </b> {{canteen.close_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2"></p>
-                                {% if canteen.avg_rating %}
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>{{canteen.avg_rating}}</p>
-                                {% else %}
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>No rating has been made yet.</p>
-                                {% endif %}
-                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <p>All canteens are opened</p>
-                {% endif %}
-
             </div>
-            <!--Favorite Canteen List-->
-            <div class="tab-pane fade" id="nav-fav" role="tabpanel" aria-labelledby="nav-fav">
-                <!--Canteen List (Currently Open)-->
-                <h4 class="font-weight-normal">Currently Opened</h4>
-                {% if canteens_opened %}
-                {% for canteen in canteens_opened %}
-                <div class="card mt-3 mb-5" data-aos="zoom-in-up">
-                    <div class="row g-0">
-                        <div class="col-md-4" style="text-align: center;">
-                            {% if canteen.image_path %}
-                            <img src="{{canteen.image_path}}" class="cover" alt="...">
+            {% endfor %}
+            {% else %}
+            <p>All canteens are closed</p>
+            {% endif %}
+
+            <hr>
+
+            <!--Canteen List (Currently Closed)-->
+            <h4 class="font-weight-normal mt-4">Currently Closed</h4>
+            {% if canteens_closed %}
+            {% for canteen in canteens_closed %}
+            <div id="closed" class="card mt-3 mb-5">
+                <div class="row g-0">
+                    <div class="col-md-4" style="text-align: center;">
+                        {% if canteen.image_path %}
+                        <img src="{{canteen.image_path}}" class="cover" alt="...">
+                        {% else %}
+                        No Image for this canteen
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
+                            <p class="foodlist card-text mb-2">
+                                <b>Open at: </b> {{canteen.open_at}}
+                            </p>
+                            <p class="foodlist card-text mb-2">
+                                <b>Close at: </b> {{canteen.close_at}}
+                            </p>
+                            <p class="foodlist card-text mb-2"></p>
+                            {% if canteen.avg_rating %}
+                            <p class="foodlist card-text mb-2"><b>Rating: </b>{{canteen.avg_rating}}</p>
                             {% else %}
-                            No Image for this canteen
+                            <p class="foodlist card-text mb-2"><b>Rating: </b>No rating has been made yet.</p>
                             {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Open at: </b> {{canteen.open_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Close at: </b> {{canteen.close_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2"></p>
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>waiting for query</p>
-                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
-                            </div>
+                            <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-                {% else %}
-                <p>All canteens are closed</p>
-                {% endif %}
-
-                <hr>
-
-                <!--Canteen List (Currently Closed)-->
-                <h4 class="font-weight-normal mt-4">Currently Closed</h4>
-                {% if canteens_closed %}
-                {% for canteen in canteens_closed %}
-                <div id="closed" class="card mt-3 mb-5">
-                    <div class="row g-0">
-                        <div class="col-md-4" style="text-align: center;">
-                            {% if canteen.image_path %}
-                            <img src="{{canteen.image_path}}" class="cover" alt="...">
-                            {% else %}
-                            No Image for this canteen
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="foodlist card-title mb-2">{{canteen.name}}</h4><br>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Open at: </b> {{canteen.open_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2">
-                                    <b>Close at: </b> {{canteen.close_at}}
-                                </p>
-                                <p class="foodlist card-text mb-2"></p>
-                                {% if canteen.avg_rating %}
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>{{canteen.avg_rating}}</p>
-                                {% else %}
-                                <p class="foodlist card-text mb-2"><b>Rating: </b>No rating has been made yet.</p>
-                                {% endif %}
-                                <a class="btn btn-outline-warning mb-3" href="/canteens/{{canteen._id}}">View</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <p>All canteens are opened</p>
-                {% endif %}
             </div>
+            {% endfor %}
+            {% else %}
+            <p>All canteens are opened</p>
+            {% endif %}
+
         </div>
     </div>
 </div>
