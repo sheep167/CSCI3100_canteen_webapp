@@ -68,14 +68,11 @@ def order_page(canteen_id):
         results = mongo.db.orders.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
-        orders = list(results)
+    orders = list(results)
+    
 
-        for order in orders :
-            duration = datetime.datetime.now() - order['at_time']
-            if duration >= 15 * 60 :
-                order['order_status'] = 'rush'
-            elif duration >= 5 * 60 :
-                order['order_status'] = 'normal'
+    for order in orders :
+        print(order['at_time'])
 
     return render_template('canteen/order.html', orders=orders)
 
