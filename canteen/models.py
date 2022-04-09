@@ -155,7 +155,6 @@ class Set:
         self.name = str(name)
         self.at_canteen = at_canteen  # ObjectId
         self.types = {}  # List of dish
-        self.active = 0
 
     def to_json(self):
         return self.__dict__
