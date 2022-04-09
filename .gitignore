@@ -7,5 +7,4 @@ Pipfile.lock
 package.json
 package-lock.json
 __pycache__
-/canteen/static/image/
 .DS_Store

@@ -58,10 +58,9 @@ def canteen_account():
 @app.route('/canteen_account/<canteen_id>/order', methods=['GET', 'POST'])
 @login_required
 def order_page(canteen_id):
-    if current_user.auth_type != 1:
+    if current_user.auth_type > 1:
         return 'Not Authorized', 403
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+
     if request.method == 'GET':
         results = mongo.db.orders.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
@@ -87,10 +86,8 @@ def order_page(canteen_id):
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
 def menu_page(canteen_id):
-    if current_user.auth_type != 2:
+    if current_user.auth_type > 1:
         return 'Not Authorized', 403
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of    
 
     if request.method == 'POST':
         set_name=request.form.get('active-set')
@@ -157,10 +154,8 @@ def finish_order(order_id):
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
 @login_required
 def add_set(canteen_id):
-    if current_user.auth_type != 2:
+    if current_user.auth_type > 1:
         return 'Not Authorized', 403
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
 
     if request.method == 'POST':
         _set_name = request.form.get('set-name')
@@ -199,8 +194,8 @@ def add_set(canteen_id):
 @app.route('/canteen_account/<canteen_id>/add/type', methods=['GET', 'POST'])
 @login_required
 def add_type(canteen_id):
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
 
     typename = ''
     if request.method == 'POST':
@@ -220,11 +215,9 @@ def add_type(canteen_id):
 
 @app.route('/canteen_account/<canteen_id>/edit/sets/<set_id>', methods=['GET', 'POST'])
 def edit_set(canteen_id, set_id):
-    if current_user.auth_type != 2:
+    if current_user.auth_type > 1:
         return 'Not Authorized', 403
-    
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+
 
     print("method")
     print(request.method)
@@ -276,8 +269,8 @@ def edit_set(canteen_id, set_id):
 
 @app.route('/canteen_account/<canteen_id>/add/menu/<typeID>', methods=['GET', 'POST'])
 def add_menu(canteen_id, typeID):
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
 
     def isFloat(num):
         try:
@@ -333,8 +326,8 @@ def add_menu(canteen_id, typeID):
 
 @app.route('/canteen_account/<canteen_id>/delete/<category>/<id>')
 def delete_item(canteen_id,category,id):
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
     if category == 'dishes':
         # delete from types
         target_dish = list(mongo.db.dishes.aggregate([
@@ -377,8 +370,8 @@ def edit_menu(canteen_id, menu_id):
         except:
             return False
     
-    if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
 
     if request.method == 'POST':
         # print(request.form)
