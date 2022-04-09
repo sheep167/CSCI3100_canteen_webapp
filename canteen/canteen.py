@@ -99,6 +99,25 @@ def menu_page(canteen_id):
         types = list(results)
     return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
 
+@app.route('/canteen_account/finish/<._id>', methods=['GET', 'POST'])
+@login_required
+def add_type(order_id):
+    typename = ''
+    if request.method == 'POST':
+        typename = request.form['typename']
+        if typename == '':
+            flash('Please add your type name', category='info')
+        if len(typename) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        else:
+            mongo.db.types.insert_one({
+                'name': typename,
+                'at_canteen': ObjectId(canteen_id),
+                'dishes': []
+            })
+        return redirect('/canteen_account/%s/menu' % canteen_id)
+    return render_template('canteen/add_type.html')
+
 
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
 @login_required
