@@ -21,7 +21,7 @@ mongo.db.users.insert_one(admin)
 
 # must be updated
 canteens_list = [
-    {'name': 'UC Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 150, 'menu': []},
+    {'name': 'UC Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '00:00', 'close_at': '23:59', 'capacity': 150, 'menu': []},
     {'name': 'NA Canteen', 'latitude': '22.4209998', 'longitude': '114.2086538', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': []},
     {'name': 'WYS Canteen', 'latitude': '22.4221426', 'longitude': '114.2027283', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 80, 'menu': []},
     {'name': 'SHHO Canteen', 'latitude': '22.4184238', 'longitude': '114.2097329', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 88, 'menu': []},

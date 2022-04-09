@@ -5,7 +5,7 @@ Canteen List
 {% endblock %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="../static/style/css/menu.css">
+<link rel="stylesheet" href="{{url_for('static', filename='style/css/menu.css')}}">
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@ Canteen List
     <div class="pl-4 pt-4 m-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 m-0 d-flex d-row">
             <div>Set</div>
-            <div class="ml-auto"><a class="btn btn-success" href="{{url_for('add_set')}}">Add Set</a></div>
+            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/set">Add Set</a></div>
         </div>
 
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
@@ -49,12 +49,11 @@ Canteen List
                                             {% endfor %}
                                             </tbody>
                                         {% endfor %}
-                                    </table>        
+                                    </table>     
                                 </div>
                                 <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
-                                    <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100" href='/canteen_account/edit/set/{{set._id}}'>Edit</a></div>
-                                    <div class="col-4 p-1"><a class="btn btn-warning btn-sm w-100" href="">Duplicate</a></div>
-                                    <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="">Delete</a></div>
+                                    <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100" href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
+                                    <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
                                 </div>
                             </div>
                         </label>
@@ -79,7 +78,7 @@ Canteen List
     <div class="container-fluid pt-4 pl-4 pb-4 m-0 pr-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 mb-3 d-flex d-row">
             <div>Type</div>
-            <div class="ml-auto"><a class="btn btn-success" href="{{url_for('add_type')}}">Add Type</a></div>
+            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/type">Add Type</a></div>
         </div>
         
         <div class="container-fluid pl-0 pr-0 d-flex flex-row flex-wrap">
@@ -98,7 +97,7 @@ Canteen List
                                     <th scope="col" class="align-middle" width="20%">Price</th>
                                     <th class="d-flex flex-row align-items-center">
                                         <div class="">Action</div>
-                                        <span class="ml-auto"><a class="btn btn-maincolor-semi" href="/canteen_account/add/menu/{{ type._id }}">Add Menu</a></span>
+                                        <span class="ml-auto"><a class="btn btn-maincolor-semi" href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">Add Menu</a></span>
                                     </th>
                                 </tr>
                             </thead>
@@ -113,8 +112,8 @@ Canteen List
                                             <td>${{ dish.price }}</td>
                                             <td class="text-left">
                                                 <div>
-                                                    <span><a href="" class="btn btn-primary">Edit</a></span>
-                                                    <span><a href="" class="btn btn-danger">Delete</a></span>
+                                                    <span><a href="/canteen_account/{{canteen_id}}/edit/menu/{{dish._id}}" class="btn btn-primary">Edit</a></span>
+                                                    <span><a href="/canteen_account/{{canteen_id}}/delete/dishes/{{dish._id}}" class="btn btn-danger">Delete</a></span>
                                                 </div>
                                             </td>
                                         </tr>

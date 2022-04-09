@@ -92,7 +92,7 @@ class Dishes:
         self.name = str(name)
         self.at_canteen = at_canteen  # ObjectId
         self.price = float(price)
-        self.in_type = None
+        self.in_type = None # typeId
         self.ingredients = ingredients  # List of str
         self.image_path = None
 
@@ -115,7 +115,7 @@ class Orders:
         self.at_canteen = created_at_canteen  # ObjectId
         self.dishes = food  # List of ObjectId
         self.total_price = total_price  # float
-        self.order_status = 'waiting'  # waiting, fulfilled, unfulfilled
+        self.order_status = 'waiting'  # just arrive, normal, rush, finished
 
     def to_json(self):
         return self.__dict__

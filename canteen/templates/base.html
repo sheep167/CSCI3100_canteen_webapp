@@ -47,10 +47,10 @@
                   </li>
                   {% elif current_user.auth_type == 2 %}
                   <li class="{{'nav-item active' if active_page == 'Order' else 'nav-item'}}">
-                    <a class="nav-link" href="/canteen_account/order">Order</a>
+                    <a class="nav-link" href="/canteen_account/{{current_user._id}}/order">Order</a>
                   </li>
                   <li class="{{'nav-item active' if active_page == 'Menu' else 'nav-item'}}">
-                      <a class="nav-link" href="/canteen_account/menu">Menu</a>
+                      <a class="nav-link" href="/canteen_account/{{current_user.staff_of}}/menu">Menu</a>
                   </li>
                     {% endif %}
                   {% endif %}
