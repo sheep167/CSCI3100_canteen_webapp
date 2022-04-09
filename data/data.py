@@ -35,11 +35,11 @@ users_list = [
     {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
     {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"UC Canteen"},
-    {'email': 'test@na.com', 'password': '123456', 'username': 'na', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"NA Canteen"},
-    {'email': 'test@wys.com', 'password': '123456', 'username': 'wys', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"WYS Canteen"},
-    {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"SHHO Canteen"},
-    {'email': 'test@lws.com', 'password': '123456', 'username': 'lws', 'auth_type': 2, 'confirmed': 1, 'balance': 10000, 'staff_of':"LWS Canteen"},
+    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"UC Canteen"},
+    {'email': 'test@na.com', 'password': '123456', 'username': 'na', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"NA Canteen"},
+    {'email': 'test@wys.com', 'password': '123456', 'username': 'wys', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"WYS Canteen"},
+    {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"SHHO Canteen"},
+    {'email': 'test@lws.com', 'password': '123456', 'username': 'lws', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"LWS Canteen"},
 ]
 for user in users_list:
     user['password'] = bcrypt.hashpw(user.get('password').encode('utf-8'), bcrypt.gensalt())
