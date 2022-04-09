@@ -53,24 +53,6 @@ for user in users_list:
 
 mongo.db.users.insert_many(users_list)
 
-
-#testing only
-orders_list = [
-    {'at_time': '15.00', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '100', 'waiting': 'red'},
-    {'at_time': '15.01', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '200', 'waiting': 'red'},
-    {'at_time': '15.10', 'by_user': 'test1', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '500', 'waiting': 'yellow'},
-    {'at_time': '15.20', 'by_user': 'test2', 'at_canteen': 'UC Canteen', 'dishes': None, 'total_price': '750', 'waiting': 'yellow'},
-    {'at_time': '15.30', 'by_user': 'test2', 'at_canteen': 'WYS Canteen', 'dishes': None, 'total_price': '390', 'waiting': 'yellow'},
-]
-
-for order in orders_list:
-    result = mongo.db.canteens.aggregate([
-                {'$match': {"name": order['at_canteen']}},
-            ])
-    order['at_canteen'] = list(result)[0]['_id']
-
-mongo.db.orders.insert_many(orders_list)
-
 types_list=[
     {'name':'type a', 'at_canteen':'UC Canteen', 'dishes':None},
     {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
