@@ -261,7 +261,8 @@ def canteen_page(_id):
             {'at_time': 1,
              'paragraph': 1,
              'rating': 1,
-             'by_user.username': 1
+             'by_user.username': 1,
+             'by_user.image_path': 1
         }}
     ])
     comments = list(results)
@@ -314,7 +315,11 @@ def canteen_page(_id):
         for dish in canteen.get('menu'):
             if dish.get('image_path'):
                 dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
-        
+
+        for comment in comments:
+            print(comment)
+            if comment.get('by_user').get('image_path'):
+                comment['by_user']['image_path'] = comment.get('by_user').get('image_path').replace(' ', '%20').replace('./canteen', '')
         
         return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments, cart=cart)
     else:

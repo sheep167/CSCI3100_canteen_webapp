@@ -23,54 +23,52 @@ Canteen List
         </div>
 
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
-            <form method="POST" class="col-lg-3 col-12 col-md-6 p-0 mr-3 mb-3"></form>
-            {% if sets %}
-            {% for set in sets %}
-
-            <input value="{{set.name}}" name="active-set" style="display: none;">
-            <button type="submit" class="labl mx-2 mb-2" style="max-width: 300px;">
-                <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
-                    <div class="pt-2 m-0 ">
-                        <div class="d-flex mb-2 pt-2">
-                            <div class="m-0 h4 text-left">{{set.name}}</div>
-                        </div>
-                        <div class="container-fluid my-1">
-                            <div style="max-height: 300px; overflow: auto;">
-                                <div class="">
-                                    {% for type_name in set.types %}
-                                    <table class="table mx-0 mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">{{type_name}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for dish_name in set.types[type_name] %}
-                                            <tr>
-                                                <th scope="row">{{loop.index}}</th>
-                                                <td>{{dish_name}}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                    {% endfor %}
+            <form method="POST" class="">
+                {% if sets %}
+                {% for set in sets %}
+                <input value="{{set.name}}" name="active-set" style="display: none;">
+                <button type="submit" class="labl mx-2 mb-2" style="max-width: 300px;">
+                    <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
+                        <div class="pt-2 m-0 ">
+                            <div class="d-flex mb-2 pt-2">
+                                <div class="m-0 h4 text-left">{{set.name}}</div>
+                            </div>
+                            <div class="container-fluid my-1">
+                                <div style="max-height: 300px; overflow: auto;">
+                                    <div class="">
+                                        {% for type_name in set.types %}
+                                        <table class="table mx-0 mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">{{type_name}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for dish_name in set.types[type_name] %}
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{dish_name}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div id="editdelete" class="mt-3 mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
+                            <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100"
+                                    href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
+                            <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100"
+                                    href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
+                        </div>
                     </div>
-                    <div id="editdelete" class="mt-3 mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
-                        <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100"
-                                href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
-                        <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100"
-                                href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
-                    </div>
-                </div>
-                </buttton>
-
-                {% endfor %}
-                {% endif %}
-                </form>
+                    </buttton>
+                    {% endfor %}
+                    {% endif %}
+            </form>
         </div>
     </div>
 </div>
