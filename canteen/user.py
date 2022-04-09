@@ -428,7 +428,7 @@ def create_order(canteen_name, total_price):
 
     order = {
         'at_time': datetime.datetime.now(),
-        'order_status': 'waiting',
+        'order_status': 'just arrive',
         'dishes': target.get('cart'),
         'total_price': total_price,
         'at_canteen': ObjectId(canteen_id),

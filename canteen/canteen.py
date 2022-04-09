@@ -69,6 +69,14 @@ def order_page(canteen_id):
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
         orders = list(results)
+
+        for order in orders :
+            duration = datetime.datetime.now() - order['at_time']
+            if duration >= 15 * 60 :
+                order['order_status'] = 'rush'
+            elif duration >= 5 * 60 :
+                order['order_status'] = 'normal'
+
     return render_template('canteen/order.html', orders=orders)
 
 
@@ -99,24 +107,16 @@ def menu_page(canteen_id):
         types = list(results)
     return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
 
-@app.route('/canteen_account/finish/<._id>', methods=['GET', 'POST'])
+@app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
-def add_type(order_id):
-    typename = ''
-    if request.method == 'POST':
-        typename = request.form['typename']
-        if typename == '':
-            flash('Please add your type name', category='info')
-        if len(typename) >= 300:
-            flash('300 characters limit exceeded', category='warning')
-        else:
-            mongo.db.types.insert_one({
-                'name': typename,
-                'at_canteen': ObjectId(canteen_id),
-                'dishes': []
-            })
-        return redirect('/canteen_account/%s/menu' % canteen_id)
-    return render_template('canteen/add_type.html')
+def finish_order(order_id):
+    if request.method == 'GET':
+        order = mongo.db.orders.aggregate([
+            {'$match': {'_id': ObjectId(order_id)}}
+        ])
+        order['order_status'] = 'finished'
+
+    return redirect('/canteen_account/%s/order' % order['at_canteen'])
 
 
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
