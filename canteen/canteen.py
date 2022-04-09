@@ -74,13 +74,41 @@ def order_page(canteen_id):
 
     return render_template('canteen/order.html', orders=orders)
 
+
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
 def menu_page(canteen_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
     if current_user.auth_type == 2:
-        canteen_id=current_user.staff_of
+        canteen_id=current_user.staff_of    
+
+    if request.method == 'POST':
+        set_name=request.form.get('active-set')
+
+        _set=list(mongo.db.sets.aggregate([
+            {'$match':{'name':set_name}}
+        ]))[0]
+        
+        target_types=_set['types']
+        print(target_types)
+        at_canteen=_set['at_canteen']
+
+        active_dishes_id=[]
+        for _type in target_types:
+            for dish_name in target_types[_type]:
+                dish_id=list(mongo.db.dishes.aggregate([
+                    {'$match':{'name':dish_name}}
+                ]))[0]['_id']
+                active_dishes_id.append(dish_id)
+
+        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'menu' : active_dishes_id}})
+
+        
+
+
+        return redirect('/canteen_account/%s/menu' % canteen_id)    
+
     if request.method == 'GET':
         results = mongo.db.sets.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
@@ -91,7 +119,7 @@ def menu_page(canteen_id):
             for _type in _set['types']:
                 if len(_set['types'][_type]) == 0:
                     to_remove.append(_type)
-
+ 
             for _type in to_remove:
                 del _set['types'][_type]
 
@@ -100,7 +128,6 @@ def menu_page(canteen_id):
         ])
         types = list(results)
     return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
-
 
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
@@ -265,7 +292,8 @@ def add_menu(canteen_id, typeID):
                 'name': str(menuName),
                 'at_canteen': ObjectId(canteen_id),
                 'price': float(price),
-                'in_type': ObjectId(typeID)
+                'in_type': ObjectId(typeID),
+                'ingredients':[]
             })
 
             dish_id = list(mongo.db.dishes.aggregate([
