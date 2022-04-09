@@ -29,12 +29,16 @@ def home():
             {'from': 'orders',
              'localField': '_id',
              'foreignField': 'at_canteen',
-             'as': 'order_num'}}
+             'as': 'order'}}
     ])
     crowd = list(results)
 
     for canteen in crowd :
-        canteen['order_num'] = len(canteen['order_num'])
+        canteen['order_num'] = 0
+        for order in canteen['order'] :
+            if order['order_status'] != 'finished' :
+                canteen['order_num'] += 1
+
         if canteen['order_num'] >= 30 :
             canteen['crowd'] = 'busy'
         elif canteen['order_num'] >= 15 :
@@ -45,7 +49,6 @@ def home():
             if can['_id'] == canteen['_id'] :
                 can['crowd'] = canteen['crowd']
 
-    
     results = mongo.db.canteens.aggregate([
         {'$lookup':
             {'from': 'comments',

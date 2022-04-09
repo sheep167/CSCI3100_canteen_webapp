@@ -72,7 +72,17 @@ def order_page(canteen_id):
     
 
     for order in orders :
-        print(order['at_time'])
+        time = datetime.datetime.strptime(order['at_time'][2:], '%y-%m-%d %H:%M:%S')
+        print(datetime.datetime.now())
+        duration = datetime.datetime.now() - time
+        duration_in_s = duration.total_seconds()      
+        print(duration_in_s)
+        if duration_in_s >= 15 * 60 :
+            order['order_status'] = 'rush'
+        elif duration_in_s >= 5 * 60 :
+            order['order_status'] = 'normal'
+        mongo.db.orders.update_one({'_id': ObjectId(order['_id'])}, {'$set': {'order_status' : order['order_status']}})
+
 
     return render_template('canteen/order.html', orders=orders)
 
