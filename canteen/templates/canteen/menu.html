@@ -9,15 +9,17 @@ Canteen List
 {% endblock %}
 
 {% block content %}
-  <div id="cat-1" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 headblock" style="max-width: 100%;">
+<div id="cat-1" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Menu Edits</div>
-  </div>
+</div>
 
-  <div id="cat-2" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
+<div id="cat-2" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 block"
+    style="background-color:rgb(255, 255, 255); max-width: 100%;">
     <div class="pl-4 pt-4 m-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 m-0 d-flex d-row">
             <div>Set</div>
-            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/set">Add Set</a></div>
+            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/set">Add Set</a>
+            </div>
         </div>
 
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
@@ -61,78 +63,138 @@ Canteen List
                 </form>
                 {% endfor %}
             {% endif %}
-            
         </div>
+            
+        <!-- <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap justify-content-">
+            <form>
+                {% if sets %}
+                {% for set in sets %}
+                <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
+                    <input type="radio" name="set" value="set1" checked="checked">
+                    <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                        <div class="pt-2 m-0 ">
+                            <div class="d-flex mb-2 pt-2">
+                                <div class="m-0 h4 text-left">{{set.name}}</div>
+                            </div>
+                            <div class="container-fluid my-1">
+                                {% for type_name in set.types %}
+                                <div class="">
+                                    <table class="table mx-0 mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">{{type_name}}</th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                                <div style="max-height: 150px; overflow: auto;">
+                                    <table class="table mx-0 mb-0">
+                                        <tbody>
+                                            {% for dish_name in set.types[type_name] %}
+                                            <tr>
+                                                <th scope="row">{{loop.index}}</th>
+                                                <td>{{dish_name}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
+                            <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100"
+                                    href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
+                            <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100"
+                                    href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
+                        </div>
+                    </div>
+                </label>
+                {% endfor %}
+                {% endif %}
+            </form>
+        </div> -->
 
     </div>
 
 
-  </div>
+</div>
 
-  <div id="cat-3" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 block" style="background-color:rgb(255, 255, 255); max-width: 100%;">
-    
+<div id="cat-3" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 block"
+    style="background-color:rgb(255, 255, 255); max-width: 100%;">
+
 
     <div class="container-fluid pt-4 pl-4 pb-4 m-0 pr-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 mb-3 d-flex d-row">
             <div>Type</div>
-            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/type">Add Type</a></div>
+            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/type">Add Type</a>
+            </div>
         </div>
-        
+
         <div class="container-fluid pl-0 pr-0 d-flex flex-row flex-wrap">
-        <!-- Main Dish -->
+            <!-- Main Dish -->
 
-        {% if types %}
+            {% if types %}
             {% for type in types %}
-                <div class="mb-4 col-6">
-                    <div class="h5 text-maincolor"> {{ type.name }} </div>
-                    <div class="block mr-4">
-                        <table class="table m-0 p-0" >
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="align-middle" width="10%">#</th>
-                                    <th scope="col" class="align-middle" width="20%">{{ type.name }}</th>
-                                    <th scope="col" class="align-middle" width="20%">Price</th>
-                                    <th class="d-flex flex-row align-items-center">
-                                        <div class="">Action</div>
-                                        <span class="ml-auto"><a class="btn btn-maincolor-semi" href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">Add Menu</a></span>
-                                        <span class="ml-auto"><a class="btn btn-danger" href="/canteen_account/{{canteen_id}}/delete/types/{{ type._id }}">Delete Type</a></span>
-                                    </th>
-                                </tr>
-                            </thead>
+            <div class="mb-4 col-6">
+                <div class="h5 text-maincolor"> {{ type.name }} </div>
+                <div class="block mr-4">
+                    <table class="table m-0 p-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="align-middle" width="10%">#</th>
+                                <th scope="col" class="align-middle" width="20%">{{ type.name }}</th>
+                                <th scope="col" class="align-middle" width="20%">Price</th>
+                                <th class="d-flex flex-row align-items-center">
+                                    <div class="">Action</div>
+                                    <span class="ml-auto"><a class="btn btn-maincolor-semi"
+                                            href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">Add
+                                            Menu</a></span>
+                                    <span class="ml-auto"><a class="btn btn-danger"
+                                            href="/canteen_account/{{canteen_id}}/delete/types/{{ type._id }}">Delete
+                                            Type</a></span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="max-height: 252px; overflow: auto;">
+                        <table class="table m-0 p-0">
+                            {% if type.dishes %}
+                            {% for dish in type.dishes %}
+                            <tr>
+                                <th scope="row">{{loop.index}}</th>
+                                <td>{{ dish.name }}</td>
+                                <td>${{ dish.price }}</td>
+                                <td class="text-left">
+                                    <div>
+                                        <span><a href="/canteen_account/{{canteen_id}}/edit/menu/{{dish._id}}"
+                                                class="btn btn-primary">Edit</a></span>
+                                        <span><a href="/canteen_account/{{canteen_id}}/delete/dishes/{{dish._id}}"
+                                                class="btn btn-danger">Delete</a></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
                         </table>
-                        <div style="max-height: 252px; overflow: auto;">
-                            <table class="table m-0 p-0">
-                                {% if type.dishes %}
-                                    {% for dish in type.dishes %}
-                                        <tr>
-                                            <th scope="row">{{loop.index}}</th>
-                                            <td>{{ dish.name }}</td>
-                                            <td>${{ dish.price }}</td>
-                                            <td class="text-left">
-                                                <div>
-                                                    <span><a href="/canteen_account/{{canteen_id}}/edit/menu/{{dish._id}}" class="btn btn-primary">Edit</a></span>
-                                                    <span><a href="/canteen_account/{{canteen_id}}/delete/dishes/{{dish._id}}" class="btn btn-danger">Delete</a></span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </table>
-                        </div>
-                
                     </div>
+
                 </div>
+            </div>
             {% endfor %}
-        {% endif %}
+            {% endif %}
 
-        
 
-    
+
+
+
+        </div>
 
     </div>
 
-  </div>
 
 
-
-{% endblock %}
+    {% endblock %}
