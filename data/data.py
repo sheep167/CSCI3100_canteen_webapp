@@ -21,10 +21,10 @@ mongo.db.users.insert_one(admin)
 
 # must be updated
 canteens_list = [
-    {'name': 'UC Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '00:00', 'close_at': '23:59', 'capacity': 150, 'menu': [], 'image_path': "/data/image/UC/UC.jpeg"},
-    {'name': 'NA Canteen', 'latitude': '22.4209998', 'longitude': '114.2086538', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': [], 'image_path': "/data/image/NA/NA.jpg"},
-    {'name': 'WYS Canteen', 'latitude': '22.4221426', 'longitude': '114.2027283', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 80, 'menu': [], 'image_path': "/data/image/WYS/WYS.jpg"},
-    {'name': 'SHHO Canteen', 'latitude': '22.4184238', 'longitude': '114.2097329', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 88, 'menu': [], 'image_path': "/data/image/SHHO/SHHO.jpg"},
+    {'name': 'UC Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '00:00', 'close_at': '23:59', 'capacity': 150, 'menu': [], 'image_path': "/static/images/UC/UC.jpeg"},
+    {'name': 'NA Canteen', 'latitude': '22.4209998', 'longitude': '114.2086538', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': [], 'image_path': "/static/images/NA/NA.jpg"},
+    {'name': 'WYS Canteen', 'latitude': '22.4221426', 'longitude': '114.2027283', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 80, 'menu': [], 'image_path': "/static/images/WYS/WYS.jpg"},
+    {'name': 'SHHO Canteen', 'latitude': '22.4184238', 'longitude': '114.2097329', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 88, 'menu': [], 'image_path': "/static/images/SHHO/SHHO.jpg"},
     {'name': 'LWS Canteen', 'latitude': '22.4224862', 'longitude': '114.2043131', 'open_at': '9:00', 'close_at': '17:00', 'capacity': 85, 'menu': []},
     {'name': 'Benjamin Franklin Centre Coffee Corner', 'latitude': '22.41897632210143', 'longitude': '114.20552342698697', 'open_at': '10:00', 'close_at': '18:00', 'capacity': 200, 'menu': []},
     {'name': 'Chung Chi College Staff Club', 'latitude': '22.416174502784415', 'longitude': '114.20768162415987', 'open_at': '11:00', 'close_at': '15:25', 'capacity': 70, 'menu': []},
