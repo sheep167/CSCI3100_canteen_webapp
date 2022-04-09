@@ -17,6 +17,7 @@ div.comment {
   font-weight: 400;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border: 0;
+  position: relative;
 }
 
 div.comment:hover {
@@ -66,4 +67,8 @@ thead {
   background-color: #ffd6bb;
 }
 
+#editdelete {
+  position: absolute;
+  bottom: 0;
+}
 /*# sourceMappingURL=menu.css.map */
