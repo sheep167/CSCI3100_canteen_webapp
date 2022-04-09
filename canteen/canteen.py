@@ -51,11 +51,9 @@ def canteen_home():
 
     return render_template('canteen/canteen_home.html', data=data, dishes=dishes, revenue=revenue)
 
-
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     return render_template('canteen/canteen_account.html')
-
 
 @app.route('/canteen_account/<canteen_id>/order', methods=['GET', 'POST'])
 @login_required
@@ -75,7 +73,6 @@ def order_page(canteen_id):
         print(order['at_time'])
 
     return render_template('canteen/order.html', orders=orders)
-
 
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
@@ -115,7 +112,6 @@ def finish_order(order_id):
 
     return redirect('/canteen_account/%s/order' % order['at_canteen'])
 
-
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
 @login_required
 def add_set(canteen_id):
@@ -137,11 +133,15 @@ def add_set(canteen_id):
             for _type in types:
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
+            
+            sets_num = len(list(mongo.db.sets.aggregate([])))
+            print(sets_num)
 
             mongo.db.sets.insert_one({
                 'name': _set_name,
                 'at_canteen': ObjectId(canteen_id),
-                'types': _dish_dict
+                'types': _dish_dict,
+                'active': 0
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
@@ -153,7 +153,6 @@ def add_set(canteen_id):
         types = list(results)
 
     return render_template('canteen/add_set.html', canteen_id=canteen_id, types=types)
-
 
 @app.route('/canteen_account/<canteen_id>/add/type', methods=['GET', 'POST'])
 @login_required
@@ -176,7 +175,6 @@ def add_type(canteen_id):
             })
         return redirect('/canteen_account/%s/menu' % canteen_id)
     return render_template('canteen/add_type.html')
-
 
 @app.route('/canteen_account/<canteen_id>/edit/sets/<set_id>', methods=['GET', 'POST'])
 def edit_set(canteen_id, set_id):
@@ -230,7 +228,6 @@ def edit_set(canteen_id, set_id):
         print(type_with_indicated)
     return render_template('canteen/edit_set.html', canteen_id=canteen_id, type_with_indicated=type_with_indicated,
                            _set=_set)
-
 
 @app.route('/canteen_account/<canteen_id>/add/menu/<typeID>', methods=['GET', 'POST'])
 def add_menu(canteen_id, typeID):
