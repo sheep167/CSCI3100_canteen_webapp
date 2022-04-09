@@ -101,6 +101,7 @@ def menu_page(canteen_id):
         types = list(results)
     return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
 
+
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
@@ -108,9 +109,14 @@ def finish_order(order_id):
         order = mongo.db.orders.aggregate([
             {'$match': {'_id': ObjectId(order_id)}}
         ])
-        order['order_status'] = 'finished'
 
-    return redirect('/canteen_account/%s/order' % order['at_canteen'])
+        order = list(order)
+
+        print(order_id)
+
+        mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
+
+    return redirect('/canteen_account/%s/order' % order[0]['at_canteen'])
 
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
 @login_required

@@ -25,6 +25,7 @@
                 <div id="cardLate" class="card ml-2 mr-2">
                     <div class="card-body">
                         <div class="row ml-3 mt-1">
+                            <div>{{order._id}}</div>
                             <p><b>Customer ID: {{ order.by_user }}</b><br>
                                 <b>Ordered Time: {{ order.at_time }}</b>
                             </p>
@@ -46,11 +47,6 @@
                                         <tbody>
                                             {% if order.dishes %}
                                             {% for dish in order.dishes %}
-                                            <tr>
-                                                <!--Not sure about data structure: need editing-->
-                                                <td>{{ dish }}</td>
-                                                <td>{{ dishes[dish] }}</td>
-                                            </tr>
                                             {% endfor %}
                                             {% endif %}
                                         </tbody>
@@ -66,10 +62,28 @@
                             </div>
                             <div class="col-6">
                                 <div class="container-fluid">
+                                    <div>{{order._id}}</div>
                                     <a class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModal" href="/canteen_account/finish/{{order._id}}">
-                                        Finish
+                                        data-target="#exampleModal" >
+                                        Finish 
                                     </a>
+
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <h5>Have you finished this order?</h5>
+                                                    <div>{{order._id}}</div>
+                                                    <div class="container-fluid mt-2">
+                                                        <a class="btn btn-success mx-2" href="/canteen_account/finish/{{order._id}}">Yes</a>
+                                                        <button type="button" class="btn btn-danger">No</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
