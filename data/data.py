@@ -31,8 +31,8 @@ canteens_list = [
 mongo.db.canteens.insert_many(canteens_list)
 
 users_list = [
-    {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 1, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
+    {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"UC Canteen"},
