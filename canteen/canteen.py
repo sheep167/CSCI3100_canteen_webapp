@@ -315,13 +315,17 @@ def delete_item(canteen_id,category,id):
 
         # delete from dishes
         mongo.db.dishes.delete_one({"_id": ObjectId(id)})        
-        
+    elif category == 'types':
+        mongo.db.types.delete_one({"_id": ObjectId(id)})
+
+        mongo.db.dishes.delete_many([
+            {'$match': {'in_type': ObjectId(id)}}
+        ])
+
     else:
         mongo.db[category].delete_one({"_id": ObjectId(id)})
         
     return redirect('/canteen_account/%s/menu' % canteen_id)
-
-
 
 @app.route('/canteen_account/<canteen_id>/edit/menu/<menu_id>', methods=['GET','POST'])
 def edit_menu(canteen_id, menu_id):

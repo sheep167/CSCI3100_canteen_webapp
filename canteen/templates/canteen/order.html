@@ -5,11 +5,11 @@
 Order List
 {% endblock %}
 {% block stylesheet %}
-<link rel="stylesheet" href="../static/style/css/order.css">
+<link rel="stylesheet" href="{{url_for('static',filename='style/css/order.css')}}">
 {% endblock %}
 
 {% block content %}
-<script src="../../static/style/js/finishedorder.js"></script>
+<script src="{{url_for('static',filename='style/js/finishedorder.js')}}"></script>
 
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Order Management</div>
