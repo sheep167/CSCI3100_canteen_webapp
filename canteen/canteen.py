@@ -62,6 +62,8 @@ def canteen_account():
 def order_page(canteen_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
     if request.method == 'GET':
         results = mongo.db.orders.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
@@ -75,6 +77,8 @@ def order_page(canteen_id):
 def menu_page(canteen_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
     if request.method == 'GET':
         results = mongo.db.sets.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
@@ -120,6 +124,8 @@ def add_type(order_id):
 def add_set(canteen_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
 
     if request.method == 'POST':
         _set_name = request.form.get('set-name')
@@ -155,6 +161,9 @@ def add_set(canteen_id):
 @app.route('/canteen_account/<canteen_id>/add/type', methods=['GET', 'POST'])
 @login_required
 def add_type(canteen_id):
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
+
     typename = ''
     if request.method == 'POST':
         typename = request.form['typename']
@@ -172,14 +181,20 @@ def add_type(canteen_id):
     return render_template('canteen/add_type.html')
 
 
-@app.route('/canteen_account/<canteen_id>/edit/set/<set_id>', methods=['GET', 'POST'])
+@app.route('/canteen_account/<canteen_id>/edit/sets/<set_id>', methods=['GET', 'POST'])
 def edit_set(canteen_id, set_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
+    
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
 
+    print("method")
+    print(request.method)
     if request.method == 'POST':
         _set_name = request.form.get('set-name')
-
+        print("hello")
+        print(_set_name)
         if _set_name == '':
             flash('Please add your set name', category='info')
         else:
@@ -191,9 +206,10 @@ def edit_set(canteen_id, set_id):
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
             print(checkboxAns)
-            mongo.db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict}})
+            print(_set_name)
+            mongo.db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict, 'name':_set_name} })
 
-            return redirect('/canteen_account/menu')
+            return redirect('/canteen_account/%s/menu' % canteen_id)
 
     # types=[]
     if request.method == 'GET':
@@ -221,6 +237,9 @@ def edit_set(canteen_id, set_id):
 
 @app.route('/canteen_account/<canteen_id>/add/menu/<typeID>', methods=['GET', 'POST'])
 def add_menu(canteen_id, typeID):
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
+
     def isFloat(num):
         try:
             float(num)
@@ -240,6 +259,8 @@ def add_menu(canteen_id, typeID):
         if not isFloat(price):
             flash('Please input your price as a number', category='warning')
         else:
+
+            # update dishes
             mongo.db.dishes.insert_one({
                 'name': str(menuName),
                 'at_canteen': ObjectId(canteen_id),
@@ -247,6 +268,11 @@ def add_menu(canteen_id, typeID):
                 'in_type': ObjectId(typeID)
             })
 
+            dish_id = list(mongo.db.dishes.aggregate([
+                {'$match': {'name':str(menuName)}}
+            ]))[0]['_id']
+
+            # update types
             results = list(mongo.db.types.aggregate([
                 {'$match': {'_id': ObjectId(typeID)}}
             ]))
@@ -256,16 +282,110 @@ def add_menu(canteen_id, typeID):
                 'name': str(menuName),
                 'at_canteen': ObjectId(canteen_id),
                 'price': float(price),
-                'in_type': ObjectId(typeID)
+                'in_type': ObjectId(typeID),
+                '_id': ObjectId(dish_id)
             })
 
             mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
 
             return redirect('/canteen_account/%s/menu' % canteen_id)
-    return render_template('canteen/add_menu.html', canteen_id=canteen_id)
+    return render_template('canteen/add_menu.html')
+
+@app.route('/canteen_account/<canteen_id>/delete/<category>/<id>')
+def delete_item(canteen_id,category,id):
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
+    if category == 'dishes':
+        # delete from types
+        target_dish = list(mongo.db.dishes.aggregate([
+            {'$match': { '_id' : ObjectId(id) }},
+        ]))[0]
+
+        in_type = target_dish['in_type']
+        print(target_dish)
+        target_type = list(mongo.db.types.aggregate([
+            {'$match': { '_id': ObjectId(in_type) }},
+        ]))[0]
+
+        dishes = target_type["dishes"]
+        new_dishes = []
+        for _dish in dishes:
+            print(_dish)
+            if _dish["_id"] == ObjectId(id):
+                continue
+            new_dishes.append(_dish)
+        mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
+
+        # delete from dishes
+        mongo.db.dishes.delete_one({"_id": ObjectId(id)})        
+        
+    else:
+        mongo.db[category].delete_one({"_id": ObjectId(id)})
+        
+    return redirect('/canteen_account/%s/menu' % canteen_id)
 
 
-@app.route('/canteen_account/<canteen_id>/edit/menu')
-def edit_menu(canteen_id):
-    return render_template('canteen/edit_menu.html', canteen_id=canteen_id)
+
+@app.route('/canteen_account/<canteen_id>/edit/menu/<menu_id>', methods=['GET','POST'])
+def edit_menu(canteen_id, menu_id):
+    def isFloat(num):
+        try:
+            float(num)
+            return True
+        except:
+            return False
+    
+    if current_user.auth_type == 2:
+        canteen_id=current_user.staff_of
+
+    if request.method == 'POST':
+        print(request.form)
+        menuName=request.form['menu-name']
+        price=request.form['price']
+        if menuName == '':
+            flash('Please add your menu name', category='info')
+        if len(menuName) >= 300:
+            flash('300 characters limit exceeded', category='warning')
+        if price == '':
+            flash('Please input your menu price', category='info')
+        if not isFloat(price):
+            flash('Please input your price as a number', category='warning')
+        else:
+            # update in dishes
+            in_type = list(mongo.db.dishes.aggregate([
+                {'$match':{'_id':ObjectId(menu_id)}}
+            ]))[0]['in_type']
+
+            mongo.db.dishes.update_one({'_id': ObjectId(menu_id)},{
+                '$set':{'name': str(menuName),
+                'price':float(price),
+                }
+            })
+
+            # update in types
+            dishes = list( mongo.db.types.aggregate([
+                { '$match' : { '_id' : ObjectId(in_type) } }
+            ]))[0]['dishes']
+            
+            for i in range(len(dishes)):
+                if dishes[i]['_id'] == ObjectId(menu_id):
+                    del dishes[i]['_id']
+                    break
+
+            dishes.append({
+                'name': str(menuName),
+                'at_canteen': current_user.staff_of,
+                'price':float(price),
+                'in_type':ObjectId(in_type),
+                '_id':ObjectId(menu_id)
+            })
+
+            mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': dishes}})
+            return redirect('/canteen_account/menu')
+    if request.method == 'GET':
+        menu=list(mongo.db.dishes.aggregate([
+            { '$match' : { '_id' : ObjectId(menu_id) } }
+        ]))[0]
+        
+    return render_template('canteen/edit_menu.html', canteen_id=canteen_id, menu=menu)
 
