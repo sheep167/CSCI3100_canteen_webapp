@@ -58,7 +58,7 @@ def canteen_account():
 @app.route('/canteen_account/<canteen_id>/order', methods=['GET', 'POST'])
 @login_required
 def order_page(canteen_id):
-    if current_user.auth_type != 2:
+    if current_user.auth_type != 1:
         return 'Not Authorized', 403
     if current_user.auth_type == 2:
         canteen_id=current_user.staff_of
@@ -83,7 +83,6 @@ def order_page(canteen_id):
 
 
     return render_template('canteen/order.html', orders=orders)
-
 
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
@@ -263,8 +262,11 @@ def edit_set(canteen_id, set_id):
             for_type = [_type['name']]
             for_type.append([])
             for dish in _type['dishes']:
-                if dish['name'] in _set['types'][_type['name']]:
-                    for_type[1].append([dish['name'], 1])
+                if _set['types']:
+                    if dish['name'] in _set['types'][_type['name']]:
+                        for_type[1].append([dish['name'], 1])
+                    else:
+                        for_type[1].append([dish['name'], 0])
                 else:
                     for_type[1].append([dish['name'], 0])
             type_with_indicated.append(for_type)

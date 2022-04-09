@@ -36,6 +36,7 @@ def home():
     for canteen in crowd :
         canteen['order_num'] = 0
         for order in canteen['order'] :
+            print(order)
             if order['order_status'] != 'finished' :
                 canteen['order_num'] += 1
 
