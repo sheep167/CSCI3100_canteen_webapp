@@ -321,9 +321,7 @@ def delete_item(canteen_id,category,id):
     elif category == 'types':
         mongo.db.types.delete_one({"_id": ObjectId(id)})
 
-        mongo.db.dishes.delete_many([
-            {'$match': {'in_type': ObjectId(id)}}
-        ])
+        mongo.db.dishes.delete_many({'in_type': ObjectId(id)})
 
     else:
         mongo.db[category].delete_one({"_id": ObjectId(id)})
