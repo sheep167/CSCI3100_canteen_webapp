@@ -248,8 +248,8 @@ def add_menu(canteen_id, typeID):
             return False
 
     if request.method == 'POST':
-        menuName = request.form['menu-name']
-        price = request.form['price']
+        menuName = request.form.get('menu-name')
+        price = request.form.get('price')
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -339,9 +339,9 @@ def edit_menu(canteen_id, menu_id):
         canteen_id=current_user.staff_of
 
     if request.method == 'POST':
-        print(request.form)
-        menuName=request.form['menu-name']
-        price=request.form['price']
+        # print(request.form)
+        menuName=request.form.get('menu-name')
+        price=request.form.get('price')
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -366,12 +366,17 @@ def edit_menu(canteen_id, menu_id):
             dishes = list( mongo.db.types.aggregate([
                 { '$match' : { '_id' : ObjectId(in_type) } }
             ]))[0]['dishes']
+
+            print(dishes)
+            print(1)
             
             for i in range(len(dishes)):
+                # print(dishes[i])
                 if dishes[i]['_id'] == ObjectId(menu_id):
-                    del dishes[i]['_id']
+                    del dishes[i]
                     break
 
+            print(dishes)
             dishes.append({
                 'name': str(menuName),
                 'at_canteen': current_user.staff_of,
@@ -379,9 +384,9 @@ def edit_menu(canteen_id, menu_id):
                 'in_type':ObjectId(in_type),
                 '_id':ObjectId(menu_id)
             })
-
             mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': dishes}})
-            return redirect('/canteen_account/menu')
+            return redirect('/canteen_account/%s/menu' % canteen_id)
+
     if request.method == 'GET':
         menu=list(mongo.db.dishes.aggregate([
             { '$match' : { '_id' : ObjectId(menu_id) } }

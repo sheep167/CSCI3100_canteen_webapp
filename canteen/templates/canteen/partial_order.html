@@ -44,22 +44,15 @@
                                 <div style="max-height: 150px; overflow: auto;">
                                     <table class="table mx-0 mb-0">
                                         <tbody>
+                                            {% if order.dishes %}
+                                            {% for dish in order.dishes %}
                                             <tr>
-                                                <td>Dish 1</td>
-                                                <td>2</td>
+                                                <!--Not sure about data structure: need editing-->
+                                                <td>{{ dish }}</td>
+                                                <td>{{ dishes[dish] }}</td>
                                             </tr>
-                                            <tr>
-                                                <td>Dish 1</td>
-                                                <td>2</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Milk Tea Milk Tea</td>
-                                                <td>2</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Dish 1</td>
-                                                <td>2</td>
-                                            </tr>
+                                            {% endfor %}
+                                            {% endif %}
                                         </tbody>
                                     </table>
                                 </div>
