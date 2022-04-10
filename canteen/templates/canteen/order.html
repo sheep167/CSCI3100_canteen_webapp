@@ -10,6 +10,9 @@ Order List
 
 {% block content %}
 <script src="{{url_for('static',filename='style/js/finishedorder.js')}}"></script>
+<script>
+    setInterval(function() {location.reload()}, 30000);
+</script>
 
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Order Management</div>

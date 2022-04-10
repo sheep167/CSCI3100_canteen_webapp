@@ -23,105 +23,56 @@ Canteen List
         </div>
 
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
-            {% if sets %}
-                {% for set in sets %}
-                <form method="POST" class="col-lg-3 col-12 col-md-6 p-0 mr-3 mb-3">
-                    <input value="{{set.name}}" name="active-set" style="display: none;">
-                    <button type="submit" class="labl" style="max-width: 300px;">
-                    <!-- One Block -->
-                        <!-- <button name="set" value="set1" checked="checked"> -->
-                        <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
-                            <div class="pt-2 m-0 ">
-                                <div class="d-flex mb-2 pt-2">
-                                    <div class="m-0 h4 text-left">{{set.name}}</div>
-                                </div>
-                                <table class="table">
-                                    {% for type_name in set.types %}
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">{{type_name}}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for dish_name in set.types[type_name] %}
-                                            <tr>
-                                                <th scope="row">{{loop.index}}</th>
-                                                <td>{{dish_name}}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    {% endfor %}
-                                </table>     
-                            </div>
-                            <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
-                                <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100" href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
-                                <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100" href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
-                            </div>
-                        </div>
-                    </buttton>
-                </form>
-                {% endfor %}
-            {% endif %}
-        </div>
-            
-        <!-- <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap justify-content-">
-            <form>
+            <form method="POST" class="">
                 {% if sets %}
                 {% for set in sets %}
-                <label class="labl col-lg-3 col-12 col-md-6 p-0 mr-3" style="max-width: 300px;">
-                    <input type="radio" name="set" value="set1" checked="checked">
-                    <div class="comment btn w-100 pt-0 pl-3 mr-0" style="min-height: 140px;">
+                <input value="{{set.name}}" name="active-set" style="display: none;">
+                <button type="submit" class="labl mx-2 mb-2" style="max-width: 300px;">
+                    <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
                         <div class="pt-2 m-0 ">
                             <div class="d-flex mb-2 pt-2">
                                 <div class="m-0 h4 text-left">{{set.name}}</div>
                             </div>
                             <div class="container-fluid my-1">
-                                {% for type_name in set.types %}
-                                <div class="">
-                                    <table class="table mx-0 mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">{{type_name}}</th>
-                                            </tr>
-                                        </thead>
-
-                                    </table>
+                                <div style="max-height: 300px; overflow: auto;">
+                                    <div class="">
+                                        {% for type_name in set.types %}
+                                        <table class="table mx-0 mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">{{type_name}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for dish_name in set.types[type_name] %}
+                                                <tr>
+                                                    <th scope="row">{{loop.index}}</th>
+                                                    <td>{{dish_name}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                                <div style="max-height: 150px; overflow: auto;">
-                                    <table class="table mx-0 mb-0">
-                                        <tbody>
-                                            {% for dish_name in set.types[type_name] %}
-                                            <tr>
-                                                <th scope="row">{{loop.index}}</th>
-                                                <td>{{dish_name}}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                                {% endfor %}
                             </div>
                         </div>
-                        <div class="mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
+                        <div id="editdelete" class="mt-3 mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
                             <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100"
                                     href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
                             <div class="col-4 p-1"><a class="btn btn-danger btn-sm w-100"
                                     href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
                         </div>
                     </div>
-                </label>
-                {% endfor %}
-                {% endif %}
+                    </buttton>
+                    {% endfor %}
+                    {% endif %}
             </form>
-        </div> -->
-
+        </div>
     </div>
-
-
 </div>
+
 
 <div id="cat-3" class="mt-4 mb-4 ml-4 pt-0 pl-0 pr-0 pb-4 mr-3 block"
     style="background-color:rgb(255, 255, 255); max-width: 100%;">
@@ -130,7 +81,8 @@ Canteen List
     <div class="container-fluid pt-4 pl-4 pb-4 m-0 pr-0">
         <div class="container-fluid pr-4 pl-0 pt-0 pb-0 h1 mb-3 d-flex d-row">
             <div>Type</div>
-            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/type">Add Type</a>
+            <div class="ml-auto"><a class="btn btn-success" href="/canteen_account/{{canteen_id}}/add/type">Add
+                    Type</a>
             </div>
         </div>
 
@@ -160,7 +112,7 @@ Canteen List
                             </tr>
                         </thead>
                     </table>
-                    <div style="max-height: 252px; overflow: auto;">
+                    <div style="max-height: 250px; overflow: auto;">
                         <table class="table m-0 p-0">
                             {% if type.dishes %}
                             {% for dish in type.dishes %}

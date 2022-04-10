@@ -59,11 +59,11 @@ Canteen List
             <h4 class="font-weight-normal">Currently Opened</h4>
             {% if canteens_opened %}
             {% for canteen in canteens_opened %}
-            <div class="card mt-3 mb-5" data-aos="zoom-in-up">
+            <div class="card mt-3 mb-5 justify-content-center" style="max-width: 100%; height: 450px;" data-aos="zoom-in-up">
                 <div class="row g-0">
                     <div class="col-md-4" style="text-align: center;">
                         {% if canteen.image_path %}
-                        <img src="{{canteen.image_path}}" class="cover" alt="...">
+                        <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid" style="height: 450px" alt="...">
                         {% else %}
                         No Image for this canteen
                         {% endif %}
@@ -108,13 +108,14 @@ Canteen List
 
             <!--Canteen List (Currently Closed)-->
             <h4 class="font-weight-normal mt-4">Currently Closed</h4>
-            {% if canteens_opened %}
+            
+            {% if canteens_closed %}
             {% for canteen in canteens_closed %}
-            <div class="card mt-3 mb-5" data-aos="zoom-in-up">
+            <div class="card mt-3 mb-5 justify-content-center" style="max-width: 100%; height: 450px;" data-aos="zoom-in-up">
                 <div class="row g-0">
                     <div class="col-md-4" style="text-align: center;">
                         {% if canteen.image_path %}
-                        <img src="{{canteen.image_path}}" class="cover" alt="...">
+                        <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid" style="height: 450px;" alt="...">
                         {% else %}
                         No Image for this canteen
                         {% endif %}
