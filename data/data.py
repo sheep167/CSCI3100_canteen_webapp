@@ -21,7 +21,7 @@ mongo.db.users.insert_one(admin)
 
 # must be updated
 canteens_list = [
-    {'name': 'United College Student Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '11:00', 'close_at': '20.45', 'capacity': 150, 'menu': [], 'image_path': "/static/images/UC/UC.jpeg"},
+    {'name': 'United College Student Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '11:00', 'close_at': '20:45', 'capacity': 150, 'menu': [], 'image_path': "/static/images/UC/UC.jpeg"},
     {'name': 'NA Canteen', 'latitude': '22.4209998', 'longitude': '114.2086538', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': [], 'image_path': "/static/images/NA/NA.jpg"},
     {'name': 'WYS Canteen', 'latitude': '22.4221426', 'longitude': '114.2027283', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 80, 'menu': [], 'image_path': "/static/images/WYS/WYS.jpg"},
     {'name': 'SHHO Canteen', 'latitude': '22.4184238', 'longitude': '114.2097329', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 88, 'menu': [], 'image_path': "/static/images/SHHO/SHHO.jpg"},
@@ -37,7 +37,7 @@ users_list = [
     {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test3@test.com', 'password': '123456', 'username': 'test3', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test4@test.com', 'password': '123456', 'username': 'test4', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
-    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"UC Canteen"},
+    {'email': 'test@uc.com', 'password': '123456', 'username': 'uc', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"United College Student Canteen"},
     {'email': 'test@na.com', 'password': '123456', 'username': 'na', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"NA Canteen"},
     {'email': 'test@wys.com', 'password': '123456', 'username': 'wys', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"WYS Canteen"},
     {'email': 'test@shho.com', 'password': '123456', 'username': 'shho', 'auth_type': 1, 'confirmed': 1, 'balance': 10000, 'staff_of':"SHHO Canteen"},

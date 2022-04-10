@@ -66,6 +66,8 @@ def order_page(canteen_id):
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
         orders = list(results)
+
+        print(orders)
     
 
         for order in orders :
@@ -80,10 +82,13 @@ def order_page(canteen_id):
                 order['order_status'] = 'normal'
             mongo.db.orders.update_one({'_id': ObjectId(order['_id'])}, {'$set': {'order_status' : order['order_status']}})
 
-        results = mongo.db.orders.aggregate([
-            {'$match': {'at_canteen': ObjectId(canteen_id)}}
-        ])
-        orders = list(results)
+            counter = Counter(order['dishes'])
+            counted_dishes = []
+            for dish_id, count in counter.items():
+                counted_dishes.append([dish_id,count])
+
+            order['dishes'] = counted_dishes
+
     return render_template('canteen/order.html', orders=orders)
 
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
