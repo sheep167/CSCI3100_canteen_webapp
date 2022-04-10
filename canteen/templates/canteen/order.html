@@ -29,8 +29,8 @@ Order List
         <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
             <h2 class="mx-4">Finished Order</h2>
         </div>
-        {% if orders %}
         {% set count = namespace(value=0) %}
+        {% if orders %}
         {% for order in orders if order.order_status == 'finished' %}
         {% set count.value = count.value + 1 %}
         {% if (count.value) % 3 == 1 %}
