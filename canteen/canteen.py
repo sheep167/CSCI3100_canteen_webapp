@@ -1,5 +1,6 @@
 import datetime
 from collections import Counter
+import re
 from bson import ObjectId
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash, request
@@ -85,7 +86,12 @@ def order_page(canteen_id):
             counter = Counter(order['dishes'])
             counted_dishes = []
             for dish_id, count in counter.items():
-                counted_dishes.append([dish_id,count])
+                print('hello')
+                results = mongo.db.dishes.aggregate([
+                    {'$match': {'_id': ObjectId(dish_id)}}  # edit!!!
+                ])
+                dish = list(results)
+                counted_dishes.append([dish[0]['name'],count])
 
             order['dishes'] = counted_dishes
 
