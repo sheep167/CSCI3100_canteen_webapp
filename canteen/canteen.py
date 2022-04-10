@@ -386,8 +386,16 @@ def delete_item(canteen_id,category,id):
         # delete from dishes
         mongo.db.dishes.delete_one({"_id": ObjectId(id)})        
     elif category == 'types':
-        mongo.db.types.delete_one({"_id": ObjectId(id)})
+        target_type_name=list(mongo.db.types.aggregate([
+            {'$match':{'_id':ObjectId(id)}}
+        ]))[0]['name']
+        sets = list(mongo.db.sets.aggregate([]))
+        for _set in sets:
+            types_in_set = _set['types']
+            del types_in_set[target_type_name]
+            mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': types_in_set}})
 
+        mongo.db.types.delete_one({"_id": ObjectId(id)})
         mongo.db.dishes.delete_many({'in_type': ObjectId(id)})
 
     else:

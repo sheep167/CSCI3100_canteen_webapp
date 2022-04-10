@@ -57,15 +57,3 @@ for user in users_list:
         user['staff_of'] = list(results)[0]['_id']
 
 mongo.db.users.insert_many(users_list)
-
-types_list=[
-    {'name':'type a', 'at_canteen':'UC Canteen', 'dishes':None},
-    {'name':'type b', 'at_canteen':'SHHO Canteen', 'dishes':None}
-]
-
-mongo.db.types.insert_many(types_list)
-
-sets_list=[
-    {}
-]
-mongo.db.sets.insert_many(sets_list)
