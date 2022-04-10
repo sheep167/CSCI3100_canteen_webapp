@@ -4,7 +4,7 @@
 Canteen List
 {% endblock %}
 {% block stylesheet %}
-<link rel="stylesheet" href="../static/style/css/home.css">
+
 <link rel="stylesheet" href="../static/style/css/animatedhome.css">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Vollkorn&display=swap" rel="stylesheet">
@@ -19,21 +19,20 @@ Canteen List
 <script>AOS.init();</script>
 
 <div id="top" class="container-fluid mb-5 overflow-hidden align-items-center">
-    <div class="container-fluid mb-3 justify-content-center d-flex flex-wrap">
-        <div id="textabove" class="col-6 text-center">
-            <h1 data-aos="fade-right" style="font-family: Parisienne; font-size: 70px;">CU Food Order</h1>
-            <hr class="mx-auto" style="border: 70; max-width: 500px;">
-            <h6 data-aos="fade-right" style="font-family: Vollkorn; font-size: 30px;">We offer good food with our care.</h6><br>
-        </div>
-        
-        <div id="imgcol" class="float-right col-5 justify-content-center">
+    <div class="container-fluid my-5 d-flex flex-wrap align-items-center">
+        <div id="imgcol" class="col-lg-6 pl-5">
             <div class="wrapper">
-                <div class="circle align-items-center" data-aos="zoom-in-left">
+                <div class="circle align-items-right mx-3" data-aos="zoom-in-left">
                     <!--source picture: https://www.pngplay.com/th/image/67424-->
                     <img id="reload" src="../static/image/home/Noodle-Background-PNG-Image.png" alt="scroll"
                         class="center">
                 </div>
             </div>
+        </div>
+        <div class="col-lg-6 justify-content-left text-center">
+            <h1 data-aos="fade-right" style="font-family: Parisienne; font-size: 70px;">CU Food Order</h1>
+            <hr class="mx-auto" style="border: 70; max-width: 500px;">
+            <h6 data-aos="fade-right" style="font-family: Vollkorn; font-size: 30px;">We offer good food with our care.</h6><br>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -50,7 +49,7 @@ Canteen List
 
 <!--Displaying Content List-->
 <div class="container" id="tabs">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mx-auto">
         <!--Canteen List: separate opened and closed canteens-->
         <div class="">
             <!--Canteen List (Currently Open)-->
@@ -68,7 +67,7 @@ Canteen List
                     </div>
                     <div class="col-md-6 align-items-center d-flex">
                         <div class="card-body my-auto">
-                            <h4 class="foodlist card-title mb-1">{{canteen.name}}</h4>
+                            <h4 class="foodlist card-title mb-1" style="color: #df5607;">{{canteen.name}}</h4>
                             <p class="foodlist card-text mb-auto">
                                 <b>Open at: </b> {{canteen.open_at}}
                             </p>
@@ -110,7 +109,7 @@ Canteen List
             {% if canteens_closed %}
             {% for canteen in canteens_closed %}
             <div class="card mt-3 mb-5" style="max-width: 800px; height: 300px;" data-aos="zoom-in-up">
-                <div class="row g-0 d-flex flex-nowrap my-auto">
+                <div id="closed" class="row g-0 d-flex flex-nowrap my-auto">
                     <div class="col-md-6 d-flex flex-column" style="text-align: center;">
                         {% if canteen.image_path %}
                         <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid cover" style="height: 300px" alt="...">
@@ -120,7 +119,7 @@ Canteen List
                     </div>
                     <div class="col-md-6 align-items-center d-flex">
                         <div class="card-body my-auto">
-                            <h4 class="foodlist card-title mb-1">{{canteen.name}}</h4>
+                            <h4 class="foodlist card-title mb-1" style="color: #df5607;">{{canteen.name}}</h4>
                             <p class="foodlist card-text mb-auto">
                                 <b>Open at: </b> {{canteen.open_at}}
                             </p>
