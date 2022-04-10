@@ -109,8 +109,8 @@ Canteen List
             {% if canteens_closed %}
             {% for canteen in canteens_closed %}
             <div class="card mt-3 mb-5" style="max-width: 800px; height: 300px;" data-aos="zoom-in-up">
-                <div id="closed" class="row g-0 d-flex flex-nowrap my-auto">
-                    <div class="col-md-6 d-flex flex-column" style="text-align: center;">
+                <div class="row g-0 d-flex flex-nowrap my-auto">
+                    <div id="imgclosed" class="col-md-6 d-flex flex-column" style="text-align: center;">
                         {% if canteen.image_path %}
                         <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid cover" style="height: 300px" alt="...">
                         {% else %}
@@ -118,7 +118,7 @@ Canteen List
                         {% endif %}
                     </div>
                     <div class="col-md-6 align-items-center d-flex">
-                        <div class="card-body my-auto">
+                        <div id="closed" class="card-body my-auto">
                             <h4 class="foodlist card-title mb-1" style="color: #df5607;">{{canteen.name}}</h4>
                             <p class="foodlist card-text mb-auto">
                                 <b>Open at: </b> {{canteen.open_at}}
