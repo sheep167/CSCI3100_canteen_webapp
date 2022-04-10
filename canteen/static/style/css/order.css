@@ -14,20 +14,20 @@ div.headblock {
     box-shadow: rgba(49, 48, 48, 0.24) 0px 3px 8px;
 }
 
-/*css for card with LATE status*/
-#cardLate.card {
+/*css for card with rush status*/
+#cardRush.card {
     background-color: rgba(246, 150, 99, 0.2);
     color: #cb4f30;
 }
 
-/*css for card with NOT LATE status*/
-#cardNotLate.card {
+/*css for card with normal status*/
+#cardNormal.card {
     background-color: rgba(246, 212, 99, 0.2);
     color: #cb9a30;
 }
 
-/*css for card with FINISHED status*/
-#cardFinished.card {
+/*css for card with just arrive status*/
+#cardJustArrive.card {
     background-color: rgba(154, 241, 120, 0.2);
     color: #77945c;
 }
