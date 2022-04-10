@@ -195,12 +195,10 @@ def add_set(canteen_id):
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
-    types = []
-    if request.method == 'GET':
-        results = mongo.db.types.aggregate([
-            {'$match': {'at_canteen': ObjectId(canteen_id)}}
-        ])
-        types = list(results)
+    results = mongo.db.types.aggregate([
+        {'$match': {'at_canteen': ObjectId(canteen_id)}}
+    ])
+    types = list(results)
 
     return render_template('canteen/add_set.html', canteen_id=canteen_id, types=types)
 
@@ -218,6 +216,12 @@ def add_type(canteen_id):
         if len(typename) >= 300:
             flash('300 characters limit exceeded', category='warning')
         else:
+            sets=list(mongo.db.sets.aggregate([]))
+
+            for _set in sets:
+                _set['types'][typename]=[]
+                mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': _set['types']}})
+
             mongo.db.types.insert_one({
                 'name': typename,
                 'at_canteen': ObjectId(canteen_id),
