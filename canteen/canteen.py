@@ -104,13 +104,13 @@ def menu_page(canteen_id):
 
     if request.method == 'POST':
         set_name=request.form.get('active-set')
+        print(set_name)
 
         _set=list(mongo.db.sets.aggregate([
             {'$match':{'name':set_name}}
         ]))[0]
         
         target_types=_set['types']
-        print(target_types)
         at_canteen=_set['at_canteen']
 
         active_dishes_id=[]
