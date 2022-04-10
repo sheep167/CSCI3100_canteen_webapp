@@ -22,10 +22,10 @@ Canteen List
             </div>
         </div>
 
-        <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid flex-row flex-wrap">
+        <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid d-flex flex-row flex-wrap">
+            {% if sets %}
+            {% for set in sets %}
             <form method="POST" class="">
-                {% if sets %}
-                {% for set in sets %}
                 <input value="{{set.name}}" name="active-set" style="display: none;">
                 <button type="submit" class="labl mx-2 mb-2" style="max-width: 300px;">
                     <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
@@ -65,10 +65,10 @@ Canteen List
                                     href="/canteen_account/{{canteen_id}}/delete/sets/{{set._id}}">Delete</a></div>
                         </div>
                     </div>
-                    </buttton>
-                    {% endfor %}
-                    {% endif %}
+                </buttton>
             </form>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
