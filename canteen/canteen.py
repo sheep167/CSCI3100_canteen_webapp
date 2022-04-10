@@ -14,8 +14,7 @@ from flask_mail import Message
 from flask_wtf import FlaskForm  # 1.
 from wtforms import StringField  # 2.
 from wtforms.validators import DataRequired  # 3.
-import threading
-import time
+import os
 
 """
 order page
@@ -293,7 +292,15 @@ def add_menu(canteen_id, typeID):
         except:
             return False
 
+    def save_image():
+        folder_path = './canteen/static/image/menu'
+        os.makedirs(folder_path, exist_ok=True)
+        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+        file.save(save_path)
+        return save_path
+
     if request.method == 'POST':
+
         menuName = request.form.get('menu-name')
         price = request.form.get('price')
         if menuName == '':
@@ -302,7 +309,7 @@ def add_menu(canteen_id, typeID):
             flash('300 characters limit exceeded', category='warning')
         if price == '':
             flash('Please input your menu price', category='info')
-        if not isFloat(price):
+        elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
         else:
 
@@ -318,6 +325,19 @@ def add_menu(canteen_id, typeID):
             dish_id = list(mongo.db.dishes.aggregate([
                 {'$match': {'name':str(menuName)}}
             ]))[0]['_id']
+
+            user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+            if request.files:
+                file = request.files['file']
+                if file.filename != '':
+                    filename = secure_filename(file.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        filename = user.get('username') + '_' + str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
+                        image_path = save_image()
+                        mongo.db.dishes.update_one({'_id': ObjectId(dish_id)}, {'$set': {'image_path': image_path}})
+                    else:
+                        flash('File not supported', category='warning')
+                        return redirect(request.url)
 
             # update types
             results = list(mongo.db.types.aggregate([
@@ -384,6 +404,13 @@ def edit_menu(canteen_id, menu_id):
         except:
             return False
     
+    def save_image():
+        folder_path = './canteen/static/image/menu'
+        os.makedirs(folder_path, exist_ok=True)
+        save_path = os.path.join(folder_path, filename).replace('\\', '/')
+        file.save(save_path)
+        return save_path
+    
     if current_user.auth_type > 1:
         return 'Not Authorized', 403
 
@@ -397,9 +424,25 @@ def edit_menu(canteen_id, menu_id):
             flash('300 characters limit exceeded', category='warning')
         if price == '':
             flash('Please input your menu price', category='info')
-        if not isFloat(price):
+        elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
         else:
+            if request.files:
+                file = request.files['file']
+                if file.filename != '':
+                    filename = secure_filename(file.filename)
+                    if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
+                        filename = str(menu_id) + '.' + filename.rsplit('.', 1)[1].lower()
+                        image_path = save_image()
+                        mongo.db.dishes.update_one({'_id': ObjectId(menu_id)}, {'$set': {'image_path': image_path}})
+                    else:
+                        flash('File not supported', category='warning')
+                        return redirect(request.url)
+
+                    in_type = list(mongo.db.dishes.aggregate([
+                        {'$match':{'_id':ObjectId(menu_id)}}
+                    ]))[0]['in_type']
+
             # update in dishes
             in_type = list(mongo.db.dishes.aggregate([
                 {'$match':{'_id':ObjectId(menu_id)}}
