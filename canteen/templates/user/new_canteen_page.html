@@ -137,6 +137,9 @@
       <div class="p-0 h2">Menu</div>
     </div>
 
+    <!--Section Sorted by Type-->
+
+    <!-- Original Code
     <div class="container-fluid p-0">
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
 
@@ -146,19 +149,19 @@
             <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="{{dish._id}}" style="height: 132px;">
               <div class="container m-0">
                 <div class="flex-row d-flex flex-wrap">
-                  <!-- Left side of button -->
+                  
                   <div class="d-flex flex-column" style="max-width: 50%;">
                     <span class="mr-auto pt-2 h4">{{dish.name}}</span>
                     <span class="mr-auto font-weight-light h6 text-left"
                       style="font-size: 15px">
-                      <!-- only show 3 ingredients -->
+                      
                       {{ dish.ingredients[0] }}
                       {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
                       {% endfor %}
                     </span>
                     <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
                   </div>
-                  <!-- Right Side of Button -->
+                  
                   <div class="ml-auto">
                     {% if dish.image_path %}
                     <img src="{{dish.image_path}}" style="object-fit: cover; width: 100px; height: 100px;">
@@ -174,6 +177,102 @@
         {% endfor %}
       </div>
     </div>
+    -->
+
+    <!--Section Sorted by Type-->
+    <!--First Type Template-->
+    <div class="container-fluid p-0 my-auto">
+      <h3 class="mt-4">Type: </h3>
+      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
+
+        <!--Food Element-->
+        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
+          <form method="post">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
+              <div class="container m-0">
+                <div class="flex-row d-flex flex-wrap">
+                  <!-- Left side of button -->
+                  <div class="d-flex flex-column" style="max-width: 50%;">
+                    <span class="mr-auto pt-2 h4">dish.name</span>
+                    <span class="mr-auto font-weight-light h6 text-left"
+                      style="font-size: 15px">
+                      <!-- only show 3 ingredients -->
+                      dish.ingredients[0]
+                    </span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
+                  </div>
+                  <!-- Right Side of Button -->
+                  <div class="ml-auto">
+                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
+                  </div>
+                </div>
+              </div>
+            </button>
+          </form>
+        </div>
+
+        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
+          <form method="post">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
+              <div class="container m-0">
+                <div class="flex-row d-flex flex-wrap">
+                  <!-- Left side of button -->
+                  <div class="d-flex flex-column" style="max-width: 50%;">
+                    <span class="mr-auto pt-2 h4">dish.name</span>
+                    <span class="mr-auto font-weight-light h6 text-left"
+                      style="font-size: 15px">
+                      <!-- only show 3 ingredients -->
+                      dish.ingredients[0]
+                    </span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
+                  </div>
+                  <!-- Right Side of Button -->
+                  <div class="ml-auto">
+                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
+                  </div>
+                </div>
+              </div>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <!--End of First Type Template-->
+
+    <!--Second Type Template-->
+    <div class="container-fluid p-0 my-auto">
+      <h3 class="mt-4">Type: 2</h3>
+      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
+        <!--Food Element-->
+        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
+          <form method="post">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
+              <div class="container m-0">
+                <div class="flex-row d-flex flex-wrap">
+                  <!-- Left side of button -->
+                  <div class="d-flex flex-column" style="max-width: 50%;">
+                    <span class="mr-auto pt-2 h4">dish.name</span>
+                    <span class="mr-auto font-weight-light h6 text-left"
+                      style="font-size: 15px">
+                      <!-- only show 3 ingredients -->
+                      dish.ingredients[0]
+                    </span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
+                  </div>
+                  <!-- Right Side of Button -->
+                  <div class="ml-auto">
+                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
+                  </div>
+                </div>
+              </div>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!--End of Second Type Template-->
+
   </div>
 
   <!-- Comment Section -->
