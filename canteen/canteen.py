@@ -321,7 +321,7 @@ def add_menu(canteen_id, typeID):
                 if file.filename != '':
                     filename = secure_filename(file.filename)
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
-                        filename = user.get('username') + '_' + str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
+                        filename = str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
                         image_path = save_image()
                         mongo.db.dishes.update_one({'_id': ObjectId(dish_id)}, {'$set': {'image_path': image_path}})
                     else:
@@ -433,6 +433,8 @@ def edit_menu(canteen_id, menu_id):
             flash('300 characters limit exceeded', category='warning')
         if price == '':
             flash('Please input your menu price', category='info')
+        if float(price) <= 0:
+            flash('Please input a positive price', category='warning')
         elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
         else:

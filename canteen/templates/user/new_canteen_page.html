@@ -205,9 +205,13 @@
                 <div class="d-flex flex-row">
                   <!-- User Image and Rating -->
                   <div class="pt-4 d-flex flex-column">
+                    {% if comment.by_user.image_path %}
                     <img src="{{comment.by_user.image_path}}" style="object-fit: cover; width: 50px; height: 50px;">
+                    {% else %} 
+                    <img src="{{url_for('static',filename='image/icon/user_profile_sample.png')}}" style="object-fit: cover; width: 50px; height: 50px;">
+                    {% endif %}
                     <div class="d-flex flex-inline pl-1 pt-2">
-                      <img src="../../static/image/icon/star.png" style="width: 20px; height: 20px;">
+                      <img src="{{url_for('static',filename='image/icon/star.png')}}" style="width: 20px; height: 20px;">
                       <div class="h6 font-weight-light text-center pl-2" style="font-size: 20px">{{comment.rating}} </div>
                     </div>
                   </div>
