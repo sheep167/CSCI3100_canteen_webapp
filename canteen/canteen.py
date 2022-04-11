@@ -109,7 +109,7 @@ def menu_page(canteen_id):
             {'$match':{'name':set_name}}
         ]))[0]
 
-        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'active_set': _set['_id']}})
+        mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': _set['_id']}})
 
         return redirect('/canteen_account/%s/menu' % canteen_id)    
 
@@ -131,7 +131,12 @@ def menu_page(canteen_id):
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
         ])
         types = list(results)
-    return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
+
+        active_set=list(mongo.db.canteens.aggregate([
+            {'$match': {'_id': ObjectId(canteen_id)}}
+        ]))[0]['active_set']
+
+    return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types, active_set=active_set)
 
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required

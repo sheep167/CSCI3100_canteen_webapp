@@ -17,7 +17,6 @@ div.comment {
   font-weight: 400;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border: 0;
-  position: relative;
 }
 
 div.comment:hover {
@@ -43,6 +42,20 @@ thead {
 
 .labl {
   /* (RADIO CHECKED) DIV STYLES */
+  border: 1px solid #ff6600;
+}
+
+.labl-check {
+  width: 430px;
+}
+
+.labl-check > input + div {
+  /* DIV STYLES */
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.labl-check {
   background-color: #ffd6bb;
   border: 1px solid #ff6600;
 }
@@ -59,8 +72,4 @@ thead {
   background-color: #ffd6bb;
 }
 
-#editdelete {
-  position: absolute;
-  bottom: 0;
-}
 /*# sourceMappingURL=menu.css.map */
