@@ -221,6 +221,7 @@ def logout_page():
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
+    print("hello")
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt=app.config['SECRET_KEY'], max_age=300)
