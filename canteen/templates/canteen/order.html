@@ -1,29 +1,24 @@
 {% extends 'base.html' %}
 {% set active_page = "Order" %}
-
 {% block title %}
 Order List
 {% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{{url_for('static',filename='style/css/order.css')}}">
 {% endblock %}
-
 {% block content %}
 <script src="{{url_for('static',filename='style/js/finishedorder.js')}}"></script>
 <script>
     setInterval(function () { location.reload() }, 30000);
 </script>
-
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Order Management</div>
 </div>
-
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     {% with orders = orders %}
     {% include "canteen/partial_order.html" %}
     {% endwith %}
 </div>
-
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     <div class="px-4 pt-4 m-0">
         <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
@@ -46,7 +41,6 @@ Order List
                     <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                     </p>
                 </div>
-
                 <!--card (Finished)-->
                 <div class="pt-1 pb-3 container-fluid d-flex flex-nowrap">
                     <div class="card ml-2 mr-2">
@@ -99,22 +93,18 @@ Order List
                 </div>
             </div>
             <!--End A Column-->
-
             {% endif %}
             {% if (count.value > 0) and (count.value) % 3 == 0 %}
         </div>
         {% endif %}
         {% endfor %}
-
         {% if (count.value > 0) and (count.value) % 3 != 0 %}
     </div>
     {% endif %}
-
     {% endif %}
     {% if (count.value == 0) %}
     <p class="mx-4">There is no finished order.</p>
     {% endif %}
     </div>
 </div>
-
 {% endblock %}
