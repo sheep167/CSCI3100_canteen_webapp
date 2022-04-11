@@ -12,6 +12,7 @@ div.headblock {
 /*css add shadow to card*/
 .card {
     box-shadow: rgba(49, 48, 48, 0.24) 0px 3px 8px;
+    height: 400px;
 }
 
 /*css for card with rush status*/
