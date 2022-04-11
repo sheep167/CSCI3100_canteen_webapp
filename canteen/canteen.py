@@ -70,8 +70,10 @@ def order_page(canteen_id):
         for order in orders :
             time = order['at_time']
             duration = datetime.datetime.now() - time
-            duration_in_s = duration.total_seconds()      
-            if duration_in_s >= 15 * 60 :
+            duration_in_s = duration.total_seconds()
+            if order['order_status'] == 'finished':
+                pass
+            elif duration_in_s >= 15 * 60 :
                 order['order_status'] = 'rush'
             elif duration_in_s >= 5 * 60 :
                 order['order_status'] = 'normal'
@@ -137,16 +139,11 @@ def menu_page(canteen_id, invalid_delete=''):
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
-    if request.method == 'GET':
-        order = mongo.db.orders.aggregate([
+    order = mongo.db.orders.aggregate([
             {'$match': {'_id': ObjectId(order_id)}}
         ])
-
-        order = list(order)
-
-        print(order_id)
-
-        mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
+    order = list(order)
+    mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
 
     return redirect('/canteen_account/%s/order' % order[0]['at_canteen'])
 
