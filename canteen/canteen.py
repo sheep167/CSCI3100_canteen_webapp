@@ -98,7 +98,7 @@ def order_page(canteen_id):
 
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
-def menu_page(canteen_id):
+def menu_page(canteen_id, invalid_delete=''):
     if current_user.auth_type > 1:
         return 'Not Authorized', 403
 
@@ -114,6 +114,8 @@ def menu_page(canteen_id):
         return redirect('/canteen_account/%s/menu' % canteen_id)    
 
     if request.method == 'GET':
+        if invalid_delete == 'sets':
+            flash('You cannot delete current active set', category='warning')
         results = mongo.db.sets.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
         ])
@@ -225,13 +227,8 @@ def edit_set(canteen_id, set_id):
     if current_user.auth_type > 1:
         return 'Not Authorized', 403
 
-
-    print("method")
-    print(request.method)
     if request.method == 'POST':
         _set_name = request.form.get('set-name')
-        print("hello")
-        print(_set_name)
         if _set_name == '':
             flash('Please add your set name', category='info')
         else:
@@ -239,12 +236,21 @@ def edit_set(canteen_id, set_id):
             types = list(mongo.db.types.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ]))
+
+            dish_only=[]
             for _type in types:
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
-            print(checkboxAns)
-            print(_set_name)
+
+                for dish_name in checkboxAns:
+                    dish_id=list(mongo.db.dishes.aggregate([
+                        {'$match':{'name': dish_name}}
+                    ]))[0]['_id']
+
+                    dish_only.append(dish_id)
             mongo.db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict, 'name':_set_name} })
+
+            mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'menu': dish_only} })
 
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
@@ -270,7 +276,6 @@ def edit_set(canteen_id, set_id):
                 else:
                     for_type[1].append([dish['name'], 0])
             type_with_indicated.append(for_type)
-        print(type_with_indicated)
     return render_template('canteen/edit_set.html', canteen_id=canteen_id, type_with_indicated=type_with_indicated,
                            _set=_set)
 
@@ -393,7 +398,18 @@ def delete_item(canteen_id,category,id):
 
         mongo.db.types.delete_one({"_id": ObjectId(id)})
         mongo.db.dishes.delete_many({'in_type': ObjectId(id)})
-
+    elif category == 'sets':
+        canteen=list(mongo.db.canteens.aggregate([
+            {'$match':{'_id': ObjectId(canteen_id)}}
+        ]))[0]
+        if 'active_set' in canteen:
+            active_set=canteen['active_set']
+        else:
+            active_set=''
+        if ObjectId(id) == ObjectId(active_set):
+            return menu_page(canteen_id, invalid_delete='sets')
+        else:
+            mongo.db[category].delete_one({"_id": ObjectId(id)})
     else:
         mongo.db[category].delete_one({"_id": ObjectId(id)})
         

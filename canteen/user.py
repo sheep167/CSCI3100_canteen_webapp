@@ -312,6 +312,7 @@ def canteen_page(_id):
         target_types=active_set['types']
         at_canteen=active_set['at_canteen']
         dishes_by_type={}
+        dishes_only=[]
 
         for _type in target_types:
             for dish_name in target_types[_type]:
@@ -319,13 +320,16 @@ def canteen_page(_id):
                     {'$match':{'name':dish_name}}
                 ]))[0]
 
+                dishes_only.append(dish['_id'])
                 if _type in dishes_by_type:
                     dishes_by_type[_type].append(dish)
                 else:
                     dishes_by_type[_type]=[dish]
-        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'menu' : dishes_by_type }})
+        
+        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'menu' : dishes_only }})
+
+        # inconsistent here
         canteen['menu'] = dishes_by_type
-        print(canteen.get('menu'))
         
         for _type in canteen['menu']:
             for dish in canteen['menu'][_type]:
@@ -355,6 +359,7 @@ def list_canteens():
              'as': 'menu'}}
     ])
     canteens = list(results)
+    print(canteens)
 
     for canteen in canteens:
         if canteen.get('image_path'):
