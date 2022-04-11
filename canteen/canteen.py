@@ -176,14 +176,10 @@ def add_set(canteen_id):
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
             
-            sets_num = len(list(mongo.db.sets.aggregate([])))
-            print(sets_num)
-
             mongo.db.sets.insert_one({
                 'name': _set_name,
                 'at_canteen': ObjectId(canteen_id),
                 'types': _dish_dict,
-                'active': 0
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
