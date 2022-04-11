@@ -307,6 +307,7 @@ def add_menu(canteen_id, typeID):
 
         menuName = request.form.get('menu-name')
         price = request.form.get('price')
+        ingredients = re.split(", |," ,request.form.get('ingredients'))
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -323,7 +324,7 @@ def add_menu(canteen_id, typeID):
                 'at_canteen': ObjectId(canteen_id),
                 'price': float(price),
                 'in_type': ObjectId(typeID),
-                'ingredients':[]
+                'ingredients':ingredients
             })
 
             dish_id = list(mongo.db.dishes.aggregate([
@@ -354,7 +355,8 @@ def add_menu(canteen_id, typeID):
                 'at_canteen': ObjectId(canteen_id),
                 'price': float(price),
                 'in_type': ObjectId(typeID),
-                '_id': ObjectId(dish_id)
+                '_id': ObjectId(dish_id),
+                'ingredients':ingredients
             })
 
             mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
