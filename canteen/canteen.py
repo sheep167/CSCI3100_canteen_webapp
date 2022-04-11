@@ -301,7 +301,7 @@ def add_menu(canteen_id, typeID):
             flash('Please input your menu price', category='info')
         elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
-        elif price <= 0:
+        elif int(price) <= 0:
             flash('Please input your price as a positive number', category='warning')
         else:
 
