@@ -88,7 +88,6 @@ def home():
 
     return render_template('home.html', canteens_opened=canteens_opened, canteens_closed=canteens_closed,)
 
-
 @login_required
 @app.route('/user_account', methods=['GET', 'POST'])
 def user_account():
@@ -162,11 +161,9 @@ def user_account():
 
     return render_template('/user/user_account.html', user=user)
 
-
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECRET_KEY'])
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -195,7 +192,6 @@ def register_page():
 
     return render_template('/user/register.html', form=form)
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if current_user.is_authenticated:
@@ -217,13 +213,11 @@ def login_page():
 
     return render_template('/user/login.html', form=form)
 
-
 @app.route('/logout')
 def logout_page():
     logout_user()
     flash('You have been logged out!', category='info')
     return redirect(url_for('home'))
-
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -234,7 +228,6 @@ def confirm_email(token):
     except SignatureExpired:
         return '<h1> Token Expired </h1> '    
     return redirect(url_for('home'))
-
 
 @app.route('/canteens/<_id>', methods=['GET', 'POST'])
 def canteen_page(_id):
@@ -312,19 +305,45 @@ def canteen_page(_id):
         else:
             canteen['image_path'] = None
 
-        for dish in canteen.get('menu'):
-            if dish.get('image_path'):
-                dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+        active_set=list(mongo.db.sets.aggregate([
+            {'$match':{ '_id': ObjectId(canteen['active_set'])}}
+        ]))[0]
+
+        target_types=active_set['types']
+        at_canteen=active_set['at_canteen']
+        dishes_by_type={}
+
+        for _type in target_types:
+            for dish_name in target_types[_type]:
+                dish=list(mongo.db.dishes.aggregate([
+                    {'$match':{'name':dish_name}}
+                ]))[0]
+
+                if _type in dishes_by_type:
+                    dishes_by_type[_type].append(dish)
+                else:
+                    dishes_by_type[_type]=[dish]
+        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'menu' : dishes_by_type }})
+        canteen['menu'] = dishes_by_type
+        print(canteen.get('menu'))
+        
+        for _type in canteen['menu']:
+            for dish in canteen['menu'][_type]:
+                print(dish)
+                if dish.get('image_path'):
+                    dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
+
+                dish['in_type_name'] = list(mongo.db.types.aggregate([
+                    {'$match': {'_id':ObjectId(dish.get('in_type'))}}
+                ]))[0]['name']
 
         for comment in comments:
-            print(comment)
             if comment.get('by_user').get('image_path'):
                 comment['by_user']['image_path'] = comment.get('by_user').get('image_path').replace(' ', '%20').replace('./canteen', '')
         
         return render_template('/user/new_canteen_page.html', canteen=canteen, comments=comments, cart=cart)
     else:
         return 'Page Not Found', 404
-
 
 @app.route('/canteens')
 def list_canteens():
@@ -348,7 +367,6 @@ def list_canteens():
         
 
     return render_template('/user/list_canteens.html', canteens=canteens)
-
 
 @login_required
 def add_to_cart(canteen_id, dish_id):
@@ -379,7 +397,6 @@ def remove_from_cart(canteen_id, dish_id):
             mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
         except:
             pass
-
 
 @app.route('/cart', methods=['GET', 'POST'])
 @login_required
@@ -424,7 +441,6 @@ def cart_page():
             all_canteen_total += total_price
     return render_template('/user/checkout_page.html', cart=cart, all_canteen_total=all_canteen_total)
 
-
 @login_required
 def create_order(canteen_name, total_price):
     total_price = float(total_price)
@@ -446,7 +462,6 @@ def create_order(canteen_name, total_price):
     mongo.db.orders.insert_one(order)
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$set': {'cart': cart}})
     mongo.db.users.update_one({'_id': ObjectId(current_user._id)}, {'$inc': {'balance': -total_price}})
-
 
 @login_required
 @app.route('/post_comment/<canteen_id>', methods=['GET', 'POST'])

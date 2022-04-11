@@ -138,140 +138,45 @@
     </div>
 
     <!--Section Sorted by Type-->
-
-    <!-- Original Code
-    <div class="container-fluid p-0">
+    <!-- Type Template-->
+    {% for type in canteen.menu %}
+    <div class="container-fluid p-0 my-auto">
+      <h3 class="mt-4">{{type}}</h3>
       <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
 
-        {% for dish in canteen.menu %}
+        <!--Food Element-->
+        {% for dish in canteen.menu[type] %}
         <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
           <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="{{dish._id}}" style="height: 132px;">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
               <div class="container m-0">
                 <div class="flex-row d-flex flex-wrap">
-                  
+                  <!-- Left side of button -->
                   <div class="d-flex flex-column" style="max-width: 50%;">
                     <span class="mr-auto pt-2 h4">{{dish.name}}</span>
                     <span class="mr-auto font-weight-light h6 text-left"
                       style="font-size: 15px">
-                      
-                      {{ dish.ingredients[0] }}
+                      <!-- only show 3 ingredients -->
+                      {{dish.ingredients[0]}}
                       {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
                       {% endfor %}
                     </span>
-                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
                   </div>
-                  
+                  <!-- Right Side of Button -->
                   <div class="ml-auto">
-                    {% if dish.image_path %}
-                    <img src="{{dish.image_path}}" style="object-fit: cover; width: 100px; height: 100px;">
-                    {% endif %}
+                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
                   </div>
                 </div>
               </div>
             </button>
           </form>
         </div>
-
-
         {% endfor %}
-      </div>
-    </div>
-    -->
-
-    <!--Section Sorted by Type-->
-    <!--First Type Template-->
-    <div class="container-fluid p-0 my-auto">
-      <h3 class="mt-4">Type: </h3>
-      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
-
-        <!--Food Element-->
-        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
-              <div class="container m-0">
-                <div class="flex-row d-flex flex-wrap">
-                  <!-- Left side of button -->
-                  <div class="d-flex flex-column" style="max-width: 50%;">
-                    <span class="mr-auto pt-2 h4">dish.name</span>
-                    <span class="mr-auto font-weight-light h6 text-left"
-                      style="font-size: 15px">
-                      <!-- only show 3 ingredients -->
-                      dish.ingredients[0]
-                    </span>
-                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
-                  </div>
-                  <!-- Right Side of Button -->
-                  <div class="ml-auto">
-                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
-                  </div>
-                </div>
-              </div>
-            </button>
-          </form>
-        </div>
-
-        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
-              <div class="container m-0">
-                <div class="flex-row d-flex flex-wrap">
-                  <!-- Left side of button -->
-                  <div class="d-flex flex-column" style="max-width: 50%;">
-                    <span class="mr-auto pt-2 h4">dish.name</span>
-                    <span class="mr-auto font-weight-light h6 text-left"
-                      style="font-size: 15px">
-                      <!-- only show 3 ingredients -->
-                      dish.ingredients[0]
-                    </span>
-                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
-                  </div>
-                  <!-- Right Side of Button -->
-                  <div class="ml-auto">
-                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
-                  </div>
-                </div>
-              </div>
-            </button>
-          </form>
-        </div>
 
       </div>
     </div>
-    <!--End of First Type Template-->
-
-    <!--Second Type Template-->
-    <div class="container-fluid p-0 my-auto">
-      <h3 class="mt-4">Type: 2</h3>
-      <div class="d-flex flex-row flex-wrap" style="background-color: rgb(255, 255, 255);">
-        <!--Food Element-->
-        <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
-          <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
-              <div class="container m-0">
-                <div class="flex-row d-flex flex-wrap">
-                  <!-- Left side of button -->
-                  <div class="d-flex flex-column" style="max-width: 50%;">
-                    <span class="mr-auto pt-2 h4">dish.name</span>
-                    <span class="mr-auto font-weight-light h6 text-left"
-                      style="font-size: 15px">
-                      <!-- only show 3 ingredients -->
-                      dish.ingredients[0]
-                    </span>
-                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
-                  </div>
-                  <!-- Right Side of Button -->
-                  <div class="ml-auto">
-                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
-                  </div>
-                </div>
-              </div>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <!--End of Second Type Template-->
+    {% endfor %}
 
   </div>
 
@@ -279,7 +184,7 @@
   <div id="cat-2" class="mt-4 mb-4 pt-0 pl-5 pr-4 pb-4 container-fluid" style="background-color:rgb(255, 255, 255); ">
     <div class="container m-0 pl-0 pt-4 pb-3">
       <h2>Comment</h2>
-      <div class="h5 font-weight-light">200 comments</div>
+      <div class="h5 font-weight-light">{{comments|length}} comments</div>
       <br>
       <img src="../../static/image/icon/comment.png" class="mr-2" style="float:left;" alt="comments" width="35" height="35">
             <a href="/post_comment/{{canteen._id}}">

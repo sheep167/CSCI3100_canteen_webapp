@@ -70,7 +70,8 @@ class Canteens:
         self.close_at = str(close_at)
         self.capacity = int(capacity)
         self.menu = []  # List of ObjectId of Dishes are stored in here
-        self.image_path = None
+        self.image_path = None # menu should be deprecated, use active_set instead
+        self.active_set = None #ObjectId of active_set
 
     def to_json(self):
         return self.__dict__

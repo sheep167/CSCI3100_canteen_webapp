@@ -104,27 +104,12 @@ def menu_page(canteen_id):
 
     if request.method == 'POST':
         set_name=request.form.get('active-set')
-        print(set_name)
 
         _set=list(mongo.db.sets.aggregate([
             {'$match':{'name':set_name}}
         ]))[0]
-        
-        target_types=_set['types']
-        at_canteen=_set['at_canteen']
 
-        active_dishes_id=[]
-        for _type in target_types:
-            for dish_name in target_types[_type]:
-                dish_id=list(mongo.db.dishes.aggregate([
-                    {'$match':{'name':dish_name}}
-                ]))[0]['_id']
-                active_dishes_id.append(dish_id)
-
-        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'menu' : active_dishes_id}})
-
-        
-
+        mongo.db.canteens.update_one({'_id': ObjectId(at_canteen)}, {'$set': {'active_set': _set['_id']}})
 
         return redirect('/canteen_account/%s/menu' % canteen_id)    
 
