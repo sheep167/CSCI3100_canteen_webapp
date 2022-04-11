@@ -66,16 +66,11 @@ def order_page(canteen_id):
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
         orders = list(results)
-
-        print(orders)
     
-
         for order in orders :
             time = order['at_time']
-            print(datetime.datetime.now())
             duration = datetime.datetime.now() - time
             duration_in_s = duration.total_seconds()      
-            print(duration_in_s)
             if duration_in_s >= 15 * 60 :
                 order['order_status'] = 'rush'
             elif duration_in_s >= 5 * 60 :
@@ -85,7 +80,6 @@ def order_page(canteen_id):
             counter = Counter(order['dishes'])
             counted_dishes = []
             for dish_id, count in counter.items():
-                print('hello')
                 results = mongo.db.dishes.aggregate([
                     {'$match': {'_id': ObjectId(dish_id)}}  # edit!!!
                 ])

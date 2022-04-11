@@ -43,7 +43,7 @@ Order List
                 <!--orderID-->
                 <div class="container-fluid p-0 d-flex">
                     <p>
-                    <h3 class="mx-4">Order ID: </h3>
+                    <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                     </p>
                 </div>
 
@@ -52,7 +52,7 @@ Order List
                     <div class="card ml-2 mr-2">
                         <div class="card-body">
                             <div class="row ml-3 mt-1">
-                                <p><b>Customer ID: {{ order.by_user }}</b><br>
+                                <p>
                                     <b>Ordered Time: {{ order.at_time }}</b>
                                 </p>
                             </div>
@@ -93,8 +93,6 @@ Order List
                                 </div>
                                 <div class="col-6">
                                     <div class="container-fluid">
-                                        <div>{{order._id}}</div>
-
                                         <a class="btn btn-primary" href="/canteen_account/finish/{{order._id}}">
                                             Finish
                                         </a>
