@@ -180,7 +180,7 @@ def register_page():
         token = generate_confirmation_token(form.email.data)
 
         msg = Message('Verification Email', recipients=[form.email.data])
-        msg.body = 'Go here to for verification. http://localhost:5000/confirm_email/%s' % token
+        msg.body = 'Go here to for verification. http://127.0.0.1:5000/confirm_email/%s' % token
         mail.send(msg)
 
         mongo.db.users.insert_one(user_to_create.to_json())
