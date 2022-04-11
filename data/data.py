@@ -57,3 +57,17 @@ for user in users_list:
         user['staff_of'] = list(results)[0]['_id']
 
 mongo.db.users.insert_many(users_list)
+
+# add default set
+for canteen in canteens_list:
+    canteen_id=list(mongo.db.canteens.aggregate([
+        {'$match':{'name': canteen['name']}}
+    ]))[0]['_id']
+    to_insert={
+        'name': 'default',
+        'at_canteen': ObjectId(canteen_id),
+        'types': {},
+    }
+    mongo.db.sets.insert_one(to_insert)
+    mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': to_insert['_id']} })
+

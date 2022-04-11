@@ -148,7 +148,7 @@
         {% for dish in canteen.menu[type] %}
         <div class="container m-0 pt-3 pb-3 pl-0 pr-3 col-lg-4 col-12 col-md-6" style="height: 20vh;">
           <form method="post">
-            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="dish._id" style="height: 132px;">
+            <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="{{dish._id}}" style="height: 132px;">
               <div class="container m-0">
                 <div class="flex-row d-flex flex-wrap">
                   <!-- Left side of button -->
@@ -161,11 +161,13 @@
                       {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
                       {% endfor %}
                     </span>
-                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">$dish.price</span>
+                    <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
                   </div>
                   <!-- Right Side of Button -->
                   <div class="ml-auto">
-                    <img src="" style="object-fit: cover; width: 100px; height: 100px;">
+                    {%if dish.image_path %}
+                    <img src="{{dish.image_path}}" style="object-fit: cover; width: 100px; height: 100px;">
+                    {% endif %}
                   </div>
                 </div>
               </div>

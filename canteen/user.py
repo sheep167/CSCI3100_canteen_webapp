@@ -340,6 +340,7 @@ def canteen_page(_id):
                 dish['in_type_name'] = list(mongo.db.types.aggregate([
                     {'$match': {'_id':ObjectId(dish.get('in_type'))}}
                 ]))[0]['name']
+        print(canteen)
 
         for comment in comments:
             if comment.get('by_user').get('image_path'):
@@ -359,7 +360,6 @@ def list_canteens():
              'as': 'menu'}}
     ])
     canteens = list(results)
-    print(canteens)
 
     for canteen in canteens:
         if canteen.get('image_path'):
