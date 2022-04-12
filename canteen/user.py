@@ -271,6 +271,7 @@ def canteen_page(_id):
         return redirect(request.url)
 
     if canteen:
+        print("hello")
 
         #ADD CART FOR IN-PAGE CART
         cart={}
@@ -314,6 +315,7 @@ def canteen_page(_id):
         at_canteen=active_set['at_canteen']
         dishes_by_type={}
         dishes_only=[]
+        print("hello")
 
         for _type in target_types:
             for dish_name in target_types[_type]:
@@ -334,14 +336,12 @@ def canteen_page(_id):
         
         for _type in canteen['menu']:
             for dish in canteen['menu'][_type]:
-                print(dish)
                 if dish.get('image_path'):
                     dish['image_path'] = dish.get('image_path').replace(' ', '%20').replace('./canteen', '')
 
                 dish['in_type_name'] = list(mongo.db.types.aggregate([
                     {'$match': {'_id':ObjectId(dish.get('in_type'))}}
                 ]))[0]['name']
-        print(canteen)
 
         for comment in comments:
             if comment.get('by_user').get('image_path'):
