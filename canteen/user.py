@@ -1,6 +1,7 @@
 import datetime
 import os
 from collections import Counter
+from unittest import result
 from bson import ObjectId
 from canteen import app, mongo, mail
 from flask import render_template, redirect, url_for, flash, request
@@ -160,6 +161,41 @@ def user_account():
         user['image_path'] = user.get('image_path').replace(' ', '%20').replace('./canteen', '')
 
     return render_template('/user/user_account.html', user=user)
+
+
+@app.route('/canteen_account/<user_id>/order', methods=['GET', 'POST'])
+@login_required
+def userOrder_page(user_id):
+    if current_user.auth_type != 2:
+        return 'Not Authorized', 403
+
+    if request.method == 'GET':
+        results = mongo.db.orders.aggregate([
+            {'$match': {'by_user': ObjectId(user_id)}} 
+        ])
+        orders = list(results)
+    
+        for order in orders :
+            counter = Counter(order['dishes'])
+            counted_dishes = []
+            results = mongo.db.canteens.aggregate([
+                {'$match': {'_id': ObjectId(order['at_canteen'])}}  
+            ])
+
+            results = list(results)
+
+            order['at_canteen_name'] = results[0]['name'] 
+
+            for dish_id, count in counter.items():
+                results = mongo.db.dishes.aggregate([
+                    {'$match': {'_id': ObjectId(dish_id)}}  
+                ])
+                dish = list(results)
+                counted_dishes.append([dish[0]['name'],count])
+
+            order['dishes'] = counted_dishes
+
+    return render_template('canteen/order.html', orders=orders)
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
