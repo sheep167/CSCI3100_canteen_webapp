@@ -332,7 +332,7 @@ def add_menu(canteen_id, typeID):
                 if file.filename != '':
                     filename = secure_filename(file.filename)
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
-                        filename = user.get('username') + '_' + str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
+                        filename = str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
                         image_path = save_image()
                         mongo.db.dishes.update_one({'_id': ObjectId(dish_id)}, {'$set': {'image_path': image_path}})
                     else:
@@ -453,15 +453,11 @@ def edit_menu(canteen_id, menu_id):
                     filename = secure_filename(file.filename)
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
                         filename = str(menu_id) + '.' + filename.rsplit('.', 1)[1].lower()
-                        image_path = save_image()
-                        mongo.db.dishes.update_one({'_id': ObjectId(menu_id)}, {'$set': {'image_path': image_path}})
+                        image = save_image()
+                        print(image)
                     else:
                         flash('File not supported', category='warning')
                         return redirect(request.url)
-
-                    in_type = list(mongo.db.dishes.aggregate([
-                        {'$match':{'_id':ObjectId(menu_id)}}
-                    ]))[0]['in_type']
 
             # update in dishes
             in_type = list(mongo.db.dishes.aggregate([
