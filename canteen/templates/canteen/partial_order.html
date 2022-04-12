@@ -16,7 +16,7 @@
             <!--orderID -->
             <div class="container-fluid p-0 d-flex">
                 <p>
-                <h3 class="mx-4">Order ID: </h3>
+                <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                 </p>
             </div>
 
@@ -25,7 +25,7 @@
                 <div id="cardJustArrive" class="card ml-2 mr-2">
                     <div class="card-body">
                         <div class="row ml-3 mt-1">
-                            <p><b>Customer ID: {{ order.by_user }}</b><br>
+                            <p>
                                 <b>Ordered Time: {{ order.at_time }}</b>
                             </p>
                         </div>
@@ -60,13 +60,11 @@
                         <!--buttons-->
                         <div class="row ml-1 my-2">
                             <div class="col-6">
-                                <p><b>Status: </b><br>
+                                <p><b>Status: Just Arrive</b><br>
                                 <b>Total Price: {{ order.total_price }} </b></p>
                             </div>
                             <div class="col-6">
                                 <div class="container-fluid">
-                                    <div>{{order._id}}</div>
-
                                     <a class="btn btn-primary" href="/canteen_account/finish/{{order._id}}"
                                          >
                                         Finish 
@@ -108,7 +106,7 @@
             <!--orderID-->
             <div class="container-fluid p-0 d-flex">
                 <p>
-                <h3 class="mx-4">Order ID: </h3>
+                <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                 </p>
             </div>
 
@@ -117,8 +115,7 @@
                 <div id="cardNormal" class="card ml-2 mr-2">
                     <div class="card-body">
                         <div class="row ml-3 mt-1">
-                            <p><b>Customer ID: {{ order.by_user }}</b><br>
-                                <b>Ordered Time: {{ order.at_time }}</b>
+                            <p><b>Ordered Time: {{ order.at_time }}</b>
                             </p>
                         </div>
                         <div class="container-fluid my-1">
@@ -152,13 +149,11 @@
                         <!--buttons-->
                         <div class="row ml-1 my-2">
                             <div class="col-6">
-                                <p><b>Status: </b><br>
+                                <p><b>Status: Normal</b><br>
                                 <b>Total Price: {{ order.total_price }} </b></p>
                             </div>
                             <div class="col-6">
                                 <div class="container-fluid">
-                                    <div>{{order._id}}</div>
-
                                     <a class="btn btn-primary" href="/canteen_account/finish/{{order._id}}"
                                          >
                                         Finish 
@@ -200,7 +195,7 @@
             <!--orderID-->
             <div class="container-fluid p-0 d-flex">
                 <p>
-                <h3 class="mx-4">Order ID: </h3>
+                <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                 </p>
             </div>
 
@@ -209,7 +204,7 @@
                 <div id="cardRush" class="card ml-2 mr-2">
                     <div class="card-body">
                         <div class="row ml-3 mt-1">
-                            <p><b>Customer ID: {{ order.by_user }}</b><br>
+                            <p>
                                 <b>Ordered Time: {{ order.at_time }}</b>
                             </p>
                         </div>
@@ -244,13 +239,11 @@
                         <!--buttons-->
                         <div class="row ml-1 my-2">
                             <div class="col-6">
-                                <p><b>Status: </b><br>
+                                <p><b>Status: Rush</b><br>
                                 <b>Total Price: {{ order.total_price }} </b></p>
                             </div>
                             <div class="col-6">
                                 <div class="container-fluid">
-                                    <div>{{order._id}}</div>
-
                                     <a class="btn btn-primary" href="/canteen_account/finish/{{order._id}}"
                                          >
                                         Finish 

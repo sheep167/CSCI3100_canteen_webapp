@@ -1,29 +1,24 @@
 {% extends 'base.html' %}
 {% set active_page = "Order" %}
-
 {% block title %}
 Order List
 {% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{{url_for('static',filename='style/css/order.css')}}">
 {% endblock %}
-
 {% block content %}
 <script src="{{url_for('static',filename='style/js/finishedorder.js')}}"></script>
 <script>
     setInterval(function () { location.reload() }, 30000);
 </script>
-
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Order Management</div>
 </div>
-
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     {% with orders = orders %}
     {% include "canteen/partial_order.html" %}
     {% endwith %}
 </div>
-
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     <div class="px-4 pt-4 m-0">
         <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
@@ -43,16 +38,15 @@ Order List
                 <!--orderID-->
                 <div class="container-fluid p-0 d-flex">
                     <p>
-                    <h3 class="mx-4">Order ID: </h3>
+                    <h3 class="mx-4">Order ID: {{ (order._id|string)[-4:] }}</h3>
                     </p>
                 </div>
-
                 <!--card (Finished)-->
                 <div class="pt-1 pb-3 container-fluid d-flex flex-nowrap">
                     <div class="card ml-2 mr-2">
                         <div class="card-body">
                             <div class="row ml-3 mt-1">
-                                <p><b>Customer ID: {{ order.by_user }}</b><br>
+                                <p>
                                     <b>Ordered Time: {{ order.at_time }}</b>
                                 </p>
                             </div>
@@ -87,40 +81,11 @@ Order List
                             <!--buttons-->
                             <div class="row ml-1 my-2">
                                 <div class="col-6">
-                                    <p><b>Status: </b><br>
+                                    <p><b>Status: Finished</b><br>
                                         <b>Total Price: {{ order.total_price }} </b>
                                     </p>
                                 </div>
                                 <div class="col-6">
-                                    <div class="container-fluid">
-                                        <div>{{order._id}}</div>
-
-                                        <a class="btn btn-primary" href="/canteen_account/finish/{{order._id}}">
-                                            Finish
-                                        </a>
-
-                                        <!-- <a class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModal" >
-                                        Finish 
-                                    </a> -->
-
-                                        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-body">
-                                                    <h5>Have you finished this order?</h5>
-                                                    <div>{{order._id}}</div>
-                                                    <div class="container-fluid mt-2">
-                                                        <a class="btn btn-success mx-2" href="/canteen_account/finish/{{order._id}}">Yes</a>
-                                                        <button type="button" class="btn btn-danger">No</button>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -128,22 +93,18 @@ Order List
                 </div>
             </div>
             <!--End A Column-->
-
             {% endif %}
             {% if (count.value > 0) and (count.value) % 3 == 0 %}
         </div>
         {% endif %}
         {% endfor %}
-
         {% if (count.value > 0) and (count.value) % 3 != 0 %}
     </div>
     {% endif %}
-
     {% endif %}
     {% if (count.value == 0) %}
     <p class="mx-4">There is no finished order.</p>
     {% endif %}
     </div>
 </div>
-
 {% endblock %}

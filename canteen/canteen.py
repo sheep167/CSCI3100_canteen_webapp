@@ -66,17 +66,14 @@ def order_page(canteen_id):
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
         orders = list(results)
-
-        print(orders)
     
-
         for order in orders :
             time = order['at_time']
-            print(datetime.datetime.now())
             duration = datetime.datetime.now() - time
-            duration_in_s = duration.total_seconds()      
-            print(duration_in_s)
-            if duration_in_s >= 15 * 60 :
+            duration_in_s = duration.total_seconds()
+            if order['order_status'] == 'finished':
+                pass
+            elif duration_in_s >= 15 * 60 :
                 order['order_status'] = 'rush'
             elif duration_in_s >= 5 * 60 :
                 order['order_status'] = 'normal'
@@ -85,7 +82,6 @@ def order_page(canteen_id):
             counter = Counter(order['dishes'])
             counted_dishes = []
             for dish_id, count in counter.items():
-                print('hello')
                 results = mongo.db.dishes.aggregate([
                     {'$match': {'_id': ObjectId(dish_id)}}  # edit!!!
                 ])
@@ -143,16 +139,11 @@ def menu_page(canteen_id, invalid_delete=''):
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
-    if request.method == 'GET':
-        order = mongo.db.orders.aggregate([
+    order = mongo.db.orders.aggregate([
             {'$match': {'_id': ObjectId(order_id)}}
         ])
-
-        order = list(order)
-
-        print(order_id)
-
-        mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
+    order = list(order)
+    mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
 
     return redirect('/canteen_account/%s/order' % order[0]['at_canteen'])
 
@@ -176,14 +167,10 @@ def add_set(canteen_id):
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
             
-            sets_num = len(list(mongo.db.sets.aggregate([])))
-            print(sets_num)
-
             mongo.db.sets.insert_one({
                 'name': _set_name,
                 'at_canteen': ObjectId(canteen_id),
                 'types': _dish_dict,
-                'active': 0
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
@@ -311,6 +298,8 @@ def add_menu(canteen_id, typeID):
             flash('Please input your menu price', category='info')
         elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
+        elif int(price) <= 0:
+            flash('Please input your price as a positive number', category='warning')
         else:
 
             # update dishes
@@ -384,8 +373,19 @@ def delete_item(canteen_id,category,id):
             new_dishes.append(_dish)
         mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
 
+        # delete from sets
+        sets=list(mongo.db.sets.aggregate([
+            {'$match': {'at_canteen':ObjectId(canteen_id)}}
+        ]))
+        for _set in sets:
+            dish_in_set=_set['types']
+            for _type in dish_in_set:
+                if target_dish['name'] in dish_in_set[_type]:
+                    dish_in_set[_type].remove(target_dish['name'])
+            mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': dish_in_set}})
+
         # delete from dishes
-        mongo.db.dishes.delete_one({"_id": ObjectId(id)})        
+        mongo.db.dishes.delete_one({"_id": ObjectId(id)})
     elif category == 'types':
         target_type_name=list(mongo.db.types.aggregate([
             {'$match':{'_id':ObjectId(id)}}
@@ -444,6 +444,8 @@ def edit_menu(canteen_id, menu_id):
             flash('300 characters limit exceeded', category='warning')
         if price == '':
             flash('Please input your menu price', category='info')
+        if float(price) <= 0:
+            flash('Please input a positive price', category='warning')
         elif not isFloat(price):
             flash('Please input your price as a number', category='warning')
         else:

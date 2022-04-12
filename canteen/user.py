@@ -180,7 +180,7 @@ def register_page():
         token = generate_confirmation_token(form.email.data)
 
         msg = Message('Verification Email', recipients=[form.email.data])
-        msg.body = 'Go here to for verification. http://localhost:5000/confirm_email/%s' % token
+        msg.body = 'Go here to for verification. http://127.0.0.1:5000/confirm_email/%s' % token
         mail.send(msg)
 
         mongo.db.users.insert_one(user_to_create.to_json())
@@ -221,6 +221,7 @@ def logout_page():
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
+    print("hello")
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt=app.config['SECRET_KEY'], max_age=300)
@@ -340,6 +341,7 @@ def canteen_page(_id):
                 dish['in_type_name'] = list(mongo.db.types.aggregate([
                     {'$match': {'_id':ObjectId(dish.get('in_type'))}}
                 ]))[0]['name']
+        print(canteen)
 
         for comment in comments:
             if comment.get('by_user').get('image_path'):
@@ -359,7 +361,6 @@ def list_canteens():
              'as': 'menu'}}
     ])
     canteens = list(results)
-    print(canteens)
 
     for canteen in canteens:
         if canteen.get('image_path'):

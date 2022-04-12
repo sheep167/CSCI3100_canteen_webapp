@@ -24,7 +24,7 @@ Canteen List
             <div class="wrapper">
                 <div class="circle align-items-right mx-3" data-aos="zoom-in-left">
                     <!--source picture: https://www.pngplay.com/th/image/67424-->
-                    <img id="reload" src="../static/image/home/Noodle-Background-PNG-Image.png" alt="scroll"
+                    <img id="reload" src="{{ url_for('static', filename='../static/image/home/Noodle-Background-PNG-Image.png') }}" alt="scroll"
                         class="center">
                 </div>
             </div>
@@ -37,7 +37,7 @@ Canteen List
     </div>
     <div class="row justify-content-center">
         <!--source picture: https://www.flaticon.com-->
-        <img src="../static/image/home/forkspoon.png" style="object-fit: cover; width: 40px; height: 40px;"
+        <img src="{{ url_for('static', filename='../static/image/home/forkspoon.png') }}" style="object-fit: cover; width: 40px; height: 40px;"
             class="center" data-aos="fade-down">
     </div>
     <hr data-aos="fade-down">
@@ -83,11 +83,11 @@ Canteen List
                             <p class="foodlist card-text mb-1">
                                 <b>Crowdedness: </b> 
                                 {% if canteen.crowd == 'busy' %}
-                                <img src="../static/image/home/busy.png" alt="busy" width="25" height="25"> 
+                                <img src="{{ url_for('static', filename='../static/image/home/busy.png') }}" alt="busy" width="25" height="25"> 
                                 {% elif canteen.crowd == 'normal' %}
-                                <img src="../static/image/home/normal.png" alt="normal" width="25" height="25">
+                                <img src="{{ url_for('static', filename='../static/image/home/normal.png') }}" alt="normal" width="25" height="25">
                                 {% else %}
-                                <img src="../static/image/home/few_people.png" alt="few_people" width="25" height="25">
+                                <img src="{{ url_for('static', filename='../static/image/home/few_people.png') }}" alt="few_people" width="25" height="25">
                                 {% endif %}
                                 {{canteen.crowd}}
                             </p>
@@ -135,15 +135,14 @@ Canteen List
                             <p class="foodlist card-text mb-1">
                                 <b>Crowdedness: </b> 
                                 {% if canteen.crowd == 'busy' %}
-                                <img src="../static/image/home/busy.png" alt="busy" width="25" height="25"> 
+                                <img src="{{ url_for('static', filename='../static/image/home/busy.png') }}" alt="busy" width="25" height="25"> 
                                 {% elif canteen.crowd == 'normal' %}
-                                <img src="../static/image/home/normal.png" alt="normal" width="25" height="25">
+                                <img src="{{ url_for('static', filename='../static/image/home/normal.png') }}" alt="normal" width="25" height="25">
                                 {% else %}
-                                <img src="../static/image/home/few_people.png" alt="few_people" width="25" height="25">
+                                <img src="{{ url_for('static', filename='../static/image/home/few_people.png') }}" alt="few_people" width="25" height="25">
                                 {% endif %}
                                 {{canteen.crowd}}
                             </p>
-                            <a class="btn btn-outline-warning mb-2" href="/canteens/{{canteen._id}}">View</a>
                         </div>
                     </div>
                 </div>
