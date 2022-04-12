@@ -1,4 +1,5 @@
 import datetime
+import dateutil.parser
 import os
 from collections import Counter
 from unittest import result
@@ -162,10 +163,9 @@ def user_account():
 
     return render_template('/user/user_account.html', user=user)
 
-
-@app.route('/canteen_account/<user_id>/order', methods=['GET', 'POST'])
+@app.route('/order/<user_id>', methods=['GET', 'POST'])
 @login_required
-def userOrder_page(user_id):
+def user_order_page(user_id):
     if current_user.auth_type != 2:
         return 'Not Authorized', 403
 
@@ -192,10 +192,22 @@ def userOrder_page(user_id):
                 ])
                 dish = list(results)
                 counted_dishes.append([dish[0]['name'],count])
-
             order['dishes'] = counted_dishes
-
-    return render_template('canteen/order.html', orders=orders)
+        
+        unfinished_orders=[]
+        finished_orders={} # a dict of month: [order]
+        for order in orders:
+            if order['order_status']=="finished":
+                month = dateutil.parser.isoparse(str(order['at_time'])).strftime("%B")
+                if month in finished_orders:
+                    finished_orders[month].append(order)
+                else:
+                    finished_orders[month]=[order]
+            else:
+                unfinished_orders.append(order)
+        
+        sorted(finished_orders) # sort by month
+    return render_template('user/order_history.html', unfinished_orders=unfinished_orders, finished_orders=finished_orders)
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
