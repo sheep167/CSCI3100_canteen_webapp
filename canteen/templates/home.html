@@ -76,7 +76,7 @@ Canteen List
                             </p>
                             <p class="foodlist card-text mb-auto"></p>
                             {% if canteen.avg_rating %}
-                            <p class="foodlist card-text mb-auto"><b>Rating: </b>{{canteen.avg_rating}}</p>
+                            <p class="foodlist card-text mb-auto"><b>Rating: </b>{{"%.2f"|format(canteen.avg_rating)}}</p>
                             {% else %}
                             <p class="foodlist card-text mb-auto"><b>Rating: </b>No rating has been made yet.</p>
                             {% endif %}
@@ -128,7 +128,7 @@ Canteen List
                             </p>
                             <p class="foodlist card-text mb-auto"></p>
                             {% if canteen.avg_rating %}
-                            <p class="foodlist card-text mb-auto"><b>Rating: </b>{{canteen.avg_rating}}</p>
+                            <p class="foodlist card-text mb-auto"><b>Rating: </b>{{"%.2f"|format(canteen.avg_rating)}}</p>
                             {% else %}
                             <p class="foodlist card-text mb-auto"><b>Rating: </b>No rating has been made yet.</p>
                             {% endif %}
