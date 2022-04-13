@@ -27,7 +27,7 @@ canteens_list = [
     {'name': 'SHHO Canteen', 'latitude': '22.4184238', 'longitude': '114.2097329', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 88, 'menu': [], 'image_path': "/static/images/SHHO/SHHO.jpg", 'active_set':None},
     {'name': 'LWS Canteen', 'latitude': '22.4224862', 'longitude': '114.2043131', 'open_at': '9:00', 'close_at': '17:00', 'capacity': 85, 'menu': [], 'image_path': "/static/images/LWS/LWS.jpeg", 'active_set':None},
     {'name': 'Benjamin Franklin Centre Coffee Corner', 'latitude': '22.41897632210143', 'longitude': '114.20552342698697', 'open_at': '10:00', 'close_at': '18:00', 'capacity': 200, 'menu': [], 'image_path': "/static/images/BFC/BFC.jpeg", 'active_set':None},
-    {'name': 'Chung Chi College Staff Club', 'latitude': '22.416174502784415', 'longitude': '114.20768162415987', 'open_at': '11:00', 'close_at': '15:25', 'capacity': 70, 'menu': [], 'image_path': "/static/images/CCSC/CCSC.jpeg", 'active_set':None},
+    {'name': 'Chung Chi College Staff Club', 'latitude': '22.416174502784415', 'longitude': '114.20768162415987', 'open_at': '8:00', 'close_at': '13:00', 'capacity': 70, 'menu': [], 'image_path': "/static/images/CCSC/CCSC.jpeg", 'active_set':None},
     {'name': 'Orchid Lodge', 'latitude': '22.415698430860907', 'longitude': '114.20771381066638', 'open_at': '8:00', 'close_at': '18:00', 'capacity': 40, 'menu': [], 'image_path': "/static/images/OL/OL.jpeg", 'active_set':None}
 ]
 mongo.db.canteens.insert_many(canteens_list)
