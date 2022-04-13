@@ -92,23 +92,23 @@ Canteen List
             {% if types %}
             {% for type in types %}
             <div class="mb-4 col-6">
-                <div class="h5 text-maincolor"> {{ type.name }} </div>
-                <div class="block mr-4">
+                <div class="h5 text-maincolor d-flex flex-row flex-wrap"> 
+                    <div>{{ type.name }} </div>
+                    <a class="btn btn-maincolor-semi ml-auto mr-2" href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">
+                        Add Menu
+                    </a>
+                    <a class="btn btn-danger" href="/canteen_account/{{canteen_id}}/delete/types/{{ type._id }}">
+                        Delete Type
+                    </a>
+                </div>
+                <div class="block mr-0">
                     <table class="table m-0 p-0">
                         <thead>
                             <tr>
                                 <th scope="col" class="align-middle" width="10%">#</th>
                                 <th scope="col" class="align-middle" width="20%">{{ type.name }}</th>
                                 <th scope="col" class="align-middle" width="20%">Price</th>
-                                <th class="d-flex flex-row align-items-center">
-                                    <div class="">Action</div>
-                                    <span class="ml-auto"><a class="btn btn-maincolor-semi"
-                                            href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">Add
-                                            Menu</a></span>
-                                    <span class="ml-auto"><a class="btn btn-danger"
-                                            href="/canteen_account/{{canteen_id}}/delete/types/{{ type._id }}">Delete
-                                            Type</a></span>
-                                </th>
+                                <th class="align-middle" width="20%">Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -117,10 +117,10 @@ Canteen List
                             {% if type.dishes %}
                             {% for dish in type.dishes %}
                             <tr>
-                                <th scope="row">{{loop.index}}</th>
-                                <td>{{ dish.name }}</td>
-                                <td>${{ dish.price }}</td>
-                                <td class="text-left">
+                                <th scope="row" width="10%">{{loop.index}}</th>
+                                <td width="20%">{{ dish.name }}</td>
+                                <td width="20%">${{ dish.price }}</td>
+                                <td class="text-left" width="20%">
                                     <div>
                                         <span><a href="/canteen_account/{{canteen_id}}/edit/menu/{{dish._id}}"
                                                 class="btn btn-primary">Edit</a></span>

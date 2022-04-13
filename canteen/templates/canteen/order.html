@@ -42,12 +42,12 @@ Order List
                     </p>
                 </div>
                 <!--card (Finished)-->
-                <div class="pt-1 pb-3 container-fluid d-flex flex-nowrap">
+                <div class="pt-1 pb-3 container-fluid w-100 m-0">
                     <div class="card ml-2 mr-2">
                         <div class="card-body">
                             <div class="row ml-3 mt-1">
                                 <p>
-                                    <b>Ordered Time: {{ order.at_time }}</b>
+                                    <div>Time: {{order.at_time.hour}}:{{order.at_time.minute}}:{{order.at_time.second}} {{order.at_time.day}}/{{order.at_time.month}}/{{order.at_time.year}}</div>
                                 </p>
                             </div>
                             <div class="container-fluid my-1">
@@ -56,8 +56,8 @@ Order List
                                     <table class="table mx-0 mb-0">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>Menu</th>
-                                                <th></th>
+                                                <th width="50%">Menu</th>
+                                                <th width="50%"><div class="text-center">Amount</div></th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -68,8 +68,8 @@ Order List
                                                 {% if order.dishes %}
                                                 {% for name, num in order.dishes %}
                                                 <tr>
-                                                    <td>{{ name }}</td>
-                                                    <td>{{ num }}</td>
+                                                    <td width="50%">{{ name }}</td>
+                                                    <td width="50%"><div class="text-center">{{num}}</div></td>
                                                 </tr>
                                                 {% endfor %}
                                                 {% endif %}
