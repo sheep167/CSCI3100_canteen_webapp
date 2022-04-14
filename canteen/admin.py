@@ -1,6 +1,6 @@
 import datetime
 import os
-from canteen import app, mongo
+from canteen import app, db
 from flask import render_template, request, redirect, flash
 from flask_login import current_user, login_required
 from .form import DataEditForm, DataEditFormWithImage, DataEditFormWithSelect
@@ -26,7 +26,7 @@ def reset_password(_id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    mongo.db.users.update_one({'_id': ObjectId(_id)}, {'$set': {'password': bcrypt.hashpw('123456'.encode('utf-8'), bcrypt.gensalt())}})
+    db.users.update_one({'_id': ObjectId(_id)}, {'$set': {'password': bcrypt.hashpw('123456'.encode('utf-8'), bcrypt.gensalt())}})
     flash('Password is reset to 123456', category='info')
     return redirect('/overview/users')
 
@@ -38,10 +38,10 @@ def overview_page(category):
         return 'Not Authorized', 403
 
     if category == 'users':
-        users = list(mongo.db.users.find())
+        users = list(db.users.find())
         return render_template('admin/admin_users.html', users=users)
     elif category == 'canteens':
-        canteens = list(mongo.db.canteens.find())
+        canteens = list(db.canteens.find())
         return render_template('admin/admin_canteens.html', canteens=canteens)
 
     return 'category not found'
@@ -68,7 +68,7 @@ def add_data_page(category):
             data = json.loads(form.text.data)
 
             if category == 'users':
-                if mongo.db.users.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
+                if db.users.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
                     raise ValidationError()
 
                 hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
@@ -78,10 +78,10 @@ def add_data_page(category):
                                        username=data.get('username')
                                        )
 
-                mongo.db.users.insert_one(user_to_insert.to_json())
+                db.users.insert_one(user_to_insert.to_json())
 
             elif category == 'canteens':
-                if mongo.db.canteens.find_one({'name': data.get('name')}):
+                if db.canteens.find_one({'name': data.get('name')}):
                     raise ValidationError()
 
                 canteen_to_insert = Canteens(name=data.get('name'),
@@ -91,7 +91,7 @@ def add_data_page(category):
                                              close_at=data.get('close_at'),
                                              capacity=data.get('capacity'))
 
-                mongo.db.canteens.insert_one(canteen_to_insert.to_json())
+                db.canteens.insert_one(canteen_to_insert.to_json())
 
             return redirect('/overview/%s' % category)
 
@@ -114,7 +114,7 @@ def edit_data_page(category, _id):
     form = DataEditForm()
     if category == 'canteens':
         form = DataEditFormWithImage()
-    mongo_col = mongo.db[category]
+    mongo_col = db[category]
 
     if request.method == 'GET':
         if category == 'users':
@@ -127,7 +127,7 @@ def edit_data_page(category, _id):
             data = json.loads(form.text.data)
             if category == 'canteens':
 
-                canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
+                canteen = db.canteens.find_one({'_id': ObjectId(_id)})
 
                 if form.image.data.filename != '':
                     filename = secure_filename(form.image.data.filename)
@@ -159,7 +159,7 @@ def delete_data_page(category, _id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
-    mongo_col = mongo.db[category]
+    mongo_col = db[category]
     mongo_col.delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')
     return redirect('/overview/%s' % category)
@@ -173,7 +173,7 @@ def overview_canteens_data(canteen_id, category):
 
     if category == 'dishes':
         if request.method == 'GET':
-            results = mongo.db.sets.aggregate([
+            results = db.sets.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ])
             sets = list(results)
@@ -186,14 +186,14 @@ def overview_canteens_data(canteen_id, category):
                 for _type in to_remove:
                     del _set['types'][_type]
 
-            results = mongo.db.types.aggregate([
+            results = db.types.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ])
             types = list(results)
         return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types)
-        # canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        # canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
         #
-        # results = mongo.db.dishes.aggregate([
+        # results = db.dishes.aggregate([
         #     {'$match': {'at_canteen': ObjectId(canteen_id)}},
         #     {'$lookup':
         #         {'from': 'canteens',
@@ -215,8 +215,8 @@ def overview_canteens_data(canteen_id, category):
 
     elif category == 'comments':
 
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
-        results = mongo.db.comments.aggregate([
+        canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        results = db.comments.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}},
             {'$lookup':
                 {'from': 'users',
@@ -232,9 +232,9 @@ def overview_canteens_data(canteen_id, category):
         return render_template('admin/admin_comments.html', canteen=canteen, comments=comments)
 
     elif category == 'orders':
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
 
-        results = mongo.db.orders.aggregate([
+        results = db.orders.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}},
             {'$lookup':
                 {'from': 'users',
@@ -261,7 +261,7 @@ def overview_canteens_data(canteen_id, category):
 @login_required
 def add_canteens_data(canteen_id, category):
     def save_image():
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
         folder_path = './canteen/static/image/%s' % canteen.get('name')
         os.makedirs(folder_path, exist_ok=True)
         save_path = os.path.join(folder_path, filename).replace('\\', '/')
@@ -286,7 +286,7 @@ def add_canteens_data(canteen_id, category):
         elif category == 'orders':
             form.text.data = json.dumps(Orders.template_object(), indent=4)
 
-            dishes = mongo.db.dishes.aggregate([
+            dishes = db.dishes.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}},
                 {'$lookup':
                     {'from': 'canteens',
@@ -323,7 +323,7 @@ def add_canteens_data(canteen_id, category):
 
                 data['at_canteen'] = ObjectId(canteen_id)
 
-                user = mongo.db.users.find_one({'username': data.get('username')})
+                user = db.users.find_one({'username': data.get('username')})
                 if not user:
                     raise NoSuchUserError()
                 user_id = user.get('_id')
@@ -334,13 +334,13 @@ def add_canteens_data(canteen_id, category):
 
             elif category == 'orders':
 
-                dishes_ids = mongo.db.dishes.aggregate([
+                dishes_ids = db.dishes.aggregate([
                     {'$match': {'name': {'$in': form.select.data}}},
                     {'$project': {'_id': 1}}
                 ])
                 data['dishes'] = [_id.get('_id') for _id in dishes_ids]
 
-                total_price = mongo.db.dishes.aggregate([
+                total_price = db.dishes.aggregate([
                     {'$match': {'name': {'$in': form.select.data}}},
                     {'$group': {'_id': 0, 'total_price': {'$sum': '$price'}}}
                 ])
@@ -349,7 +349,7 @@ def add_canteens_data(canteen_id, category):
 
                 data['at_canteen'] = ObjectId(canteen_id)
 
-                user = mongo.db.users.find_one({'username': data.get('username')})
+                user = db.users.find_one({'username': data.get('username')})
                 if not user:
                     raise NoSuchUserError()
                 user_id = user.get('_id')
@@ -358,10 +358,10 @@ def add_canteens_data(canteen_id, category):
 
                 data['at_time'] = datetime.datetime.strptime(data.get('at_time'), '%Y-%m-%d %H:%M:%S')
 
-            _id = mongo.db[category].insert_one(data)
+            _id = db[category].insert_one(data)
 
             if category == 'dishes':
-                mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$push': {'menu': ObjectId(_id.inserted_id)}})
+                db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$push': {'menu': ObjectId(_id.inserted_id)}})
 
             return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
 
@@ -386,12 +386,12 @@ def add_canteens_data(canteen_id, category):
 def edit_canteens_data(canteen_id, category, _id):
 
     def save_and_delete_image():
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
         folder_path = './canteen/static/image/%s' % canteen.get('name')
         os.makedirs(folder_path, exist_ok=True)
         save_path = os.path.join(folder_path, filename).replace('\\', '/')
         form.image.data.save(save_path)
-        old_file_name = mongo.db.dishes.find_one({'_id': ObjectId(_id)})
+        old_file_name = db.dishes.find_one({'_id': ObjectId(_id)})
         old_file_name = old_file_name.get('image_path')
         if old_file_name:
             os.remove(os.path.join(folder_path, old_file_name.rsplit('/', 1)[1]).replace('\\', '/'))
@@ -406,11 +406,11 @@ def edit_canteens_data(canteen_id, category, _id):
 
     if request.method == 'GET':
         if category == 'dishes':
-            form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
+            form.text.data = json.dumps(db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
         elif category == 'comments':
-            form.text.data = json.dumps(mongo.db.comments.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'at_canteen': 0, 'by_user': 0, 'at_time': 0}), indent=4, default=str)
+            form.text.data = json.dumps(db.comments.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'at_canteen': 0, 'by_user': 0, 'at_time': 0}), indent=4, default=str)
         elif category == 'orders':
-            form.text.data = json.dumps(mongo.db.orders.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'order_status': 1, 'total_price': 1}), indent=4)
+            form.text.data = json.dumps(db.orders.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'order_status': 1, 'total_price': 1}), indent=4)
 
     if request.method == 'POST':
         try:
@@ -424,7 +424,7 @@ def edit_canteens_data(canteen_id, category, _id):
                     else:
                         raise ValidationError()
 
-            mongo.db[category].update_one({'_id': ObjectId(_id)}, {'$set': data})
+            db[category].update_one({'_id': ObjectId(_id)}, {'$set': data})
             return redirect('/overview/canteens/%s/%s' % (canteen_id, category))
 
         except JSONDecodeError:
@@ -442,9 +442,9 @@ def edit_canteens_data(canteen_id, category, _id):
 def delete_canteens_data(canteen_id, category, _id):
 
     def delete_image():
-        canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
+        canteen = db.canteens.find_one({'_id': ObjectId(canteen_id)})
         folder_path = './canteen/static/image/%s' % canteen.get('name')
-        old_file_name = mongo.db.dishes.find_one({'_id': ObjectId(_id)})
+        old_file_name = db.dishes.find_one({'_id': ObjectId(_id)})
         old_file_name = old_file_name.get('image_path')
         if old_file_name:
             os.remove(os.path.join(folder_path, old_file_name.rsplit('/', 1)[1]).replace('\\', '/'))
@@ -454,11 +454,11 @@ def delete_canteens_data(canteen_id, category, _id):
 
     if category == 'dishes':
         # Delete image only if there is no entry sharing the same image
-        image_path = mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'image_path': 1}).get('image_path')
-        if mongo.db.dishes.count_documents({'image_path': image_path}) == 1:
+        image_path = db.dishes.find_one({'_id': ObjectId(_id)}, {'image_path': 1}).get('image_path')
+        if db.dishes.count_documents({'image_path': image_path}) == 1:
             delete_image()
-        mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$pull': {'menu': ObjectId(_id)}})
+        db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$pull': {'menu': ObjectId(_id)}})
 
-    mongo.db[category].delete_one({'_id': ObjectId(_id)})
+    db[category].delete_one({'_id': ObjectId(_id)})
     flash('Item Deleted', category='info')
     return redirect('/overview/canteens/%s/%s' % (canteen_id, category))

@@ -1,5 +1,6 @@
 from flask import Flask
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from bson import ObjectId
 import bcrypt
 
@@ -11,13 +12,17 @@ if option.lower() != 'y':
 app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/canteen'
 app.config['SECRET_KEY'] = 'dQw4w9WgXcQ'
-mongo = PyMongo(app)
-for collection in mongo.db.list_collection_names():
-    mongo.db[collection].drop()
+# mongo = PyMongo(app)
+
+client = MongoClient("mongodb+srv://csci3100:food-ordering@food-ordering.nonow.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = client.test
+
+for collection in db.list_collection_names():
+    db[collection].drop()
 
 admin = {'email': 'admin@admin.com', 'password': '123456', 'username': 'admin', 'auth_type': 0, 'confirmed': 1, 'balance': 10000}
 admin['password'] = bcrypt.hashpw(admin.get('password').encode('utf-8'), bcrypt.gensalt())
-mongo.db.users.insert_one(admin)
+db.users.insert_one(admin)
 
 # must be updated
 canteens_list = [
@@ -30,7 +35,7 @@ canteens_list = [
     {'name': 'Chung Chi College Staff Club', 'latitude': '22.416174502784415', 'longitude': '114.20768162415987', 'open_at': '11:00', 'close_at': '15:25', 'capacity': 70, 'menu': [], 'image_path': "/static/images/CCSC/CCSC.jpeg", 'active_set':None},
     {'name': 'Orchid Lodge', 'latitude': '22.415698430860907', 'longitude': '114.20771381066638', 'open_at': '8:00', 'close_at': '18:00', 'capacity': 40, 'menu': [], 'image_path': "/static/images/OL/OL.jpeg", 'active_set':None}
 ]
-mongo.db.canteens.insert_many(canteens_list)
+db.canteens.insert_many(canteens_list)
 
 users_list = [
     {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
@@ -51,16 +56,16 @@ for user in users_list:
     user['cart'] = {}
     user['image_path'] = None
     if 'staff_of' in user:
-        results = mongo.db.canteens.aggregate([
+        results = db.canteens.aggregate([
                     {'$match': {"name": user['staff_of']}},
                 ])
         user['staff_of'] = list(results)[0]['_id']
 
-mongo.db.users.insert_many(users_list)
+db.users.insert_many(users_list)
 
 # add default set
 for canteen in canteens_list:
-    canteen_id=list(mongo.db.canteens.aggregate([
+    canteen_id=list(db.canteens.aggregate([
         {'$match':{'name': canteen['name']}}
     ]))[0]['_id']
     to_insert={
@@ -68,6 +73,6 @@ for canteen in canteens_list:
         'at_canteen': ObjectId(canteen_id),
         'types': {},
     }
-    mongo.db.sets.insert_one(to_insert)
-    mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': to_insert['_id']} })
+    db.sets.insert_one(to_insert)
+    db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': to_insert['_id']} })
 

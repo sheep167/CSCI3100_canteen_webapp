@@ -1,5 +1,6 @@
 from flask import Flask
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from flask_login import LoginManager
 from flask_mail import Mail
 
@@ -8,7 +9,9 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/canteen'
 app.config['SECRET_KEY'] = 'dQw4w9WgXcQ'
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
-mongo = PyMongo(app)
+# mongo = PyMongo(app)
+client = MongoClient("mongodb+srv://csci3100:food-ordering@food-ordering.nonow.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = client.test
 login_manager = LoginManager(app)
 
 app.config['MAIL_SERVER'] = 'smtp-relay.sendinblue.com'

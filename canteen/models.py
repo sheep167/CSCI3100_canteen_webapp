@@ -5,7 +5,7 @@
 from typing import List, Union
 from bson import ObjectId
 import datetime
-from canteen import mongo, login_manager
+from canteen import login_manager, db
 from flask_login import UserMixin
 
 
@@ -43,7 +43,7 @@ class Users:
 
 @login_manager.user_loader
 def load_user(user_id):
-    user_json = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    user_json = db.users.find_one({'_id': ObjectId(user_id)})
     return LoginUsers(user_json)
 
 

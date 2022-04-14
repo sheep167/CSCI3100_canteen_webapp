@@ -2,7 +2,7 @@ import datetime
 from collections import Counter
 import re
 from bson import ObjectId
-from canteen import app, mongo, mail
+from canteen import app, mail, db
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from .form import UserRegistrationForm, UserLoginForm
@@ -62,7 +62,7 @@ def order_page(canteen_id):
         return 'Not Authorized', 403
 
     if request.method == 'GET':
-        results = mongo.db.orders.aggregate([
+        results = db.orders.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}  # edit!!!
         ])
         orders = list(results)
@@ -77,12 +77,12 @@ def order_page(canteen_id):
                 order['order_status'] = 'rush'
             elif duration_in_s >= 5 * 60 :
                 order['order_status'] = 'normal'
-            mongo.db.orders.update_one({'_id': ObjectId(order['_id'])}, {'$set': {'order_status' : order['order_status']}})
+            db.orders.update_one({'_id': ObjectId(order['_id'])}, {'$set': {'order_status' : order['order_status']}})
 
             counter = Counter(order['dishes'])
             counted_dishes = []
             for dish_id, count in counter.items():
-                results = mongo.db.dishes.aggregate([
+                results = db.dishes.aggregate([
                     {'$match': {'_id': ObjectId(dish_id)}}  # edit!!!
                 ])
                 dish = list(results)
@@ -101,18 +101,18 @@ def menu_page(canteen_id, invalid_delete=''):
     if request.method == 'POST':
         set_name=request.form.get('active-set')
 
-        _set=list(mongo.db.sets.aggregate([
+        _set=list(db.sets.aggregate([
             {'$match':{'name':set_name}}
         ]))[0]
 
-        mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': _set['_id']}})
+        db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': _set['_id']}})
 
         return redirect('/canteen_account/%s/menu' % canteen_id)    
 
     if request.method == 'GET':
         if invalid_delete == 'sets':
             flash('You cannot delete current active set', category='warning')
-        results = mongo.db.sets.aggregate([
+        results = db.sets.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
         ])
         sets = list(results)
@@ -125,12 +125,12 @@ def menu_page(canteen_id, invalid_delete=''):
             for _type in to_remove:
                 del _set['types'][_type]
 
-        results = mongo.db.types.aggregate([
+        results = db.types.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
         ])
         types = list(results)
 
-        active_set=list(mongo.db.canteens.aggregate([
+        active_set=list(db.canteens.aggregate([
             {'$match': {'_id': ObjectId(canteen_id)}}
         ]))[0]['active_set']
 
@@ -139,11 +139,11 @@ def menu_page(canteen_id, invalid_delete=''):
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
-    order = mongo.db.orders.aggregate([
+    order = db.orders.aggregate([
             {'$match': {'_id': ObjectId(order_id)}}
         ])
     order = list(order)
-    mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
+    db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
 
     return redirect('/canteen_account/%s/order' % order[0]['at_canteen'])
 
@@ -160,21 +160,21 @@ def add_set(canteen_id):
             flash('Please add your set name', category='info')
         else:
             _dish_dict = {}
-            types = list(mongo.db.types.aggregate([
+            types = list(db.types.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ]))
             for _type in types:
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
             
-            mongo.db.sets.insert_one({
+            db.sets.insert_one({
                 'name': _set_name,
                 'at_canteen': ObjectId(canteen_id),
                 'types': _dish_dict,
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
-    results = mongo.db.types.aggregate([
+    results = db.types.aggregate([
         {'$match': {'at_canteen': ObjectId(canteen_id)}}
     ])
     types = list(results)
@@ -195,13 +195,13 @@ def add_type(canteen_id):
         if len(typename) >= 300:
             flash('300 characters limit exceeded', category='warning')
         else:
-            sets=list(mongo.db.sets.aggregate([]))
+            sets=list(db.sets.aggregate([]))
 
             for _set in sets:
                 _set['types'][typename]=[]
-                mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': _set['types']}})
+                db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': _set['types']}})
 
-            mongo.db.types.insert_one({
+            db.types.insert_one({
                 'name': typename,
                 'at_canteen': ObjectId(canteen_id),
                 'dishes': []
@@ -220,7 +220,7 @@ def edit_set(canteen_id, set_id):
             flash('Please add your set name', category='info')
         else:
             _dish_dict = {}
-            types = list(mongo.db.types.aggregate([
+            types = list(db.types.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ]))
 
@@ -230,23 +230,23 @@ def edit_set(canteen_id, set_id):
                 _dish_dict[_type['name']] = checkboxAns
 
                 for dish_name in checkboxAns:
-                    dish_id=list(mongo.db.dishes.aggregate([
+                    dish_id=list(db.dishes.aggregate([
                         {'$match':{'name': dish_name}}
                     ]))[0]['_id']
 
                     dish_only.append(dish_id)
-            mongo.db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict, 'name':_set_name} })
+            db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict, 'name':_set_name} })
 
-            mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'menu': dish_only} })
+            db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'menu': dish_only} })
 
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
     # types=[]
     if request.method == 'GET':
-        types = list(mongo.db.types.aggregate([
+        types = list(db.types.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
         ]))
-        _set = list(mongo.db.sets.aggregate([
+        _set = list(db.sets.aggregate([
             {'$match': {'_id': ObjectId(set_id)}}
         ]))[0]
         # print(_set)
@@ -303,7 +303,7 @@ def add_menu(canteen_id, typeID):
         else:
 
             # update dishes
-            mongo.db.dishes.insert_one({
+            db.dishes.insert_one({
                 'name': str(menuName),
                 'at_canteen': ObjectId(canteen_id),
                 'price': float(price),
@@ -311,11 +311,11 @@ def add_menu(canteen_id, typeID):
                 'ingredients':ingredients
             })
 
-            dish_id = list(mongo.db.dishes.aggregate([
+            dish_id = list(db.dishes.aggregate([
                 {'$match': {'name':str(menuName)}}
             ]))[0]['_id']
 
-            user = mongo.db.users.find_one({'_id': ObjectId(current_user._id)})
+            user = db.users.find_one({'_id': ObjectId(current_user._id)})
             if request.files:
                 file = request.files['file']
                 if file.filename != '':
@@ -323,13 +323,13 @@ def add_menu(canteen_id, typeID):
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
                         filename = str(dish_id) + '.' + filename.rsplit('.', 1)[1].lower()
                         image_path = save_image()
-                        mongo.db.dishes.update_one({'_id': ObjectId(dish_id)}, {'$set': {'image_path': image_path}})
+                        db.dishes.update_one({'_id': ObjectId(dish_id)}, {'$set': {'image_path': image_path}})
                     else:
                         flash('File not supported', category='warning')
                         return redirect(request.url)
 
             # update types
-            results = list(mongo.db.types.aggregate([
+            results = list(db.types.aggregate([
                 {'$match': {'_id': ObjectId(typeID)}}
             ]))
 
@@ -343,7 +343,7 @@ def add_menu(canteen_id, typeID):
                 'ingredients':ingredients
             })
 
-            mongo.db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
+            db.types.update_one({'_id': ObjectId(typeID)}, {'$set': {'dishes': dishes}})
 
             return redirect('/canteen_account/%s/menu' % canteen_id)
     return render_template('canteen/add_menu.html')
@@ -354,13 +354,13 @@ def delete_item(canteen_id,category,id):
         return 'Not Authorized', 403
     if category == 'dishes':
         # delete from types
-        target_dish = list(mongo.db.dishes.aggregate([
+        target_dish = list(db.dishes.aggregate([
             {'$match': { '_id' : ObjectId(id) }},
         ]))[0]
 
         in_type = target_dish['in_type']
         print(target_dish)
-        target_type = list(mongo.db.types.aggregate([
+        target_type = list(db.types.aggregate([
             {'$match': { '_id': ObjectId(in_type) }},
         ]))[0]
 
@@ -371,10 +371,10 @@ def delete_item(canteen_id,category,id):
             if _dish["_id"] == ObjectId(id):
                 continue
             new_dishes.append(_dish)
-        mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
+        db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
 
         # delete from sets
-        sets=list(mongo.db.sets.aggregate([
+        sets=list(db.sets.aggregate([
             {'$match': {'at_canteen':ObjectId(canteen_id)}}
         ]))
         for _set in sets:
@@ -382,24 +382,24 @@ def delete_item(canteen_id,category,id):
             for _type in dish_in_set:
                 if target_dish['name'] in dish_in_set[_type]:
                     dish_in_set[_type].remove(target_dish['name'])
-            mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': dish_in_set}})
+            db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': dish_in_set}})
 
         # delete from dishes
-        mongo.db.dishes.delete_one({"_id": ObjectId(id)})
+        db.dishes.delete_one({"_id": ObjectId(id)})
     elif category == 'types':
-        target_type_name=list(mongo.db.types.aggregate([
+        target_type_name=list(db.types.aggregate([
             {'$match':{'_id':ObjectId(id)}}
         ]))[0]['name']
-        sets = list(mongo.db.sets.aggregate([]))
+        sets = list(db.sets.aggregate([]))
         for _set in sets:
             types_in_set = _set['types']
             del types_in_set[target_type_name]
-            mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': types_in_set}})
+            db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': types_in_set}})
 
-        mongo.db.types.delete_one({"_id": ObjectId(id)})
-        mongo.db.dishes.delete_many({'in_type': ObjectId(id)})
+        db.types.delete_one({"_id": ObjectId(id)})
+        db.dishes.delete_many({'in_type': ObjectId(id)})
     elif category == 'sets':
-        canteen=list(mongo.db.canteens.aggregate([
+        canteen=list(db.canteens.aggregate([
             {'$match':{'_id': ObjectId(canteen_id)}}
         ]))[0]
         if 'active_set' in canteen:
@@ -409,9 +409,9 @@ def delete_item(canteen_id,category,id):
         if ObjectId(id) == ObjectId(active_set):
             return menu_page(canteen_id, invalid_delete='sets')
         else:
-            mongo.db[category].delete_one({"_id": ObjectId(id)})
+            db[category].delete_one({"_id": ObjectId(id)})
     else:
-        mongo.db[category].delete_one({"_id": ObjectId(id)})
+        db[category].delete_one({"_id": ObjectId(id)})
         
     return redirect('/canteen_account/%s/menu' % canteen_id)
 
@@ -462,18 +462,18 @@ def edit_menu(canteen_id, menu_id):
                         return redirect(request.url)
 
             # update in dishes
-            in_type = list(mongo.db.dishes.aggregate([
+            in_type = list(db.dishes.aggregate([
                 {'$match':{'_id':ObjectId(menu_id)}}
             ]))[0]['in_type']
 
-            mongo.db.dishes.update_one({'_id': ObjectId(menu_id)},{
+            db.dishes.update_one({'_id': ObjectId(menu_id)},{
                 '$set':{'name': str(menuName),
                 'price':float(price),
                 }
             })
 
             # update in types
-            dishes = list( mongo.db.types.aggregate([
+            dishes = list( db.types.aggregate([
                 { '$match' : { '_id' : ObjectId(in_type) } }
             ]))[0]['dishes']
 
@@ -494,11 +494,11 @@ def edit_menu(canteen_id, menu_id):
                 'in_type':ObjectId(in_type),
                 '_id':ObjectId(menu_id)
             })
-            mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': dishes}})
+            db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': dishes}})
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
     if request.method == 'GET':
-        menu=list(mongo.db.dishes.aggregate([
+        menu=list(db.dishes.aggregate([
             { '$match' : { '_id' : ObjectId(menu_id) } }
         ]))[0]
         
