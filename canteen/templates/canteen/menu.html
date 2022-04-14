@@ -26,8 +26,8 @@ Canteen List
             {% if sets %}
             {% for set in sets %}
             <form method="POST" class="">
-                <input value="{{set.name}}" name="active-set" style="display: none;">
-                <button type="submit" class="mx-2 mb-2 {{'labl-check' if set['_id'] == active_set}} {{'labl' if set['_id'] != active_set}}" style="max-width: 300px;">
+                <input value="{{set._id}}" name="active-set" style="display: none;">
+                <button type="submit" class="mx-2 mb-2 {{'labl-check' if set._id|string == active_set|string}} {{'labl' if set._id|string != active_set|string}}" style="max-width: 300px;">
                     <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
                         <div class="pt-2 m-0 ">
                             <div class="d-flex mb-2 pt-2">
