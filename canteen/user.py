@@ -228,7 +228,7 @@ def register_page():
         token = generate_confirmation_token(form.email.data)
 
         msg = Message('Verification Email', recipients=[form.email.data])
-        msg.body = 'Go here to for verification. http://127.0.0.1:5000/confirm_email/%s' % token
+        msg.body = 'Go here to for verification. https://csci3100-food-ordering.herokuapp.com/%s' % token
         mail.send(msg)
 
         db.users.insert_one(user_to_create.to_json())
