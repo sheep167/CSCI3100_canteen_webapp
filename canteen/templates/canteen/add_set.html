@@ -1,3 +1,18 @@
+<!-- 
+    /canteen/templates/canteen/add_set.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Nutdranai Jaruthikorn <pond-nj@outlook.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    add_set.html displays a page with text input and check-box input of different menu 
+    from different types. This page creates a new set to a canteen. Add_set in 
+    canteen.py renders this page with canteen_id and (array of) food of different types as input.
+    The POST method from this page is also handled by add_set in canteen.py
+-->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -14,12 +29,14 @@ Add Set
         <div class="p-3">
 
             <form class="form-group" method="POST"> 
+                <!-- Set Name -->
                 <div>
                     <label for="set-name">Set Name: </label>
                     <input type="text" class="form-control" id= "set-name" name="set-name" placeholder="Enter Set Name"></input>
                     <small id="set-name-help" class="form-text text-muted">Name a set for your shop. e.g. Tuesday set. This serves as a mean for grouping your food only. It will not appear on your canteen home page</small>
                 </div>
 
+                <!-- Display food of each type -->
                 {% if types %}
                     {% for type in types %}
                     <div class="mb-3 p-0 ">
@@ -40,7 +57,7 @@ Add Set
                     {% endfor %}
                 {% endif %}
             
-                <!-- Add set -->
+                <!-- Submit Button -->
                 <div class="d-flex flex-row flex-wrap">
                     <button type="submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">
                         Add Set

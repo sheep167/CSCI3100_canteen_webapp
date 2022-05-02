@@ -1,3 +1,18 @@
+<!-- 
+    /canteen/templates/canteen/add_menu.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Nutdranai Jaruthikorn <pond-nj@outlook.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    add_menu.html displays a page for adding new menu to 
+    a canteen. The page asks users to input Menu Name, Price, 
+    Ingredients and an Image. It is rendered by a function add_menu in canteen.py
+    A POST request from this page will be handled by the function as well.
+-->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -15,6 +30,8 @@ Add Type
             <div class="h4 mb-3">Menu Information</div>
 
             <form enctype="multipart/form-data" method="POST">
+
+                <!-- Menu Name -->
                 <div class="form-group row">
                     <label for="menu-name" class="pl-3 col-form-label pr-0">Menu Name: </label>
                     <div class="col pl-3">
@@ -22,6 +39,7 @@ Add Type
                     </div>
                 </div>
 
+                <!-- Price -->
                 <div class="form-group row">
                     <label for="price" class="pl-3 col-form-label pr-0">Price: </label>
                     <div class="col pl-3">
@@ -29,6 +47,7 @@ Add Type
                     </div>
                 </div>
             
+                <!-- Ingredients -->
                 <div class="form-group row">
                     <label for="ingredients" class="pl-3 col-form-label pr-0">Ingredients: </label>
                     <div class="col pl-3">
@@ -38,6 +57,7 @@ Add Type
                     </div>
                 </div>
 
+                <!-- Image -->
                 <div class="">
                     <div class="row pl-3 pb-3">
                         <div class="h4 mr-3">Upload Image:</div>
@@ -47,6 +67,7 @@ Add Type
                     </div>
                 </div>
 
+                <!-- Submit Button -->
                 <div class="d-flex">
                     <button class="btn btn-main-color ml-auto" type="submit">
                         Add Menu
