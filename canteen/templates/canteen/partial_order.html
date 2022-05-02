@@ -1,3 +1,16 @@
+<!-- 
+    /canteen/templates/canteen/partial_order.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    partial_order.html is a partial part showing waiting order cards that will be called by order.html.
+-->
+
 <div class="px-4 pt-4 m-0" id = "load">
     <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
         <h2 class="mx-4">Wating Order</h2>
@@ -7,7 +20,7 @@
     {% for order in orders if not order.order_status == 'finished' %}
     {% set count.value = count.value + 1 %}
     {% if (count.value) % 3 == 1 %}
-    <!--card showing waiting order (Late)-->
+    <!--card showing waiting order-->
     <div class="row">
         {% endif %}
         {% if order.order_status != 'finished' %}
@@ -20,8 +33,11 @@
                 </p>
             </div>
 
-            <!--card (Just Arrive)-->
+            <!--card-->
             <div class="pt-1 pb-3 container-fluid w-100">
+
+                <!--Note: There are three colors of the order card, indicating the status. 
+                (green: 'just arrive', yellow: 'normal', red 'rush')-->
                 {% if order.order_status == 'just arrive' %}
                     {%set card_type = 'cardJustArrive' %}
                 {% elif order.order_status == 'normal' %}
@@ -29,6 +45,7 @@
                 {% else %}
                     {% set card_type = 'cardRush' %}
                 {% endif %}
+
                 <div id="{{card_type}}" class="card ml-2 mr-2">
                     <div class="card-body">
                         <div class="row ml-3 mt-1">
@@ -76,28 +93,6 @@
                                          >
                                         Finish 
                                     </a>
-
-                                    <!-- <a class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModal" >
-                                        Finish 
-                                    </a> -->
-
-                                    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-body">
-                                                    <h5>Have you finished this order?</h5>
-                                                    <div>{{order._id}}</div>
-                                                    <div class="container-fluid mt-2">
-                                                        <a class="btn btn-success mx-2" href="/canteen_account/finish/{{order._id}}">Yes</a>
-                                                        <button type="button" class="btn btn-danger">No</button>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -117,6 +112,8 @@
     {% endif %}
 
     {% endif %}
+
+    <!--This message will be shown if there is no current order-->
     {% if (count.value == 0) %}
     <p class="mx-4">There is no current order.</p>
     {% endif %}

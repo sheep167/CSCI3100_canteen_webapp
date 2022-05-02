@@ -65,6 +65,7 @@ Canteen List
             </div>
         </div>
 
+        <!--Set-->
         <div class="m-0 pt-3 pb-3 mr-3 pl-0 pr-3 container-fluid d-flex flex-row flex-wrap">
             {% if sets %}
             {% for set in sets %}
@@ -73,9 +74,11 @@ Canteen List
                 <button type="submit" class="mx-2 mb-2 {{'labl-check' if set._id|string == active_set|string}} {{'labl' if set._id|string != active_set|string}}" style="max-width: 300px;">
                     <div class="comment btn w-100 pt-0 pl-3 mr-0" style="height: 430px;">
                         <div class="pt-2 m-0 ">
+                            <!--Set Name-->
                             <div class="d-flex mb-2 pt-2">
                                 <div class="m-0 h4 text-left">{{set.name}}</div>
                             </div>
+                            <!--Menu Table-->
                             <div class="container-fluid my-1">
                                 <div style="max-height: 300px; overflow: auto;">
                                     <div class="">
@@ -101,6 +104,7 @@ Canteen List
                                 </div>
                             </div>
                         </div>
+                        <!--Action Buttons-->
                         <div id="editdelete" class="mt-3 mb-2 container container-fluid d-flex flex-row flex-wrap p-0">
                             <div class="col-4 p-1"><a class="btn btn-primary btn-sm w-100"
                                     href='/canteen_account/{{canteen_id}}/edit/sets/{{set._id}}'>Edit</a></div>
@@ -128,15 +132,16 @@ Canteen List
                     Type</a>
             </div>
         </div>
-
+        <!--Type-->
         <div class="container-fluid pl-0 pr-0 d-flex flex-row flex-wrap">
-            <!-- Main Dish -->
-
             {% if types %}
             {% for type in types %}
             <div class="mb-4 col-6">
                 <div class="h5 text-maincolor d-flex flex-row flex-wrap"> 
+                    <!--Type Name-->
                     <div>{{ type.name }} </div>
+
+                    <!--Action Buttons-->
                     <a class="btn btn-maincolor-semi ml-auto mr-2" href="/canteen_account/{{canteen_id}}/add/menu/{{ type._id }}">
                         Add Menu
                     </a>
@@ -145,6 +150,7 @@ Canteen List
                     </a>
                 </div>
                 <div class="block mr-0">
+                    <!--Menu Table-->
                     <table class="table m-0 p-0">
                         <thead>
                             <tr>
@@ -181,15 +187,7 @@ Canteen List
             </div>
             {% endfor %}
             {% endif %}
-
-
-
-
-
         </div>
-
     </div>
-
-
-
-    {% endblock %}
+</div>
+{% endblock %}
