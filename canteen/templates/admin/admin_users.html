@@ -1,3 +1,19 @@
+<!-- 
+  /canteen/templates/admin/admin_users.html
+  Copyright (c) 2021-2022  CUFoodOrder
+  @author: Yiu Chun To <yiuchunto@gmail.com>
+  @version: 1.0
+  @since 2022-02-10
+  @last updated: 2022-05-02
+-->
+
+<!--
+  admin_users.html is used for displaying users data
+  (email, username, auth type) in a tabular format.
+  The page is used by admin for managing users.
+  It is rendered by overview_page in admin.py
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "users" %}
 
@@ -13,14 +29,21 @@ Admin Page - Users Overview
   <a class="btn btn-success mx-4" href="/add/users">Add user</a>
   <hr class="mx-4">
   <div class="row mx-4">
+    <!-- table with user data -->
     <table class="table table-hover border-bottom border-right border-left text-center">
       <thead class="thead-dark">
         <tr>
+          <!-- email -->
           <th style="width:23%">Email</th>
+          <!-- username -->
           <th style="width:23%">Username</th>
+          <!-- auth type -->
           <th style="width:12%">Auth Type</th>
+          <!-- reset password -->
           <th style="width:18%"></th>
+          <!-- edit -->
           <th style="width:12%"></th>
+          <!-- delete -->
           <th style="width:12%"></th>
         </tr>
       </thead>
@@ -30,8 +53,11 @@ Admin Page - Users Overview
           <td>{{user.email}}</td>
           <td>{{user.username}}</td>
           <td>{{user.auth_type}}</td>
+          <!-- reset password -->
           <td class="text-right"><a href="/reset_password/{{user._id}}" class="btn btn-warning"> Reset password</a></td>
+          <!-- edit button-->
           <td><a href="/edit/users/{{user._id}}" class="btn btn-primary">Edit</a></td>
+          <!-- delete button-->
           <td class="text-left"><a href="/delete/users/{{user._id}}" class="btn btn-danger">Delete</a></td>
         </tr>
       </tbody>
