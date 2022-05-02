@@ -1,3 +1,26 @@
+<!-- 
+    /canteen/templates/user/list_canteens.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    list_canteens.html displays the list of all canteens. 
+    This page is rendered by a function list_canteens in user.py
+
+    These following information of each canteen will be shown.
+    - Image
+    - Canteen Name
+    - Opening and Closing Time
+    - Capacity
+    - Menu Table: food name, price, and image (the number of displayed menus can be three at maximum)
+    - 'See more': By clicking this hyperlink, the user can go to another page (new_canteen_page.html) to
+    see more details of the selected canteen.
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
@@ -6,24 +29,36 @@ Canteen List
 {% endblock %}
 
 {% block content %}
+
+<!-- Canteen List-->
 <div class="container-fluid my-4">
   <div class="row justify-content-left mx-4">
     {% for canteen in canteens %}
     <div class="col-lg-4 my-3">
+      <!--A card of Each Canteen-->
       <div class="card">
+
+        <!--Image-->
         {% if canteen.image_path %}
-        <img class="card-img-top" src="{{canteen.image_path}}">
+        <img class="card-img-top" src="{{canteen.image_path}}" class="img-fluid cover mr-2"
+          style="float:left; height: 300px;">
         {% endif %}
+
         <div class="card-body">
+          <!--Canteen Name-->
           <h3 class="card-title">{{canteen.name}}</h3>
           <img src="../../static/image/icon/time.png" class="mr-2" style="float:left;" alt="clock" width="20"
             height="20">
+          <!--Opening and Closing Time-->
           <p class="card-text">Open from {{canteen.open_at}} to {{canteen.close_at}}</p>
-          <!--image from flaticon-->
+          <!--Capacity-->
+          <!--Image Source: icon from flaticon-->
           <img src="../../static/image/icon/seat.png" class="mr-2" style="float:left;" alt="seat" width="20"
             height="20">
           <p class="card-text">Capacity: {{canteen.capacity}}</p>
         </div>
+
+        <!--Menu List-->
         <h4 class="mx-4">Menu</h4>
         <div class="row mx-4">
           <table class="table table-hover border-bottom border-right border-left text-center">
@@ -51,6 +86,8 @@ Canteen List
             {% endfor %}
           </table>
         </div>
+
+        <!--'See more'-->
         <div class="row mx-4 my-4">
           <img src="../../static/image/icon/arrow.png" class="mr-2" style="float:left;" alt="clock" width="20"
             height="20"><a href="/canteens/{{canteen._id}}" style="color: black;">See More</a>

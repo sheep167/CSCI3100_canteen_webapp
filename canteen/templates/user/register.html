@@ -1,9 +1,23 @@
+<!-- 
+    /canteen/templates/user/register.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    register.html displays the registration page.
+    The username shall enter the valid email, username, and password to register.
+    The rendering of this page and POST method is handled by a function register_page in user.py
+-->
+
 {% extends 'base.html' %}
 
 {% block title %}
 Register Page
 {% endblock %}
-
 
 {% block content %}
 <div class="container-fluid my-4">
@@ -15,14 +29,18 @@ Register Page
                     Register an account
                 </h2>
                 <br>
+                <!--Email Input Field-->
                 <h5>Email</h5>
                 {{ form.email(class="form-control", placeholder="Email:") }}
                 <br>
+                <!--Username Input Field-->
                 <h5>Username</h5>
                 {{ form.username(class="form-control", placeholder="User Name:") }}
                 <br>
+                <!--Password Input Field-->
                 <h5>Password</h5>
                 {{ form.password(class="form-control", placeholder="Password:") }}
+                <!--'Register' Button-->
                 <div class="text-center my-3">
                     {{ form.submit(class="btn btn-dark", value="Register") }}
                 </div>
