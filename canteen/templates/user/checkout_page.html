@@ -1,3 +1,27 @@
+<!-- 
+    /canteen/templates/user/checkout_page.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    checkout_page.html displays the summary of food orders in the cart.
+    This page is rendered by a function cart_page in user.py
+
+    Checkout
+    --------
+    - Canteen Name (where the user orders the food)
+    - Menu List Ordered by the User
+    - Total Price
+    - 'Pay Now' Button: The user can pay by clicking this button. 
+
+    If the payment is proceeded successfully, the 'Payment successful' message will be shown and the cart will be empty.
+    Note that the payment process will be handled by a function cart_page in user.py
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
@@ -14,6 +38,8 @@ Checkout Page
     <div class="container m-0 pl-5 pt-4 pb-3">
       <div class="p-0 h1">Check out</div>
     </div>
+
+    <!--Show the summary of the cart if the cart is not empty-->
     {% if cart %}
     {% for canteen_name in cart.keys() %}
     <div class="container-fluid pl-5 pr-5">
@@ -24,14 +50,19 @@ Checkout Page
           <div class="flex-row d-flex flex-wrap">
             <!-- Left side of button -->
             <div class="d-flex flex-column" style="max-width: 50%;">
+              <!--Dish Name-->
               <span class="mr-auto pt-2" style="font-size: 30px">{{dish.name}} <span class="font-weight-light" style="font-size: 25px;">x {{dish.count}}</span></span>
+              <!--Ingredients-->
               <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">
                 {{ dish.ingredients[0] }}
                 {% for i in range((dish.ingredients)|length) if not i >= 2 %}, {{ dish.ingredients[i+1] }} 
                 {% endfor %}</span>
+              <!--Price-->
               <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
             </div>
+
             <!-- Right Side of Button -->
+            <!--Image-->
             <div class="ml-auto">
               {% if dish.image_path %}
               <img src="{{dish.image_path}}" style="object-fit: cover; width: 150px; height: 150px;">
@@ -43,6 +74,8 @@ Checkout Page
         <hr>
       </div>
     </div>
+
+    <!--Total Price-->
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Total Price </h1>
       <div class="h3 font-weight-light"> ${{all_canteen_total}} </div>
@@ -53,13 +86,13 @@ Checkout Page
       </form>
     </div>
     {% endfor %}
+
+    <!--Show the message 'Your Cart is Empty' if there is nothing in the cart-->
     {% else %}
     <div class="container m-0 pl-5 pt-4 pb-3">
       <h1> Your Cart is Empty</h1>
     </div>
     {% endif %}
   </div>
-
-
 
 {% endblock %}
