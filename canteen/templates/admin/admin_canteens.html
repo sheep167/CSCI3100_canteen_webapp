@@ -1,3 +1,19 @@
+<!-- 
+  /canteen/templates/admin 
+  Copyright (c) 2021-2022  CUFoodOrder
+  @author: #####
+  @version: 1.0
+  @since 2022-02-10
+  @last updated: 2022-05-02
+-->
+
+<!--
+  admin_canteen.html displays a tabular list of canteen
+  with their open-close time, dishes, comments, and orders
+  as well as providing a button for the admin to edit
+  and delete each canteen
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
@@ -7,6 +23,7 @@ Admin Page - Canteens Overview
 
 {% block content %}
 <div class="container-fluid my-4">
+
   <h1 class="mx-4">Overview</h1>
   <a class="btn btn-success mx-4" href="/add/canteens">Add canteen</a>
   <hr class="mx-4">
