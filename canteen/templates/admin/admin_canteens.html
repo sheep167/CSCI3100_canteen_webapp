@@ -1,17 +1,17 @@
 <!-- 
-  /canteen/templates/admin 
+  /canteen/templates/admin/admin_canteens.html
   Copyright (c) 2021-2022  CUFoodOrder
-  @author: #####
+  @author: Yiu Chun To <yiuchunto@gmail.com>
   @version: 1.0
   @since 2022-02-10
   @last updated: 2022-05-02
 -->
 
 <!--
-  admin_canteen.html displays a tabular list of canteen
-  with their open-close time, dishes, comments, and orders
-  as well as providing a button for the admin to edit
-  and delete each canteen.
+  admin_canteen.html displays a tabular list of canteens with their info
+  (open-close time, dishes, comments, and orders)
+  as well as providing "edit" and "delete" buttons to edit data and delete canteen.
+  The page is used by admin for managin canteens and their data.
 -->
 
 {% extends 'base.html' %}
@@ -30,13 +30,21 @@ Admin Page - Canteens Overview
     <table class="table table-hover border-bottom border-right border-left text-center">
       <thead class="thead-dark my-auto">
         <tr>
+          <!-- name -->
           <th style="width:23%">Canteen Name</th>
+          <!-- open time -->
           <th style="width:15%">Open Time</th>
+          <!-- close time -->
           <th style="width:15%">Close Time</th>
+          <!-- dishes -->
           <th style="width:10%"></th>
+          <!-- comments -->
           <th style="width:10%"></th>
+          <!-- orders -->
           <th style="width:10%"></th>
+          <!-- edit -->
           <th style="width:7%"></th>
+          <!-- delete -->
           <th style="width:10%"></th>
         </tr>
       </thead>
@@ -46,10 +54,15 @@ Admin Page - Canteens Overview
           <td>{{canteen.name}}</td>
           <td>{{canteen.open_at}}</td>
           <td>{{canteen.close_at}}</td>
+          <!-- dishes button -->
           <td class="text-center"><a href="/overview/canteens/{{canteen._id}}/dishes" class="btn btn-info">Dishes</a></td>
+          <!-- comments button -->
           <td class="text-right"><a href="/overview/canteens/{{canteen._id}}/comments" class="btn btn-info">Comments</a></td>
+          <!-- orders button -->
           <td><a href="/overview/canteens/{{canteen._id}}/orders" class="btn btn-info">Orders</a></td>
+          <!-- edit button -->
           <td class="text-left"><a href="/edit/canteens/{{canteen._id}}" class="btn btn-primary">Edit</a></td>
+          <!-- delete button -->
           <td class="text-left"><a href="/delete/canteens/{{canteen._id}}" class="btn btn-danger">Delete</a></td>
         </tr>
       </tbody>

@@ -442,9 +442,12 @@ def edit_menu(canteen_id, menu_id):
         return 'Not Authorized', 403
 
     if request.method == 'POST':
-        # print(request.form)
         menuName=request.form.get('menu-name')
         price=request.form.get('price')
+
+        # unfinished
+        # ingredients are not parsed from the form
+
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -493,7 +496,6 @@ def edit_menu(canteen_id, menu_id):
                     del dishes[i]
                     break
 
-            print(dishes)
             dishes.append({
                 'name': str(menuName),
                 'at_canteen': current_user.staff_of,

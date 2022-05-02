@@ -228,7 +228,6 @@ def overview_canteens_data(canteen_id, category):
         ])
 
         comments = list(results)
-        print(comments)
         return render_template('admin/admin_comments.html', canteen=canteen, comments=comments)
 
     elif category == 'orders':
@@ -375,6 +374,8 @@ def add_canteens_data(canteen_id, category):
             flash('Wrong time format', category='error')
 
     if category == 'dishes':
+        # this is deprecated, must be removed
+
         return render_template('admin/data_with_image.html', form=form, method='Edit', category=category)
     if category == 'orders':
         return render_template('admin/data_with_select.html', form=form, method='Edit')

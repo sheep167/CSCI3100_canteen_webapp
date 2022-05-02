@@ -29,6 +29,7 @@ Edit Set
         <div class="p-3">
 
             <form class="form-group" method="POST"> 
+                <!-- Set Name -->
                 <div class="mb-3">
                     <label for="set-name">Set Name: </label>
                     <input type="text" class="form-control" id="set-name" name="set-name" value="{{_set.name}}"></input>
@@ -36,18 +37,22 @@ Edit Set
                 </div>
 
                 {% if type_with_indicated %}
+                    <!-- each type -->
                     {% for type in type_with_indicated %}
                     <div class="mb-3 p-0 ">
                         <div class="h4 pl-3 pb-1">{{type[0]}}</div>
                         <div class="d-inline flex-column">
                             <div class="form-checkbox" style="max-height: 250px; overflow: auto;">
+                                    <!-- Dish in each type -->
                                     {% for dish in type[1] %}
                                         {% if dish[1] == 1 %}
+                                        <!-- selected dish -->
                                         <label class="radio-box font-weight-light d-flex flex-row">{{dish[0]}}
                                         <input type="checkbox" name="{{type[0]}}" value="{{dish[0]}}" checked="checked">
                                         <span class="checkmark"></span>
                                         </label>
                                         {% else %}
+                                        <!-- not selected dish -->
                                         <label class="radio-box font-weight-light d-flex flex-row">{{dish[0]}}
                                         <input type="checkbox" name="{{type[0]}}" value="{{dish[0]}}">
                                         <span class="checkmark"></span>
@@ -60,7 +65,7 @@ Edit Set
                     {% endfor %}
                 {% endif %}
             
-                <!-- Add set -->
+                <!-- Submit Button -->
                 <div class="d-flex flex-row flex-wrap">
                     <button type="submit" class="ml-auto btn btn-secondary btn-main-color btn-lg">
                         Edit Set
