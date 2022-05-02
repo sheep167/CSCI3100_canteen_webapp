@@ -1,3 +1,46 @@
+<!-- 
+    /canteen/templates/canteen/add_menu.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    menu.html displays a page for adding, editing, or deleting menu sets and menu types of 
+    a specific canteen. The user shall click at the menu set to select the set that they want 
+    to show to the customers. After the set is selected, that background color of that set 
+    will turn from white to orange color. menu.html is rendered by a function menu_page in canteen.py
+    A POST request from this page will be handled by the function as well.
+
+    Menu Edits
+    ----------
+    1. Set 
+    - Add Set
+        - Enter set name
+        - Select menu, categorized by menu type, to the set (the list of all menu types available in the canteen will be shown)
+    - Edit Set
+        - Edit set name
+        - Select / Unselect menu in each menu type
+    - Delete Set
+    - Select Set to be Shown to the customers
+        - The user shall click at the required menu set that they want to show to the customers.
+          After the set is selected, that background color of that set will turn from white to orange color
+    
+    2. Type
+    - Add Type
+        - Enter type name
+    
+    After adding type, the user can take these following actions with the added type.
+    - Delete Type
+    - Add Menu in a Specific Type
+        - Add menu name, price, ingrediwnts, and image
+    - Edit Menu in a Specific Type
+        - Edit menu name, price, ingrediwnts, and image
+
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "Menu" %}
 {% block title %}
