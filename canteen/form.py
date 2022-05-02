@@ -1,3 +1,11 @@
+#   Main function (No need to modify)
+#   Copyright (c) 2021-2022  CUFoodOrder
+#   @author: Yiu Chun To <yiuchunto@gmail.com>
+#   @version: 1.0
+#   @since 2022-02-10
+#   @last updated: 2022-04-24
+
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField, SelectMultipleField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
