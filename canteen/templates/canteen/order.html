@@ -1,3 +1,42 @@
+<!-- 
+    /canteen/templates/canteen/order.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    order.html displays all food orders. The food orders will be divided into two parts: 
+    1) waiting order and 2) finished order.
+    This page is rendered by a function order_page in canteen.py
+
+    Order Management
+    ----------
+    1. Waiting Order (For showing waiting order): This section will call partial_order.html
+    - Order ID
+    - Ordered Time
+    - Ordered Menu Table
+    - 'Finish' Button: After clicking this, the order status will become 'finished' and will be shown 
+    in the 'Finished Order' section.
+
+    Note: There are three colors of the order card, indicating the status. 
+    (green: 'just arrive', yellow: 'normal', red 'rush')
+
+    2. Finished Order
+    - Order ID
+    - Ordered Time
+    - Ordered Menu Table
+
+    Note: There is only one possible color of a finished order card, white.
+    ------------------------------------------------------------------------------
+    Note that this page will be reloaded automatically with the set time interval. 
+    Thus, the color of cards in the Waiting Order section can change after 
+    some specific time interval without manually reloading.
+    ------------------------------------------------------------------------------
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "Order" %}
 {% block title %}
@@ -8,17 +47,25 @@ Order List
 {% endblock %}
 {% block content %}
 <script src="{{url_for('static',filename='style/js/finishedorder.js')}}"></script>
+
+<!--Refresh the page-->
 <script>
     setInterval(function () { location.reload() }, 30000);
 </script>
+
 <div class="mt-4 mb-4 mx-4 pb-4 headblock" style="max-width: 100%;">
     <div class="container pt-4 pl-4 h1 m-0">Order Management</div>
 </div>
+
+<!--Waiting Order-->
+<!--Call partial_order.html-->
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     {% with orders = orders %}
     {% include "canteen/partial_order.html" %}
     {% endwith %}
 </div>
+
+<!--Finished Order-->
 <div class="mt-4 mb-4 mx-4 pb-4 subblock" style="background-color:rgb(255, 255, 255); max-width: 100%;">
     <div class="px-4 pt-4 m-0">
         <div class="container-fluid pt-0 pl-0 pr-0 pb-2 d-flex">
@@ -29,7 +76,7 @@ Order List
         {% for order in orders if order.order_status == 'finished' %}
         {% set count.value = count.value + 1 %}
         {% if (count.value) % 3 == 1 %}
-        <!--card showing waiting order (Late)-->
+        <!--card showing finished orders-->
         <div class="row">
             {% endif %}
             {% if order.order_status == 'finished' %}
@@ -102,6 +149,7 @@ Order List
     </div>
     {% endif %}
     {% endif %}
+    <!--This message will be shown if there is no finished order-->
     {% if (count.value == 0) %}
     <p class="mx-4">There is no finished order.</p>
     {% endif %}

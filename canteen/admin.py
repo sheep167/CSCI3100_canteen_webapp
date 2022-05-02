@@ -1,3 +1,15 @@
+#   Admin.py
+#   Copyright (c) 2021-2022  CUFoodOrder
+#   @author: Yiu Chun To <yiuchunto@gmail.com>
+#   @version: 1.0
+#   @since 2022-02-12
+#   @last updated: 2022-05-02
+"""
+    This file includes all the functions that the admin can do
+    Those include CRUD Users Data and Canteens Data
+    All functions are limited to admin user
+    and must check the current user authentication status at first
+"""
 import datetime
 import os
 from canteen import app, mongo
@@ -12,6 +24,7 @@ import bcrypt
 from .models import *
 
 
+# Custom Type Error for handling input data
 class ValidationError(Exception):
     pass
 
@@ -20,6 +33,7 @@ class NoSuchUserError(Exception):
     pass
 
 
+# This function resets user's password to 123456
 @app.route('/reset_password/<_id>')
 @login_required
 def reset_password(_id):
@@ -31,6 +45,7 @@ def reset_password(_id):
     return redirect('/overview/users')
 
 
+# This functions returns the overview of users and canteens in a table view
 @app.route('/overview/<category>')
 @login_required
 def overview_page(category):
@@ -47,6 +62,7 @@ def overview_page(category):
     return 'category not found'
 
 
+# This function create new user and canteens respectively
 @app.route('/add/<category>', methods=['GET', 'POST'])
 @login_required
 def add_data_page(category):
@@ -56,6 +72,7 @@ def add_data_page(category):
     form = DataEditForm()
 
     if request.method == 'GET':
+        # Pre-render the text box with template
         if category == 'users':
             form.text.data = json.dumps(Users.template_object(), indent=4)
         elif category == 'canteens':
@@ -67,6 +84,7 @@ def add_data_page(category):
         try:
             data = json.loads(form.text.data)
 
+            # Check the input, return error if any duplicate key is found
             if category == 'users':
                 if mongo.db.users.find_one({'$or': [{'email': data.get('email')}, {'username': data.get('username')}]}):
                     raise ValidationError()
@@ -80,6 +98,7 @@ def add_data_page(category):
 
                 mongo.db.users.insert_one(user_to_insert.to_json())
 
+            # Check the input, return error if any duplicate key is found
             elif category == 'canteens':
                 if mongo.db.canteens.find_one({'name': data.get('name')}):
                     raise ValidationError()
@@ -105,12 +124,14 @@ def add_data_page(category):
     return render_template('admin/data.html', form=form, method='Add', category=category)
 
 
+# This function allows admin to edit the user's data and canteen's data
 @app.route('/edit/<category>/<_id>', methods=['GET', 'POST'])
 @login_required
 def edit_data_page(category, _id):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
+    # if canteen is selected, return a different form
     form = DataEditForm()
     if category == 'canteens':
         form = DataEditFormWithImage()
@@ -125,12 +146,15 @@ def edit_data_page(category, _id):
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
+            # Handle saving image of the canteen
             if category == 'canteens':
 
                 canteen = mongo.db.canteens.find_one({'_id': ObjectId(_id)})
 
                 if form.image.data.filename != '':
+                    # Give a secure filename to prevent os issue
                     filename = secure_filename(form.image.data.filename)
+                    # Save the image
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
                         folder_path = './canteen/static/image/%s' % canteen.get('name')
                         os.makedirs(folder_path, exist_ok=True)
@@ -153,6 +177,7 @@ def edit_data_page(category, _id):
     return render_template('admin/data.html', form=form, method='Edit', category=category)
 
 
+# This function deletes one document in the database
 @app.route('/delete/<category>/<_id>', methods=['GET', 'POST'])
 @login_required
 def delete_data_page(category, _id):
@@ -165,6 +190,9 @@ def delete_data_page(category, _id):
     return redirect('/overview/%s' % category)
 
 
+# All functions below belong to the subcategory of a canteen
+# Such as Dishes, Comments and Orders
+# The layout is about the same
 @app.route('/overview/canteens/<canteen_id>/<category>')
 @login_required
 def overview_canteens_data(canteen_id, category):
@@ -173,6 +201,7 @@ def overview_canteens_data(canteen_id, category):
 
     if category == 'dishes':
         if request.method == 'GET':
+            # Get the dishes of a canteen by aggregating the database
             results = mongo.db.sets.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ])
@@ -213,6 +242,7 @@ def overview_canteens_data(canteen_id, category):
         #
         # return render_template('admin/admin_dishes.html', canteen=canteen, dishes=dishes)
 
+    # Get the comments of a canteen by aggregating the database
     elif category == 'comments':
 
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
@@ -230,6 +260,7 @@ def overview_canteens_data(canteen_id, category):
         comments = list(results)
         return render_template('admin/admin_comments.html', canteen=canteen, comments=comments)
 
+    # Get the orders of a canteen by aggregating the database
     elif category == 'orders':
         canteen = mongo.db.canteens.find_one({'_id': ObjectId(canteen_id)})
 
@@ -270,6 +301,7 @@ def add_canteens_data(canteen_id, category):
     if current_user.auth_type != 0:
         return 'Not Authorized', 403
 
+    # Render the form according to the category selected
     if category == 'dishes':
         form = DataEditFormWithImage()
     elif category == 'orders':
@@ -278,6 +310,7 @@ def add_canteens_data(canteen_id, category):
         form = DataEditForm()
 
     if request.method == 'GET':
+        # Pre-render the text box with template
         if category == 'dishes':
             form.text.data = json.dumps(Dishes.template_object(), indent=4)
         elif category == 'comments':
@@ -285,6 +318,7 @@ def add_canteens_data(canteen_id, category):
         elif category == 'orders':
             form.text.data = json.dumps(Orders.template_object(), indent=4)
 
+            # Query dishes so that it can be selected in the dropdown menu
             dishes = mongo.db.dishes.aggregate([
                 {'$match': {'at_canteen': ObjectId(canteen_id)}},
                 {'$lookup':
@@ -300,15 +334,16 @@ def add_canteens_data(canteen_id, category):
 
             form.select.choices = dishes
 
+    # Handle the form submitted
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
 
             if category == 'dishes':
-
+                # Save the dishes data
                 data['at_canteen'] = ObjectId(canteen_id)
                 data['price'] = float(data['price'])
-
+                # Save the dishes image
                 if form.image.data.filename != '':
                     filename = secure_filename(form.image.data.filename)
                     if '.' in filename and filename.rsplit('.', 1)[1].lower() in ('jpg', 'jpeg', 'png'):
@@ -319,9 +354,9 @@ def add_canteens_data(canteen_id, category):
                     data['image_path'] = None
 
             elif category == 'comments':
-
+                # Save the comments data
                 data['at_canteen'] = ObjectId(canteen_id)
-
+                # Check whether this username exists
                 user = mongo.db.users.find_one({'username': data.get('username')})
                 if not user:
                     raise NoSuchUserError()
@@ -332,13 +367,13 @@ def add_canteens_data(canteen_id, category):
                 data['at_time'] = datetime.datetime.strptime(data.get('at_time'), '%Y-%m-%d %H:%M:%S')
 
             elif category == 'orders':
-
+                # Save the orders data
                 dishes_ids = mongo.db.dishes.aggregate([
                     {'$match': {'name': {'$in': form.select.data}}},
                     {'$project': {'_id': 1}}
                 ])
                 data['dishes'] = [_id.get('_id') for _id in dishes_ids]
-
+                # Calculate the total price of the orders
                 total_price = mongo.db.dishes.aggregate([
                     {'$match': {'name': {'$in': form.select.data}}},
                     {'$group': {'_id': 0, 'total_price': {'$sum': '$price'}}}
@@ -347,7 +382,7 @@ def add_canteens_data(canteen_id, category):
                 data['total_price'] = total_price
 
                 data['at_canteen'] = ObjectId(canteen_id)
-
+                # Check whether the user exists
                 user = mongo.db.users.find_one({'username': data.get('username')})
                 if not user:
                     raise NoSuchUserError()
@@ -405,6 +440,7 @@ def edit_canteens_data(canteen_id, category, _id):
     if category == 'dishes':
         form = DataEditFormWithImage()
 
+    # Pre-render the textbox with existing data
     if request.method == 'GET':
         if category == 'dishes':
             form.text.data = json.dumps(mongo.db.dishes.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'image_path': 0, 'at_canteen': 0}), indent=4, default=str)
@@ -413,10 +449,11 @@ def edit_canteens_data(canteen_id, category, _id):
         elif category == 'orders':
             form.text.data = json.dumps(mongo.db.orders.find_one({'_id': ObjectId(_id)}, {'_id': 0, 'order_status': 1, 'total_price': 1}), indent=4)
 
+    # Handle the form selected
     if request.method == 'POST':
         try:
             data = json.loads(form.text.data)
-
+            # Save the image
             if category == 'dishes':
                 if form.image.data.filename != '':
                     filename = secure_filename(form.image.data.filename)
