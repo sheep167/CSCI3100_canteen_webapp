@@ -1,15 +1,66 @@
+<!-- 
+    /canteen/templates/user/new_canteen_page.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    new_canteen_page.html displays the information of a specific canteen.
+    The rendering of this page and POST method is handled by a function canteen_page in user.py
+
+    Navbar:
+    -----------------------------------------------------------------------------
+    The navbar will display one more tab that is the cart, compared with other pages.
+    If the cart is clicked, the cart will be shown at the right side of this page.
+
+    Cart
+    - Your order from <<Canteen Name>>
+    - Ordered food list (if any), showing dish name, price, and the number of ordered dish
+    - Total price
+    - 'Go to Checkout' button: If this button is clicked, the user will go to the checkout page.
+    -----------------------------------------------------------------------------
+    
+    Main Body:
+    -----------------------------------------------------------------------------
+    Canteen Name
+    Opening and Closing Time
+    Hyperlink to Google Map
+    -----------------------------------------------------------------------------
+    Menu (categorized by the type provided by the canteen admin)
+    - Menu Type
+      - Food Name
+      - Ingredients (Each ingredient is separated by comma.
+        The number of displayed ingredients can be three at maximum.)
+      - Food Price
+      - Food Image
+    -----------------------------------------------------------------------------
+    Comments
+    - The total number of existing comments
+    - 'Post a comment' Button
+    - Comment Card
+      - User profile of the user who posted the comment
+      - Username
+      - Comments
+      - Rating
+      - Posted date and time
+    -----------------------------------------------------------------------------
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
 {% block title %}
 {{canteen.name}} Canteen Page
-<!-- Or change to Canteen Webapp -->
 {% endblock %}
 
 {% block stylesheet %}
 <link rel="stylesheet" href="../static/style/css/canteenpage.css">
 {% endblock %}
 
+<!--Cart-->
 {% block navcart %}
   {% if current_user.auth_type != 0 %}
       <li class="nav-item">
@@ -22,6 +73,7 @@
 
 {% block content %}
 
+<!--Cart Function-->
 <script >
   function toggleCart(){
     document.querySelector('#sidecart').classList.toggle('bg-over-lay');
@@ -38,7 +90,6 @@
 </script>
 
 <main>
-
   <!-- Sidecart -->
   <div id="sidecart" class="">
     <div class="sidecart bg-light text-center">
@@ -49,10 +100,14 @@
           Your Cart 
           <div class="d-inline float-right" style="margin-right: 0 auto;" onclick="toggleCart()">x</div>  <!-- THIS BLOCK EFFECTS THE CENTRE, IF LOOK CAREFULLY "YOUR CART" IS NOT CENTERED -->
         </div>
+        <br>
+        <!--
         <div class="h6 font-weight-light">No items in your cart</div>
+        -->
       </div>
+      <!--Your order from <<Canteen Name>>-->
       <div class="pb-2">Your order from {{canteen.name}}</div>
-            
+      <!---Ordered food list (if any), showing dish name, price, and the number of ordered dish-->
       {% if cart[canteen.name] %}
         {% for dish in cart[canteen.name]["cart"] %}
           <div class="flex-column container flex-wrap p-0 overflow-auto" style="max-height:40vh">
@@ -73,6 +128,7 @@
             </div>
           </div>
         {% endfor %}
+      <!--If the cart is empty, the message 'Your cart is empty' will be displayed-->
       {% else %}
         <div class="flex-column container flex-wrap p-0 overflow-auto" style="max-height:40vh">
           <div class="nav-link d-flex flex-wrap flex-column">
@@ -89,7 +145,7 @@
 
     <div class="nav flex-column container" >
       <div class="nav-link d-flex flex-wrap flex-column">
-        
+        <!--Total Price-->
         <div class="flex-row flex-wrap d-flex pb-2">
           <div class="mr-auto">Total</div>
           {% if cart[canteen.name] %}
@@ -99,7 +155,7 @@
           {% endif %}
         </div>
           
-
+        <!--'Go to checkout'-->
         <div class="pt-2">
           <a href="/cart">
             <button type="button" class="pt-2 btn btn-main-color w-100">Go to checkout</button>
@@ -126,7 +182,7 @@
         class="btn btn-outline-success btn-sm" target="_blank"
         href="https://maps.google.com/maps?q={{canteen.latitude}},{{canteen.longitude}}" role="button">Open in Google
         Map</a>
-      <!--        <div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>-->
+      <!--<div class="" style="font-weight: 200;"> Minimum price: $27 | Wait time: 30min - 1hr</div>-->
     </div>
 
   </div>
@@ -151,19 +207,20 @@
             <button class="food-menu btn btn-outline-secondary w-100" type="submit" name="add-dish" value="{{dish._id}}" style="height: 150px;">
               <div class="container m-0">
                 <div class="flex-row d-flex flex-wrap">
-                  <!-- Left side of button -->
+                  <!--Left side: dish name and ingredients, price-->
                   <div class="d-flex flex-column" style="max-width: 50%;">
                     <span class="mr-auto pt-2 h4">{{dish.name}}</span>
                     <span class="mr-auto font-weight-light h6 text-left"
                       style="font-size: 15px">
-                      <!-- only show 3 ingredients -->
+                      <!--only show up to 3 ingredients-->
+                      <!--Separate each ingredient by comma (,)-->
                       {{dish.ingredients[0]}}
                       {% for i in range((dish.ingredients)|length) if ((not(i >= 3)) and (i > 0)) %}, {{ dish.ingredients[i] }} 
                       {% endfor %}
                     </span>
                     <span class="mr-auto font-weight-light h6 text-left" style="font-size: 20px">${{dish.price}}</span>
                   </div>
-                  <!-- Right Side of Button -->
+                  <!--Right Side: dish image-->
                   <div class="ml-auto">
                     {%if dish.image_path %}
                     <img src="{{dish.image_path}}" style="object-fit: cover; width: 100px; height: 100px;">
@@ -188,6 +245,7 @@
       <h2>Comment</h2>
       <div class="h5 font-weight-light">{{comments|length}} comments</div>
       <br>
+      <!--'Post a comment'-->
       <img src="../../static/image/icon/comment.png" class="mr-2" style="float:left;" alt="comments" width="35" height="35">
             <a href="/post_comment/{{canteen._id}}">
               <button class="btn btn-outline-primary btn-sm">Post a comment</button>
@@ -228,6 +286,7 @@
                       <div class="font-weight-light" style="font-size: 20px; word-wrap: break-word;">{{comment.paragraph}}</div>
                     </div>
                     <br>
+                    <!--Time-->
                     <div class="text-left pb-2 text-secondary">
                       <span class="font-weight-light"
                         style="font-size: 15px">{{comment.at_time}}</span>
