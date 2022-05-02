@@ -1,3 +1,17 @@
+<!-- 
+    /canteen/templates/user/user_account.html
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    user_account.html is a page for editing user's general info,
+    i.e. upload a new profile photo, edit username, modify password, and top up money into the system.
+    The rendering of this page and POST method is handled by a function user_account in user.py
+-->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -37,7 +51,7 @@ Canteen List
                 </div>
             </div>
         </div>
-        <!--Username + Password Part-->
+        <!--Username + Password Part + Top-up Part-->
         <div class="col-md-7 border-right align-items-center ">
             <!--Edit Username-->
             <form method="POST" class="my-4">
@@ -62,6 +76,7 @@ Canteen List
                 </div>
                 <button class="btn btn-sm btn-secondary mb-4" type="submit"> Save </button>
             </form>
+            <!--Top up Money-->
             <form method="POST" class="my-4">
                 <h4>Top-up</h4>
                 <div class="form-group">

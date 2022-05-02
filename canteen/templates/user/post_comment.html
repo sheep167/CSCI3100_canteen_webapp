@@ -1,3 +1,18 @@
+<!-- 
+    /canteen/templates/user/post_comment.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    post_comment.html displays the page for posting comments.
+    On this page, the user can select number from 1 to 5 to give rating and 
+    type comments for a specific canteen.
+    The rendering of this page and POST method is handled by a function register_page in user.py
+-->
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
@@ -8,11 +23,13 @@ Post Comment
 <div class="container-fluid my-4">
     <div class="row mx-4 justify-content-center">
         <div class="col-8">
+            <!--Canteen Name-->
             <h2 style="text-align:center">Post Comment at {{canteen.name}}</h2>
             <div class="container">
                 <form method="POST">
                     <div class="row justify-content-center">
                         <div class="col-3 text-center">
+                            <!--Rating Form-->
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <label class="input-group-text" for="rating">Rating</label>
@@ -27,6 +44,7 @@ Post Comment
                             </div>
                         </div>
                     </div>
+                    <!--Comment Form-->
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Comment: </span>
@@ -34,6 +52,7 @@ Post Comment
                         <textarea class="form-control" aria-label="With textarea" rows="18"
                             name="paragraph"> {{paragraph}}</textarea>
                     </div>
+                    <!--'Submit' Button-->
                     <div class="text-center">
                         <button class="btn btn-dark" type="submit">Submit</button>
                     </div>
