@@ -1,3 +1,19 @@
+<!-- 
+    /canteen/templates/canteen/add_type.html
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Nutdranai Jaruthikorn <pond-nj@outlook.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    add_type.html is a page for adding a new type to 
+    a canteen. The page will ask users to input type name. 
+    The page is rendered by add_type in canteen.py. 
+    A POST request from this page (adding new type) will be handled by the function as well.
+    The canteen_id in this page's url is of the one that the new type will be added to. 
+-->
 {% extends 'base.html' %}
 
 {% block title %}
@@ -13,6 +29,7 @@ Add Type
         <div class="h2 p-3 headtitle">Add New Type</div>
         <div class="p-3">
             <form class="form-group" method="POST">
+                <!-- Name: -->
                 <label for="typename">Type Name: </label>
                 <input type="" class="form-control" id="typename" name="typename" placeholder="Enter Type Name"></input>
                 <small id="type-name-help" class="form-text text-muted">This serves as a menu type for your canteen.</small>

@@ -36,24 +36,33 @@ menu page:
 
 @app.route('/canteen_home', methods=['GET'])
 def canteen_home():
-    data = [
-        {'dish': 'a', 'price': 1, 'sold': 1},
-        {'dish': 'b', 'price': 2, 'sold': 2},
-        {'dish': 'c', 'price': 3, 'sold': 3},
-        {'dish': 'd', 'price': 4, 'sold': 4},
-        {'dish': 'e', 'price': 5, 'sold': 5},
-    ]
-    dishes = 0
-    revenue = 0
-    for orders in data:
-        dishes += orders['sold']
-        revenue += orders['price'] * orders['sold']
+    # under development
+    DEBUG = 0
+    if DEBUG == 1:
+        data = [
+            {'dish': 'a', 'price': 1, 'sold': 1},
+            {'dish': 'b', 'price': 2, 'sold': 2},
+            {'dish': 'c', 'price': 3, 'sold': 3},
+            {'dish': 'd', 'price': 4, 'sold': 4},
+            {'dish': 'e', 'price': 5, 'sold': 5},
+        ]
+        dishes = 0
+        revenue = 0
+        for orders in data:
+            dishes += orders['sold']
+            revenue += orders['price'] * orders['sold']
 
-    return render_template('canteen/canteen_home.html', data=data, dishes=dishes, revenue=revenue)
+        return render_template('unused/canteen_home.html', data=data, dishes=dishes, revenue=revenue)
+    else:
+        return 'Coming Soon', 404
 
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
-    return render_template('canteen/canteen_account.html')
+    # Coming Soon
+
+    # the template is currently under /unused
+    # return render_template('unused/canteen_account.html')
+    return 'Coming Soon', 404
 
 @app.route('/canteen_account/<canteen_id>/order', methods=['GET', 'POST'])
 @login_required
