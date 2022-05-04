@@ -1,3 +1,12 @@
+"""
+    /canteen/canteen.py 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Nawapon Sangsiri <prabnaeapon2545@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+"""
+
 import datetime
 from collections import Counter
 import re
@@ -15,24 +24,6 @@ from flask_wtf import FlaskForm  # 1.
 from wtforms import StringField  # 2.
 from wtforms.validators import DataRequired  # 3.
 import os
-
-"""
-order page
-- add_order: add to order_list
-- finideh_order: move from order_list to finished_order_list and noti to user
-- clear_order:
-- clear_finished_order:
-
-menu page:
-- create_type
-- add_menu
-- delete_menu
-- edit_menu
-- create_set
-- edit_set
-- delete_set
-"""
-
 
 @app.route('/canteen_home', methods=['GET'])
 def canteen_home():
@@ -64,6 +55,10 @@ def canteen_account():
     # return render_template('unused/canteen_account.html')
     return 'Coming Soon', 404
 
+# order_page function
+# Purpose : to call an order page when user click on the order button in nev bar.
+# Input : canteen_id
+# Output : render an order page with orders' data.
 @app.route('/canteen_account/<canteen_id>/order', methods=['GET', 'POST'])
 @login_required
 def order_page(canteen_id):
@@ -77,6 +72,8 @@ def order_page(canteen_id):
         orders = list(results)
     
         for order in orders :
+
+            # to change the status of the order of the canteen
             time = order['at_time']
             duration = datetime.datetime.now() - time
             duration_in_s = duration.total_seconds()
@@ -88,6 +85,8 @@ def order_page(canteen_id):
                 order['order_status'] = 'normal'
             mongo.db.orders.update_one({'_id': ObjectId(order['_id'])}, {'$set': {'order_status' : order['order_status']}})
 
+            
+            # to conuter a number of dishes
             counter = Counter(order['dishes'])
             counted_dishes = []
             for dish_id, count in counter.items():
@@ -101,6 +100,11 @@ def order_page(canteen_id):
 
     return render_template('canteen/order.html', orders=orders)
 
+
+# menu_page function
+# Purpose : to call a menu page when user click on the menu button in nev bar.
+# Input : canteen_id
+# Output : render a menu page by canteen ID, sets data, type data and active set data.
 @app.route('/canteen_account/<canteen_id>/menu', methods=['GET', 'POST'])
 @login_required
 def menu_page(canteen_id, invalid_delete=''):
@@ -108,8 +112,9 @@ def menu_page(canteen_id, invalid_delete=''):
         return 'Not Authorized', 403
 
     if request.method == 'POST':
-        set_id=request.form.get('active-set')
 
+        # to set a active set
+        set_id=request.form.get('active-set')
         mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'active_set': set_id}})
 
         return redirect('/canteen_account/%s/menu' % canteen_id)    
@@ -123,12 +128,13 @@ def menu_page(canteen_id, invalid_delete=''):
         
         sets = list(results)
 
+        # In sets, there are types with 0 (it means those types do not in the set).
+        # this for loop is for delete types with 0.  
         for _set in sets:
             to_remove = []
             for _type in _set['types']:
                 if len(_set['types'][_type]) == 0:
                     to_remove.append(_type)
- 
             for _type in to_remove:
                 del _set['types'][_type]
 
@@ -143,6 +149,10 @@ def menu_page(canteen_id, invalid_delete=''):
 
     return render_template('canteen/menu.html', canteen_id=canteen_id, sets=sets, types=types, active_set=active_set)
 
+# finish_order function
+# Purpose : to change a status of orders to 'finished', when click on the finish button.
+# Input : order_id
+# Output : an order move to the finished order section.
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
@@ -150,10 +160,16 @@ def finish_order(order_id):
             {'$match': {'_id': ObjectId(order_id)}}
         ])
     order = list(order)
+
+    #to update the status
     mongo.db.orders.update_one({'_id': ObjectId(order_id)}, {'$set': {'order_status' : 'finished'}})
 
     return redirect('/canteen_account/%s/order' % order[0]['at_canteen'])
 
+# add_set function
+# Purpose : to create a new set.
+# Input : canteen_id
+# Output : render a menu page with a new set.
 @app.route('/canteen_account/<canteen_id>/add/set', methods=['GET', 'POST'])
 @login_required
 def add_set(canteen_id):
@@ -174,6 +190,7 @@ def add_set(canteen_id):
                 checkboxAns = request.form.getlist(_type['name'])
                 _dish_dict[_type['name']] = checkboxAns
             
+            # to update a new set to database.
             mongo.db.sets.insert_one({
                 'name': _set_name,
                 'at_canteen': ObjectId(canteen_id),
@@ -181,6 +198,7 @@ def add_set(canteen_id):
             })
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
+    # to list the menu in each set for render a menu page.
     results = mongo.db.types.aggregate([
         {'$match': {'at_canteen': ObjectId(canteen_id)}}
     ])
@@ -188,6 +206,10 @@ def add_set(canteen_id):
 
     return render_template('canteen/add_set.html', canteen_id=canteen_id, types=types)
 
+# add_type function
+# Purpose : to create a new type.
+# Input : canteen_id
+# Output : render a menu page with a new type.
 @app.route('/canteen_account/<canteen_id>/add/type', methods=['GET', 'POST'])
 @login_required
 def add_type(canteen_id):
@@ -208,6 +230,7 @@ def add_type(canteen_id):
                 _set['types'][typename]=[]
                 mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': _set['types']}})
 
+            # update a new type to database.
             mongo.db.types.insert_one({
                 'name': typename,
                 'at_canteen': ObjectId(canteen_id),
@@ -216,6 +239,10 @@ def add_type(canteen_id):
         return redirect('/canteen_account/%s/menu' % canteen_id)
     return render_template('canteen/add_type.html')
 
+# edit_set function
+# Purpose : to edit a set.
+# Input : canteen_id
+# Output : render a menu page with a edited set.
 @app.route('/canteen_account/<canteen_id>/edit/sets/<set_id>', methods=['GET', 'POST'])
 def edit_set(canteen_id, set_id):
     if current_user.auth_type > 1:
@@ -231,6 +258,7 @@ def edit_set(canteen_id, set_id):
                 {'$match': {'at_canteen': ObjectId(canteen_id)}}
             ]))
 
+            # to list the new dishes in the set.
             dish_only=[]
             for _type in types:
                 checkboxAns = request.form.getlist(_type['name'])
@@ -242,13 +270,16 @@ def edit_set(canteen_id, set_id):
                     ]))[0]['_id']
 
                     dish_only.append(dish_id)
+            
+            # to update the new data to set databese.
             mongo.db.sets.update_one({'_id': ObjectId(set_id)}, {'$set': {'types': _dish_dict, 'name':_set_name} })
 
             mongo.db.canteens.update_one({'_id': ObjectId(canteen_id)}, {'$set': {'menu': dish_only} })
 
             return redirect('/canteen_account/%s/menu' % canteen_id)
 
-    # types=[]
+
+    # to prepare data for render a menu page
     if request.method == 'GET':
         types = list(mongo.db.types.aggregate([
             {'$match': {'at_canteen': ObjectId(canteen_id)}}
@@ -273,6 +304,10 @@ def edit_set(canteen_id, set_id):
     return render_template('canteen/edit_set.html', canteen_id=canteen_id, type_with_indicated=type_with_indicated,
                            _set=_set)
 
+# add_menu function
+# Purpose : to create a new dishes in a type.
+# Input : canteen_id, tyep_id
+# Output : render a menu page with a new dish.
 @app.route('/canteen_account/<canteen_id>/add/menu/<typeID>', methods=['GET', 'POST'])
 def add_menu(canteen_id, typeID):
     if current_user.auth_type > 1:
@@ -297,6 +332,8 @@ def add_menu(canteen_id, typeID):
         menuName = request.form.get('menu-name')
         price = request.form.get('price')
         ingredients = re.split(", |," ,request.form.get('ingredients'))
+
+        # to check whether the input data are in condition.
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -309,7 +346,7 @@ def add_menu(canteen_id, typeID):
             flash('Please input your price as a positive number', category='warning')
         else:
 
-            # update dishes
+            # to update the dishes database
             mongo.db.dishes.insert_one({
                 'name': str(menuName),
                 'at_canteen': ObjectId(canteen_id),
@@ -335,7 +372,7 @@ def add_menu(canteen_id, typeID):
                         flash('File not supported', category='warning')
                         return redirect(request.url)
 
-            # update types
+            # to update the type database
             results = list(mongo.db.types.aggregate([
                 {'$match': {'_id': ObjectId(typeID)}}
             ]))
@@ -355,12 +392,17 @@ def add_menu(canteen_id, typeID):
             return redirect('/canteen_account/%s/menu' % canteen_id)
     return render_template('canteen/add_menu.html')
 
+# delete_item function
+# Purpose : to delete an item.
+# Input : canteen_id, categoty(dish, type, set), object)id
+# Output : render a menu page.
 @app.route('/canteen_account/<canteen_id>/delete/<category>/<id>')
 def delete_item(canteen_id,category,id):
     if current_user.auth_type > 1:
         return 'Not Authorized', 403
+
     if category == 'dishes':
-        # delete from types
+        # to delete the dish from type database
         target_dish = list(mongo.db.dishes.aggregate([
             {'$match': { '_id' : ObjectId(id) }},
         ]))[0]
@@ -380,7 +422,7 @@ def delete_item(canteen_id,category,id):
             new_dishes.append(_dish)
         mongo.db.types.update_one({'_id': ObjectId(in_type)}, {'$set': {'dishes': new_dishes}})
 
-        # delete from sets
+        # to delete the dish from set database
         sets=list(mongo.db.sets.aggregate([
             {'$match': {'at_canteen':ObjectId(canteen_id)}}
         ]))
@@ -391,20 +433,25 @@ def delete_item(canteen_id,category,id):
                     dish_in_set[_type].remove(target_dish['name'])
             mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': dish_in_set}})
 
-        # delete from dishes
+        # tp delete the dish from dish database
         mongo.db.dishes.delete_one({"_id": ObjectId(id)})
+
     elif category == 'types':
         target_type_name=list(mongo.db.types.aggregate([
             {'$match':{'_id':ObjectId(id)}}
         ]))[0]['name']
         sets = list(mongo.db.sets.aggregate([]))
+
+        # to update set database if there is any set with the deleted type.
         for _set in sets:
             types_in_set = _set['types']
             del types_in_set[target_type_name]
             mongo.db.sets.update_one({'_id': ObjectId(_set['_id'])}, {'$set': {'types': types_in_set}})
 
+        # to delete a type in type database.
         mongo.db.types.delete_one({"_id": ObjectId(id)})
         mongo.db.dishes.delete_many({'in_type': ObjectId(id)})
+    
     elif category == 'sets':
         canteen=list(mongo.db.canteens.aggregate([
             {'$match':{'_id': ObjectId(canteen_id)}}
@@ -413,6 +460,8 @@ def delete_item(canteen_id,category,id):
             active_set=canteen['active_set']
         else:
             active_set=''
+
+        # if the set that user want to delete is an active set, stop the deletion.
         if ObjectId(id) == ObjectId(active_set):
             return menu_page(canteen_id, invalid_delete='sets')
         else:
@@ -422,6 +471,10 @@ def delete_item(canteen_id,category,id):
         
     return redirect('/canteen_account/%s/menu' % canteen_id)
 
+# edit_menu function
+# Purpose : to edit a dish.
+# Input : canteen_id, menu_id
+# Output : render a menu page.
 @app.route('/canteen_account/<canteen_id>/edit/menu/<menu_id>', methods=['GET','POST'])
 def edit_menu(canteen_id, menu_id):
     def isFloat(num):
@@ -442,9 +495,10 @@ def edit_menu(canteen_id, menu_id):
         return 'Not Authorized', 403
 
     if request.method == 'POST':
-        # print(request.form)
         menuName=request.form.get('menu-name')
         price=request.form.get('price')
+
+        # to check whether the input is valid.
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:
@@ -468,7 +522,7 @@ def edit_menu(canteen_id, menu_id):
                         flash('File not supported', category='warning')
                         return redirect(request.url)
 
-            # update in dishes
+            # to update dishe database.
             in_type = list(mongo.db.dishes.aggregate([
                 {'$match':{'_id':ObjectId(menu_id)}}
             ]))[0]['in_type']
@@ -483,9 +537,6 @@ def edit_menu(canteen_id, menu_id):
             dishes = list( mongo.db.types.aggregate([
                 { '$match' : { '_id' : ObjectId(in_type) } }
             ]))[0]['dishes']
-
-            print(dishes)
-            print(1)
             
             for i in range(len(dishes)):
                 # print(dishes[i])
@@ -493,7 +544,7 @@ def edit_menu(canteen_id, menu_id):
                     del dishes[i]
                     break
 
-            print(dishes)
+            # to prepare data for rendering.
             dishes.append({
                 'name': str(menuName),
                 'at_canteen': current_user.staff_of,

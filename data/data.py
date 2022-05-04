@@ -1,3 +1,12 @@
+"""
+    /canteen/data/data.py 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Nawapon Sangsiri <prabnaeapon2545@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+"""
+
 from flask import Flask
 from flask_pymongo import PyMongo
 from bson import ObjectId
@@ -15,11 +24,12 @@ mongo = PyMongo(app)
 for collection in mongo.db.list_collection_names():
     mongo.db[collection].drop()
 
+# to add admin account to the database
 admin = {'email': 'admin@admin.com', 'password': '123456', 'username': 'admin', 'auth_type': 0, 'confirmed': 1, 'balance': 10000}
 admin['password'] = bcrypt.hashpw(admin.get('password').encode('utf-8'), bcrypt.gensalt())
 mongo.db.users.insert_one(admin)
 
-# must be updated
+# to initilaze canteen data  
 canteens_list = [
     {'name': 'United College Student Canteen', 'latitude': '22.4210912', 'longitude': '114.2056994', 'open_at': '11:00', 'close_at': '20:45', 'capacity': 150, 'menu': [], 'image_path': "/static/images/UC/UC.jpeg", 'active_set':None},
     {'name': 'NA Canteen', 'latitude': '22.4209998', 'longitude': '114.2086538', 'open_at': '10:00', 'close_at': '20:00', 'capacity': 100, 'menu': [], 'image_path': "/static/images/NA/NA.jpg", 'active_set':None},
@@ -32,6 +42,7 @@ canteens_list = [
 ]
 mongo.db.canteens.insert_many(canteens_list)
 
+# to initilaze user data  
 users_list = [
     {'email': 'test1@test.com', 'password': '123456', 'username': 'test1', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
     {'email': 'test2@test.com', 'password': '123456', 'username': 'test2', 'auth_type': 2, 'confirmed': 1, 'balance': 10000},
@@ -58,7 +69,7 @@ for user in users_list:
 
 mongo.db.users.insert_many(users_list)
 
-# add default set
+# to add default set
 for canteen in canteens_list:
     canteen_id=list(mongo.db.canteens.aggregate([
         {'$match':{'name': canteen['name']}}
