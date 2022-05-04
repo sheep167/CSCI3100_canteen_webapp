@@ -37,6 +37,9 @@ menu page:
 @app.route('/canteen_home', methods=['GET'])
 def canteen_home():
     # under development
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
+
     DEBUG = 0
     if DEBUG == 1:
         data = [
@@ -59,6 +62,8 @@ def canteen_home():
 # This functions is under development
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
     # Coming Soon
 
     # the template is currently under /unused
@@ -147,6 +152,9 @@ def menu_page(canteen_id, invalid_delete=''):
 @app.route('/canteen_account/finish/<order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):
+    if current_user.auth_type > 1:
+        return 'Not Authorized', 403
+
     order = mongo.db.orders.aggregate([
             {'$match': {'_id': ObjectId(order_id)}}
         ])
