@@ -1,3 +1,18 @@
+<!-- 
+  /canteen/templates/admin/admin_orders.html
+  Copyright (c) 2021-2022  CUFoodOrder
+  @author: Yiu Chun To <yiuchunto@gmail.com>
+  @version: 1.0
+  @since 2022-02-10
+  @last updated: 2022-05-02
+-->
+
+<!--
+  admin_orders.html is used for displaying orders data
+  (user, dishes, total price, order status) in a tabular format.
+  The page is used by admin for managing orders.
+  It is rendered by overview_canteens_data in admin.py
+-->
 {% extends 'base.html' %}
 {% set active_page = "canteens" %}
 
@@ -14,12 +29,19 @@ Admin Page - Orders Overview
       <table class="table table-hover border-bottom border-right border-left text-center">
         <thead class="thead-dark my-auto">
           <tr>
+            <!-- posted at -->
             <th style="width:20%">Posted At Time</th>
+            <!-- posted by -->
             <th style="width:10%">Posted By User</th>
+            <!-- dishes -->
             <th style="width:20%">Dishes</th>
+            <!-- total price -->
             <th style="width:10%">Total Price</th>
+            <!-- order status -->
             <th style="width:20%">Order Status</th>
+            <!-- edit -->
             <th style="width:10%"></th>
+            <!-- delete -->
             <th style="width:10%"></th>
           </tr>
         </thead>
@@ -31,7 +53,9 @@ Admin Page - Orders Overview
             <td>{{order.dishes}}</td>
             <td>{{order.total_price}}</td>
             <td>{{order.order_status}}</td>
+            <!-- edit button -->
             <td><a href="/edit/canteens/{{canteen._id}}/orders/{{order._id}}" class="btn btn-primary">Edit</a></td>
+            <!-- delete button -->
             <td><a href="/delete/canteens/{{canteen._id}}/orders/{{order._id}}" class="btn btn-danger">Delete</a></td>
           </tr>
         </tbody>

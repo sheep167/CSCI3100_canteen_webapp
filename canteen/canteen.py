@@ -47,6 +47,7 @@ def canteen_home():
     else:
         return 'Coming Soon', 404
 
+# This functions is under development
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     # Coming Soon
@@ -499,6 +500,9 @@ def edit_menu(canteen_id, menu_id):
         price=request.form.get('price')
 
         # to check whether the input is valid.
+        # unfinished
+        # ingredients are not parsed from the form
+
         if menuName == '':
             flash('Please add your menu name', category='info')
         if len(menuName) >= 300:

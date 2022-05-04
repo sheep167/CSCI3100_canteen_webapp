@@ -1,8 +1,26 @@
+<!-- 
+    /canteen/templates/admin/data.html
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Yiu Chun To <yiuchunto@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    data.html is used in creating and editing data record
+    (including dished, comments, orders and etc.).
+    The data record is loaded (when editing) or entered (when creating)
+    in a JSON format into a text area form. The text in text area form 
+    is then parsed by the corresponding function that renders this template in the first place.
+    These functions are: add_data_page, edit_data_page, add_canteens_data, edit_canteens_data, 
+-->
 {% extends 'base.html' %}
+
 {% if category == 'users' %}
-{% set active_page = category %}
+    {% set active_page = category %}
 {% else %}
-{% set active_page = 'canteens' %}
+    {% set active_page = 'canteens' %}
 {% endif %}
 
 {% block title %}
@@ -15,9 +33,12 @@ Admin Page - Data
         <div class="col-8">
             <h2>{{ method }} {{ category }}</h2>
             <form method="POST" action="">
+                <!-- Text Area -->
                 <div class="form-group">
                     {{ form.text(class="form-control form-control-lg", rows="10") }}
                 </div>
+
+                <!-- Submit -->
                 <div class="text-center">
                     {{ form.submit(class="btn btn-dark") }}
                 </div>

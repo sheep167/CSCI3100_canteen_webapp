@@ -1,8 +1,28 @@
+
+<!-- 
+    /canteen/templates/admin/data_with_image.html
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Yiu Chun To <yiuchunto@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    THIS PAGE iS DEPRECATED
+
+    data_with_image.html is similar to data.html
+    (a text field for inserting JSON format data)
+    except that the page also provides a button for picture upload. The page used to be used by
+    admin for editing dishes info. Now, the template for editing dishes info is canteen/edit_menu.html instead.
+-->
+
 {% extends 'base.html' %}
+
 {% if category == 'users' %}
-{% set active_page = category %}
+    {% set active_page = category %}
 {% else %}
-{% set active_page = 'canteens' %}
+    {% set active_page = 'canteens' %}
 {% endif %}
 
 {% block title %}
@@ -15,15 +35,20 @@ Admin Page - Data
         <div class="col-8">
             <h2>{{ method }} {{ category }} </h2>
             <form method="POST" action="" enctype="multipart/form-data">
+                <!-- Text Field -->
                 <div class="form-group">
                     {{ form.text(class="form-control form-control-lg", rows="10") }}
                 </div>
+
+                <!-- Upload Image -->
                 <div>
                     <h2>
                         Upload Image:
                     </h2>
                     {{ form.image }}
                 </div>
+
+                <!-- Submit Button -->
                 <div class="container-fluid my-4">
                     <div class="row mx-4 justify-content-center">
                         <div class="col-2 text-center">

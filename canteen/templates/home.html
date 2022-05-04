@@ -1,3 +1,44 @@
+<!-- 
+    /canteen/templates/home.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    home.html displays the home page of CU Food Order
+    There are three main sections in this page: 
+    1) Welcome Image 2) Currently Opened Canteen List 3) Currently Closed Canteen List 
+    The rendering of this page is handled by a function home in user.py
+
+    --------------------------------------------------------------
+    1. Welcome Image
+    - Image
+    - Welcome Message
+
+    2. Currently Opened Canteen List (Show only the canteens which are currently opened)
+    - Canteen Image
+    - Canteen Name
+    - Opening and Closing Time
+    - Rating
+    - Crowdedness (few people / normal / busy), indicated by the number of the current order 
+      in that canteen
+    - 'View' Button: to see more details of a specific canteen
+
+    3. Currently Closed Canteen List (Show only the canteens which are currently closed)
+    - Canteen Image
+    - Canteen Name
+    - Opening and Closing Time
+    - Rating
+    - Crowdedness (few people / normal / busy), indicated by the number of the current order 
+      in that canteen
+    Note that there is no 'View' button here and the color of the 
+    canteen block has low opcaity to highlight that they are closed now.
+    --------------------------------------------------------------
+-->
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -18,17 +59,20 @@ Canteen List
 <script src="../static/style/js/animatedhome.js"></script>
 <script>AOS.init();</script>
 
+<!--Welcome Section-->
 <div id="top" class="container-fluid mb-5 overflow-hidden align-items-center">
     <div class="container-fluid my-5 d-flex flex-wrap align-items-center">
+        <!--Welcome Image-->
         <div id="imgcol" class="col-lg-6 pl-5">
             <div class="wrapper">
                 <div class="circle align-items-right mx-3" data-aos="zoom-in-left">
-                    <!--source picture: https://www.pngplay.com/th/image/67424-->
+                    <!--Image Source: https://www.pngplay.com/th/image/67424-->
                     <img id="reload" src="{{ url_for('static', filename='../static/image/home/Noodle-Background-PNG-Image.png') }}" alt="scroll"
                         class="center">
                 </div>
             </div>
         </div>
+        <!--Welcome Message-->
         <div class="col-lg-6 justify-content-left text-center">
             <h1 data-aos="fade-right" style="font-family: Parisienne; font-size: 70px;">CU Food Order</h1>
             <hr class="mx-auto" style="border: 70; max-width: 500px;">
@@ -36,7 +80,7 @@ Canteen List
         </div>
     </div>
     <div class="row justify-content-center">
-        <!--source picture: https://www.flaticon.com-->
+        <!--Image Source: https://www.flaticon.com-->
         <img src="{{ url_for('static', filename='../static/image/home/forkspoon.png') }}" style="object-fit: cover; width: 40px; height: 40px;"
             class="center" data-aos="fade-down">
     </div>
@@ -58,6 +102,7 @@ Canteen List
             {% for canteen in canteens_opened %}
             <div class="card mt-3 mb-5" style="max-width: 800px; height: 300px;" data-aos="zoom-in-up">
                 <div class="row g-0 d-flex flex-nowrap my-auto">
+                    <!--Canteen Image-->
                     <div class="col-md-6 d-flex flex-column" style="text-align: center;">
                         {% if canteen.image_path %}
                         <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid cover" style="height: 300px" alt="...">
@@ -65,6 +110,7 @@ Canteen List
                         No Image for this canteen
                         {% endif %}
                     </div>
+                    <!--Canteen Info-->
                     <div class="col-md-6 align-items-center d-flex">
                         <div class="card-body my-auto">
                             <h4 class="foodlist card-title mb-1" style="color: #df5607;">{{canteen.name}}</h4>
@@ -97,6 +143,7 @@ Canteen List
                 </div>
             </div>
             {% endfor %}
+            <!--If there is no currently opened canteens, the message will be shown.-->
             {% else %}
             <p>All canteens are closed</p>
             {% endif %}
@@ -110,6 +157,7 @@ Canteen List
             {% for canteen in canteens_closed %}
             <div class="card mt-3 mb-5" style="max-width: 800px; height: 300px;" data-aos="zoom-in-up">
                 <div class="row g-0 d-flex flex-nowrap my-auto">
+                    <!--Canteen Image-->
                     <div id="imgclosed" class="col-md-6 d-flex flex-column" style="text-align: center;">
                         {% if canteen.image_path %}
                         <img src="{{ url_for('static', filename='..' + canteen.image_path) }}" class="img-fluid cover" style="height: 300px" alt="...">
@@ -117,6 +165,7 @@ Canteen List
                         No Image for this canteen
                         {% endif %}
                     </div>
+                    <!--Canteen Info-->
                     <div class="col-md-6 align-items-center d-flex">
                         <div id="closed" class="card-body my-auto">
                             <h4 class="foodlist card-title mb-1" style="color: #df5607;">{{canteen.name}}</h4>
@@ -148,6 +197,7 @@ Canteen List
                 </div>
             </div>
             {% endfor %}
+            <!--If there is no currently closed canteens, the message will be shown.-->
             {% else %}
             <p>All canteens are opened</p>
             {% endif %}

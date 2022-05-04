@@ -1,3 +1,35 @@
+<!-- 
+    /canteen/templates/user/order_history.html 
+    Copyright (c) 2021-2022  CUFoodOrder
+    @author: Maneemala Saeng-ngern <maneemala.sn@gmail.com>
+    @version: 1.0
+    @since 2022-02-10
+    @last updated: 2022-05-02
+-->
+
+<!--
+    order_history.html displays the order history of the user, including 
+    1) Current Order and 2) Order History (Finished order in the past)
+    The rendering of this page is handled by a function order_history in user.py
+
+    My Order
+    --------------------------------------------------------------
+    1. Current Order (For showing the current order)
+    - Order ID
+    - Canteen Name
+    - Ordered Time
+    - Ordered Menu Table: Dish name and Amount
+    - Total Price
+
+    2. Order History (categorized by Month)
+    - Order ID
+    - Ordered Time
+    - Canteen Name
+    - Ordered Menu Table: Dish name and Amount
+    - Total Price
+    --------------------------------------------------------------
+-->
+
 {% extends 'base.html' %}
 {% set active_page = "Order" %}
 
@@ -31,12 +63,16 @@ Order List
                         <div class="card-body">
                             <div class="row ml-3 mt-1">
                                 <div class="pr-4 w-100">
+                                    <!--Order ID-->
                                     <div class="h3">Order ID: {{(order._id|string)[-4:]}}</div>
                                     <hr>
+                                    <!--Canteen Name-->
                                     <div class="h5">{{order.at_canteen_name}}</div>
+                                    <!--Ordered Time-->
                                     <div>{{order.at_time.hour}}:{{order.at_time.minute}}:{{order.at_time.second}} {{order.at_time.day}}/{{order.at_time.month}}/{{order.at_time.year}}</div>
                                 </div>
                             </div>
+                            <!--Ordered Menu Table-->
                             <div class="container-fluid my-1">
                                 <div class="">
                                     <!-- Table Header -->
@@ -63,6 +99,7 @@ Order List
                                     </div>
                                 </div>
                             </div>
+                            <!--Total Price-->
                             <div class="row ml-3 mt-1">
                                 <p>
                                     <b>Total Price: {{order.total_price}}</b>
@@ -74,7 +111,7 @@ Order List
             {% endif %}
         {% endfor %}
         </div>
-
+        <!--If there is no current order, the message will be shown-->
         {% if (unfinished_orders|length) == 0 %}
         <div class="row mx-4">
             <p><b>There is no current order.</b></p>
@@ -105,11 +142,15 @@ Order List
                             <div class="card-body">
                                 <div class="row ml-3 mt-1">
                                     <p>
+                                        <!--Order ID-->
                                         <b>Order ID: {{(order._id|string)[-4:]}}</b><br>
+                                        <!--Ordered Time-->
                                         <b>Ordered {{order.at_time.day}}/{{order.at_time.month}}/{{order.at_time.year}}</b><br>
+                                        <!--Canteen Name-->
                                         <b>{{order.at_canteen_name}}</b>
                                     </p>
                                 </div>
+                                <!--Ordered Menu Table-->
                                 <div class="container-fluid my-1">
                                     <div class="">
                                         <!-- Table Header -->
@@ -137,6 +178,7 @@ Order List
                                         </div>
                                     </div>
                                 </div>
+                                <!--Total Price-->
                                 <div class="row ml-3 mt-1">
                                     <p>
                                         <b>Total Price: {{order.total_price}}</b><br>
