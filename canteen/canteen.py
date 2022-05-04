@@ -33,7 +33,7 @@ menu page:
 - delete_set
 """
 
-
+# This function is under development
 @app.route('/canteen_home', methods=['GET'])
 def canteen_home():
     # under development
@@ -56,6 +56,7 @@ def canteen_home():
     else:
         return 'Coming Soon', 404
 
+# This functions is under development
 @app.route('/canteen_account', methods=['GET', 'POST'])
 def canteen_account():
     # Coming Soon
